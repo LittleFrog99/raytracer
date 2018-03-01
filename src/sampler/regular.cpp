@@ -3,7 +3,6 @@
 
 Regular::Regular(int nspl, int nset) : Sampler(nspl, nset) {
     generateSamples();
-    setupShuffledIndices();
 }
 
 void Regular::generateSamples() {
