@@ -423,6 +423,8 @@ CMakeFiles/raytracer.dir/src/core/tracer.cpp.o: /usr/local/include/glm/vector_re
 
 CMakeFiles/raytracer.dir/src/core/viewplane.cpp.o: ../src/core/sampler.h
 CMakeFiles/raytracer.dir/src/core/viewplane.cpp.o: ../src/sampler/jittered.h
+CMakeFiles/raytracer.dir/src/core/viewplane.cpp.o: ../src/sampler/multijittered.h
+CMakeFiles/raytracer.dir/src/core/viewplane.cpp.o: ../src/sampler/regular.h
 CMakeFiles/raytracer.dir/src/core/viewplane.cpp.o: ../src/core/viewplane.cpp
 CMakeFiles/raytracer.dir/src/core/viewplane.cpp.o: ../src/core/viewplane.h
 CMakeFiles/raytracer.dir/src/core/viewplane.cpp.o: /usr/local/include/glm/common.hpp
@@ -516,7 +518,8 @@ CMakeFiles/raytracer.dir/src/core/world.cpp.o: ../src/geometry/plane.h
 CMakeFiles/raytracer.dir/src/core/world.cpp.o: ../src/geometry/sphere.h
 CMakeFiles/raytracer.dir/src/core/world.cpp.o: ../src/headers/stb_image_write.h
 CMakeFiles/raytracer.dir/src/core/world.cpp.o: ../src/headers/utilities.h
-CMakeFiles/raytracer.dir/src/core/world.cpp.o: ../src/sampler/jittered.h
+CMakeFiles/raytracer.dir/src/core/world.cpp.o: ../src/sampler/multijittered.h
+CMakeFiles/raytracer.dir/src/core/world.cpp.o: ../src/sampler/regular.h
 CMakeFiles/raytracer.dir/src/core/world.cpp.o: ../src/tracer/multipleobjects.h
 CMakeFiles/raytracer.dir/src/core/world.cpp.o: ../src/core/world.cpp
 CMakeFiles/raytracer.dir/src/core/world.cpp.o: ../src/core/world.h

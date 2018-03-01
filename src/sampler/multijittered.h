@@ -4,7 +4,7 @@
 
 class MultiJittered : public Sampler {
 public:
-    MultiJittered(int num);
+    MultiJittered(int nspl, int nset);
 private:
     void generateSamples();
 };

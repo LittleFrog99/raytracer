@@ -1,8 +1,9 @@
 #include "nrooks.h"
 #include "utilities.h"
 
-NRooks::NRooks(int num) : Sampler(num) {
+NRooks::NRooks(int nspl, int nset) : Sampler(nspl, nset) {
     generateSamples();
+    setupShuffledIndices();
 }
 
 void NRooks::generateSamples() {

@@ -5,7 +5,8 @@
 #include "geometry/sphere.h"
 #include "geometry/plane.h"
 #include "geometry/function2d.h"
-#include "sampler/jittered.h"
+#include "sampler/regular.h"
+#include "sampler/multijittered.h"
 #include "utilities.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
@@ -17,9 +18,10 @@ void World::build() {
     vp.vertRes = 300;
     vp.pixelSize = 1;
     vp.numChannels = DEFAULT_NUM_CHANNELS;
-    vp.setSampler(new Jittered(25));
+    vp.setSampler(new MultiJittered(25, 2));
     vp.gamma = 1.0;
     bgColor = vec3(0.0f);
+
     auto *sphereP = new Sphere(dvec4(0.0, -25.0, 0.0, 1.0), 80.0, vec3(1.0f, 0.0f, 0.0f));
     addObject(sphereP);
     sphereP = new Sphere(dvec4(0.0, 30.0, 0.0, 1.0), 60, vec3(1, 1, 0));
@@ -55,21 +57,18 @@ void World::renderScene() {
     vec3 pixelColor;
     Ray ray;
     ray.direction = dvec4(0, 0, -1, 0);
-    int num = vp.numSamples;
     double zw = 100;
 
     for (int row = 0; row < vp.horRes; row++)
         for (int col = 0; col < vp.vertRes; col++) {
             pixelColor = vec3(0.0f);
 
-            for (int p = 0; p < num; p++) { // regular(q + 0.5) / jittered sampling (q + rand)
-                for (int q = 0; q < num; q++) {
-                    dvec2 sp = vp.getSampler()->sampleUnitSquare();
-                    double x = vp.pixelSize * (col - 0.5 * vp.horRes + sp.x);
-                    double y = vp.pixelSize * (row - 0.5 * vp.vertRes + sp.y);
-                    ray.origin = vec4(x, y, zw, 1);
-                    pixelColor += tracerP->traceRay(ray);
-                }
+            for (int p = 0; p < vp.numSamples; p++) { // regular(q + 0.5) / jittered sampling (q + rand)
+                dvec2 sp = vp.getSampler()->sampleUnitSquare();
+                double x = vp.pixelSize * (col - 0.5 * vp.horRes + sp.x);
+                double y = vp.pixelSize * (row - 0.5 * vp.vertRes + sp.y);
+                ray.origin = vec4(x, y, zw, 1);
+                pixelColor += tracerP->traceRay(ray);
             }
             pixelColor /= vp.numSamples;
             plotPoint(row, col, vec4(pixelColor, 1.0));
@@ -91,6 +90,7 @@ void World::output(string path) const {
 
 World::~World() {
     delete tracerP;
+    delete _pixels;
     for (unsigned int i = 0; i < objects.size(); i++)
         delete objects[i];
 }

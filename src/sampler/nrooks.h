@@ -4,7 +4,7 @@
 
 class NRooks : public Sampler {
 public:
-    NRooks(int num);
+    NRooks(int nspl, int nset);
 private:
     void generateSamples();
     void shuffleCoordX();

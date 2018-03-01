@@ -424,6 +424,8 @@ CMakeFiles/raytracer.dir/src/core/tracer.cpp.o
 CMakeFiles/raytracer.dir/src/core/viewplane.cpp.o
  ../src/core/sampler.h
  ../src/sampler/jittered.h
+ ../src/sampler/multijittered.h
+ ../src/sampler/regular.h
  /Users/littlefrog/raytracer/src/core/viewplane.cpp
  /Users/littlefrog/raytracer/src/core/viewplane.h
  /usr/local/include/glm/common.hpp
@@ -517,7 +519,8 @@ CMakeFiles/raytracer.dir/src/core/world.cpp.o
  ../src/geometry/sphere.h
  ../src/headers/stb_image_write.h
  ../src/headers/utilities.h
- ../src/sampler/jittered.h
+ ../src/sampler/multijittered.h
+ ../src/sampler/regular.h
  ../src/tracer/multipleobjects.h
  /Users/littlefrog/raytracer/src/core/world.cpp
  /Users/littlefrog/raytracer/src/core/world.h

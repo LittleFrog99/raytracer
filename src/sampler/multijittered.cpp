@@ -1,8 +1,9 @@
 #include "multijittered.h"
 #include "utilities.h"
 
-MultiJittered::MultiJittered(int num) : Sampler(num) {
+MultiJittered::MultiJittered(int nspl, int nset) : Sampler(nspl, nset) {
     generateSamples();
+    setupShuffledIndices();
 }
 
 void MultiJittered::generateSamples() {

@@ -1,8 +1,9 @@
 #include "purerandom.h"
 #include "utilities.h"
 
-PureRandom::PureRandom(int num) : Sampler(num) {
+PureRandom::PureRandom(int nspl, int nset) : Sampler(nspl, nset) {
     generateSamples();
+    setupShuffledIndices();
 }
 
 void PureRandom::generateSamples() {

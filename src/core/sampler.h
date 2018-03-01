@@ -7,9 +7,7 @@ using namespace std;
 
 class Sampler {
 public:
-    Sampler (int num) : numSamples(num) {}
-    void setupShuffledIndices();
-    void shuffleSamples();
+    Sampler (int nspl, int nset) : numSamples(nspl), numSets(nset) {}
     dvec2 sampleUnitSquare();
     inline int getNumSamples() { return numSamples; }
     virtual ~Sampler() {}
@@ -23,4 +21,5 @@ protected:
     int jump;
 
     virtual void generateSamples() = 0;
+    void setupShuffledIndices();
 };

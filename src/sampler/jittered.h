@@ -4,7 +4,7 @@
 
 class Jittered : public Sampler {
 public:
-    Jittered(int num);
+    Jittered(int nspl, int nset);
 private:
     void generateSamples();
 };

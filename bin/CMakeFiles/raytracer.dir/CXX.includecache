@@ -84,6 +84,14 @@ glm/glm.hpp
 core/sampler.h
 ../src/sampler/core/sampler.h
 
+../src/sampler/multijittered.h
+core/sampler.h
+../src/sampler/core/sampler.h
+
+../src/sampler/regular.h
+core/sampler.h
+../src/sampler/core/sampler.h
+
 ../src/tracer/multipleobjects.h
 core/tracer.h
 ../src/tracer/core/tracer.h
@@ -111,6 +119,8 @@ sampler.h
 /Users/littlefrog/raytracer/src/core/sampler.h
 utilities.h
 /Users/littlefrog/raytracer/src/core/utilities.h
+algorithm
+-
 
 /Users/littlefrog/raytracer/src/core/sampler.h
 glm/glm.hpp
@@ -139,8 +149,12 @@ core/ray.h
 /Users/littlefrog/raytracer/src/core/viewplane.cpp
 viewplane.h
 /Users/littlefrog/raytracer/src/core/viewplane.h
+sampler/regular.h
+/Users/littlefrog/raytracer/src/core/sampler/regular.h
 sampler/jittered.h
 /Users/littlefrog/raytracer/src/core/sampler/jittered.h
+sampler/multijittered.h
+/Users/littlefrog/raytracer/src/core/sampler/multijittered.h
 
 /Users/littlefrog/raytracer/src/core/viewplane.h
 core/sampler.h
@@ -161,8 +175,10 @@ geometry/plane.h
 /Users/littlefrog/raytracer/src/core/geometry/plane.h
 geometry/function2d.h
 /Users/littlefrog/raytracer/src/core/geometry/function2d.h
-sampler/jittered.h
-/Users/littlefrog/raytracer/src/core/sampler/jittered.h
+sampler/regular.h
+/Users/littlefrog/raytracer/src/core/sampler/regular.h
+sampler/multijittered.h
+/Users/littlefrog/raytracer/src/core/sampler/multijittered.h
 utilities.h
 /Users/littlefrog/raytracer/src/core/utilities.h
 stb_image_write.h

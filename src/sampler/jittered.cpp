@@ -1,8 +1,9 @@
 #include "jittered.h"
 #include "utilities.h"
 
-Jittered::Jittered(int num) : Sampler(num) {
+Jittered::Jittered(int nspl, int nset) : Sampler(nspl, nset) {
     generateSamples();
+    setupShuffledIndices();
 }
 
 void Jittered::generateSamples() {

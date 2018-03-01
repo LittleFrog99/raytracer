@@ -1,8 +1,9 @@
 #include "regular.h"
 #include "utilities.h"
 
-Regular::Regular(int num) : Sampler(num) {
+Regular::Regular(int nspl, int nset) : Sampler(nspl, nset) {
     generateSamples();
+    setupShuffledIndices();
 }
 
 void Regular::generateSamples() {

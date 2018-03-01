@@ -14,10 +14,10 @@ public:
 
     void setSampler(Sampler *sampler_ptr);
     inline Sampler * getSampler() { return samplerP; }
-    void setSamples(const int n);
+    void setSamples(const int num_sampler, const int num_sets);
     ~ViewPlane() { delete samplerP; }
 
 private:
-    Sampler *samplerP;
+    Sampler *samplerP = nullptr;
 };
 

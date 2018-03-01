@@ -4,7 +4,7 @@
 
 class Regular : public Sampler {
 public:
-    Regular(int num);
+    Regular(int nspl, int nset = 1);
 private:
     void generateSamples();
 };

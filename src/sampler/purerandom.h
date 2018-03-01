@@ -4,7 +4,7 @@
 
 class PureRandom : public Sampler {
 public:
-    PureRandom(int num);
+    PureRandom(int nspl, int nset);
 private:
     void generateSamples();
 };
