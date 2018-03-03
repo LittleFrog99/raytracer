@@ -22,3 +22,45 @@ dvec2 Sampler::sampleUnitSquare() {
         jump = (rand.randomInteger() % numSets) * numSamples;
     return samples[jump + shuffledIndices[jump + count++ % numSamples]];
 }
+
+void Sampler::mapSamplesToUnitDisk() {
+    int size = samples.size();
+    double radius, phi;
+    diskSamples.reserve(size);
+
+    for (int i = 0; i < size; i++) {
+        dvec2 sp(2.0 * samples[i].x - 1.0, 2.0 * samples[i].y - 1.0);
+        if (sp.x > -sp.y) {
+            if (sp.x > sp.y) {
+                radius = sp.x;
+                phi = sp.y / sp.x;
+            }
+            else {
+                radius = sp.y;
+                phi = 2 - sp.x / sp.y;
+            }
+        }
+        else {
+            if (sp.x < sp.y) {
+                radius = -sp.x;
+                phi = 4 + sp.y / sp.x;
+            }
+            else {
+                radius = -sp.y;
+                if (sp.y != 0) // avoid division by zero at origin (NaN)
+                    phi = 6 - sp.x / sp.y;
+                else
+                    phi = 0;
+            }
+        }
+        phi *= PI / 4.0;
+        diskSamples[i] = dvec2(radius * cos(phi), radius * sin(phi));
+    }
+}
+
+dvec2 Sampler::sampleUnitDisk() {
+    Random rand;
+    if (count % numSamples == 0) // start of a new pixel
+        jump = (rand.randomInteger() % numSets) * numSamples;
+    return diskSamples[jump + shuffledIndices[jump + count++ % numSamples]];
+}

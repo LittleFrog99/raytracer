@@ -6,6 +6,8 @@
 using namespace std;
 using namespace glm;
 
+#define PI 3.14159265358979323846
+
 class Random {
 public:
     Random(unsigned int seed = time(nullptr)) {
