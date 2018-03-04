@@ -7,6 +7,7 @@
 #include "geometry/function2d.h"
 #include "sampler/regular.h"
 #include "sampler/multijittered.h"
+#include "camera/pinhole.h"
 #include "utilities.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
@@ -18,7 +19,7 @@ void World::build() {
     vp.vertRes = 300;
     vp.pixelSize = 1;
     vp.numChannels = DEFAULT_NUM_CHANNELS;
-    vp.setSampler(new MultiJittered(25, 2));
+    vp.setSamples(25, 2);
     vp.gamma = 1.0;
     bgColor = vec3(0.0f);
 
@@ -30,6 +31,7 @@ void World::build() {
     addObject(planeP);
 
     tracerP = new MultipleObjects(this);
+    cameraP = new PinHole(dvec3(300, 400, 500), dvec3(0, 0, -50), 400);
     _pixels = new unsigned char[vp.horRes * vp.vertRes * vp.numChannels];
 }
 
@@ -53,29 +55,10 @@ Shade World::intersectWithObjects(const Ray &ray) {
 }
 
 void World::renderScene() {
-    Random random;
-    vec3 pixelColor;
-    Ray ray;
-    ray.direction = dvec4(0, 0, -1, 0);
-    double zw = 100;
-
-    for (int row = 0; row < vp.horRes; row++)
-        for (int col = 0; col < vp.vertRes; col++) {
-            pixelColor = vec3(0.0f);
-
-            for (int p = 0; p < vp.numSamples; p++) { // regular(q + 0.5) / jittered sampling (q + rand)
-                dvec2 sp = vp.getSampler()->sampleUnitSquare();
-                double x = vp.pixelSize * (col - 0.5 * vp.horRes + sp.x);
-                double y = vp.pixelSize * (row - 0.5 * vp.vertRes + sp.y);
-                ray.origin = vec4(x, y, zw, 1);
-                pixelColor += tracerP->traceRay(ray);
-            }
-            pixelColor /= vp.numSamples;
-            plotPoint(row, col, vec4(pixelColor, 1.0));
-        }
+    cameraP->renderScene(*this);
 }
 
-inline void World::plotPoint(unsigned int row, unsigned int col, vec4 color) {
+void World::plotPoint(int row,int col, vec4 color) {
     unsigned int offset = vp.numChannels * vp.horRes * row + vp.numChannels * col;
     _pixels[offset] = static_cast<unsigned char>(UCHAR_MAX * color.r); // red channel
     _pixels[offset + 1] = static_cast<unsigned char>(UCHAR_MAX * color.g); // green
@@ -90,6 +73,7 @@ void World::output(string path) const {
 
 World::~World() {
     delete tracerP;
+    delete cameraP;
     delete _pixels;
     for (unsigned int i = 0; i < objects.size(); i++)
         delete objects[i];

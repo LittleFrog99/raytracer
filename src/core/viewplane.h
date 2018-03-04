@@ -2,8 +2,7 @@
 
 #include "core/sampler.h"
 
-class ViewPlane {
-public:
+struct ViewPlane {
     int horRes;
     int vertRes;
     int numSamples;
@@ -11,13 +10,10 @@ public:
     double pixelSize;
     float gamma;
     float invGamma; // 1/gamma
+    Sampler *samplerP = nullptr;
 
     void setSampler(Sampler *sampler_ptr);
-    inline Sampler * getSampler() { return samplerP; }
     void setSamples(const int num_sampler, const int num_sets);
-    ~ViewPlane() { delete samplerP; }
-
-private:
-    Sampler *samplerP = nullptr;
+    ~ViewPlane() {}
 };
 
