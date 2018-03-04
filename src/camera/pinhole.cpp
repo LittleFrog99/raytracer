@@ -9,7 +9,7 @@ void PinHole::renderScene(World &w) {
     dvec2 samplePt, pixelPt;
 
     vp.pixelSize /= zoom;
-    ray.origin = dvec4(eye, 1);
+    ray.origin = dvec4(eye, 1.0);
 
     for (int row = 0; row < vp.vertRes; row++)
         for (int col = 0; col < vp.horRes; col++) {

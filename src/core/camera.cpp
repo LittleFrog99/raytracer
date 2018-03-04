@@ -11,3 +11,9 @@ void Camera::computeUVW() {
     u = normalize(cross(up, w));
     v = cross(w, u);
 }
+
+void Camera::setRollAngles(double radians) {
+    dmat4 rotMat = rotate(dmat4(), -radians, w);
+    up = dmat3(rotMat) * up;
+    computeUVW();
+}

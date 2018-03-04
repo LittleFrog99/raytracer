@@ -11,7 +11,6 @@
 #include "utilities.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
-#include <limits.h>
 #include <iostream>
 
 void World::build() {
@@ -23,15 +22,15 @@ void World::build() {
     vp.gamma = 1.0;
     bgColor = vec3(0.0f);
 
-    auto *sphereP = new Sphere(dvec4(0.0, -25.0, 0.0, 1.0), 80.0, vec3(1.0f, 0.0f, 0.0f));
+    auto *sphereP = new Sphere(dvec3(-30.0, 0.0, 0.0), 80.0, vec3(1.0, 0.0, 0.0));
     addObject(sphereP);
-    sphereP = new Sphere(dvec4(0.0, 30.0, 0.0, 1.0), 60, vec3(1, 1, 0));
+    sphereP = new Sphere(dvec3(20.0, 10.0, 0.0), 60, vec3(1.0, 1.0, 0.0));
     addObject(sphereP);
-    auto *planeP = new Plane(dvec3(0.0, 1.0, 1.0), dvec4(0), vec3(0.0, 0.0, 1.0));
+    auto *planeP = new Plane(dvec3(0, 1, 0), dvec3(0.0, 0.0, 0.0), vec3(0.0, 0.0, 1.0));
     addObject(planeP);
 
     tracerP = new MultipleObjects(this);
-    cameraP = new PinHole(dvec3(300, 400, 500), dvec3(0, 0, -50), 400);
+    cameraP = new PinHole(dvec3(0, 50, 300), dvec3(-10, 0, 0), 200);
     _pixels = new unsigned char[vp.horRes * vp.vertRes * vp.numChannels];
 }
 
@@ -42,7 +41,7 @@ void World::addObject(Geometry *obj) {
 Shade World::intersectWithObjects(const Ray &ray) {
     Shade shade(*this);
     double t;
-    double tmin = DBL_MAX;
+    double tmin = numeric_limits<double>::max();
 
     for (unsigned int i = 0; i < objects.size(); i++) {
         if (objects[i]->intersect(ray, t, shade) && (t < tmin)) {
@@ -59,11 +58,12 @@ void World::renderScene() {
 }
 
 void World::plotPoint(int row,int col, vec4 color) {
+    static int MAX = numeric_limits<unsigned char>::max();
     unsigned int offset = vp.numChannels * vp.horRes * row + vp.numChannels * col;
-    _pixels[offset] = static_cast<unsigned char>(UCHAR_MAX * color.r); // red channel
-    _pixels[offset + 1] = static_cast<unsigned char>(UCHAR_MAX * color.g); // green
-    _pixels[offset + 2] = static_cast<unsigned char>(UCHAR_MAX * color.b); // blue
-    _pixels[offset + 3] = static_cast<unsigned char>(UCHAR_MAX * color.a); // alpha
+    _pixels[offset] = static_cast<unsigned char>(MAX * color.r);             // red
+    _pixels[offset + 1] = static_cast<unsigned char>(MAX * color.g);         // green
+    _pixels[offset + 2] = static_cast<unsigned char>(MAX * color.b);         // blue
+    _pixels[offset + 3] = static_cast<unsigned char>(MAX * color.a);         // alpha
 }
 
 void World::output(string path) const {
