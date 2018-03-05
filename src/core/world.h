@@ -1,12 +1,10 @@
 #pragma once
 
-#include <vector>
-#include <string>
+#include "utilities.h"
 #include "core/viewplane.h"
 #include "core/tracer.h"
 #include "core/geometry.h"
 #include "core/camera.h"
-using namespace std;
 
 class World {
 public:

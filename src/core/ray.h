@@ -1,7 +1,6 @@
 #pragma once
 
-#include <glm/glm.hpp>
-using namespace glm;
+#include "utilities.h"
 
 struct Ray {
 public:

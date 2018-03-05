@@ -1,6 +1,6 @@
 #pragma once
-#include <glm/glm.hpp>
-using namespace glm;
+
+#include "utilities.h"
 
 class World; // declared first, header is included in source file
 struct Shade {

@@ -1,9 +1,6 @@
 #pragma once
 
-#include <glm/glm.hpp>
-#include <vector>
-using namespace glm;
-using namespace std;
+#include "utilities.h"
 
 class Sampler {
 public:

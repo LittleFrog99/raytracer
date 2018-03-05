@@ -14,8 +14,8 @@
 #include <iostream>
 
 void World::build() {
-    vp.horRes = 300;
-    vp.vertRes = 300;
+    vp.horRes = 400;
+    vp.vertRes = 400;
     vp.pixelSize = 1;
     vp.numChannels = DEFAULT_NUM_CHANNELS;
     vp.setSamples(25, 2);
@@ -26,11 +26,13 @@ void World::build() {
     addObject(sphereP);
     sphereP = new Sphere(dvec3(20.0, 10.0, 0.0), 60, vec3(1.0, 1.0, 0.0));
     addObject(sphereP);
-    auto *planeP = new Plane(dvec3(0, 1, 0), dvec3(0.0, 0.0, 0.0), vec3(0.0, 0.0, 1.0));
+    auto *planeP = new Plane(dvec3(0, 1, 0), dvec3(0.0, -20.0, 0.0), vec3(0.0, 0.0, 1.0));
     addObject(planeP);
 
     tracerP = new MultipleObjects(this);
     cameraP = new PinHole(dvec3(0, 50, 300), dvec3(-10, 0, 0), 200);
+    // cameraP = new PinHole(dvec3(0, 200, 0), dvec3(0, 0, 0), 100); // vertical
+    cameraP->setRollAngles(radians(45.0f));
     _pixels = new unsigned char[vp.horRes * vp.vertRes * vp.numChannels];
 }
 
