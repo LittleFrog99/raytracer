@@ -1,6 +1,5 @@
 #include "sampler.h"
 #include "utilities.h"
-#include <algorithm>
 
 void Sampler::setupShuffledIndices() {
     shuffledIndices.reserve(numSamples * numSets);
@@ -24,7 +23,7 @@ dvec2 Sampler::sampleUnitSquare() {
 }
 
 void Sampler::mapSamplesToUnitDisk() {
-    int size = samples.size();
+    int size = numSamples * numSets;
     double radius, phi;
     diskSamples.reserve(size);
 
@@ -47,7 +46,7 @@ void Sampler::mapSamplesToUnitDisk() {
             }
             else {
                 radius = -sp.y;
-                if (sp.y != 0) // avoid division by zero at origin (NaN)
+                if (sp.y != 0.0) // avoid division by zero at origin (NaN)
                     phi = 6 - sp.x / sp.y;
                 else
                     phi = 0;
@@ -66,8 +65,8 @@ dvec2 Sampler::sampleUnitDisk() {
 }
 
 void Sampler::mapSamplesToHemisphere(const double e) {
-    int size = samples.size();
-    hemisphereSamples.reserve(numSamples * numSets);
+    int size = numSamples * numSets;
+    hemisphereSamples.reserve(size);
 
     for (int i = 0; i < size; i++) {
         double phi = 2.0 * PI * samples[i].x;

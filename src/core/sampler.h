@@ -5,6 +5,8 @@
 class Sampler {
 public:
     Sampler (int nspl, int nset) : numSamples(nspl), numSets(nset) {}
+    void mapSamplesToUnitDisk();
+    void mapSamplesToHemisphere(const double e);
     dvec2 sampleUnitSquare();
     dvec2 sampleUnitDisk();
     dvec3 sampleUnitHemisphere();
@@ -18,11 +20,9 @@ protected:
     vector<dvec2> diskSamples;
     vector<dvec3> hemisphereSamples;
     vector<int> shuffledIndices;
-    unsigned long count;
+    int count = 0;
     int jump;
 
     virtual void generateSamples() = 0;
     void setupShuffledIndices();
-    void mapSamplesToUnitDisk();
-    void mapSamplesToHemisphere(const double e);
 };

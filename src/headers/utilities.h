@@ -1,16 +1,19 @@
 #pragma once
 
-#include <vector>
-#include <string>
+#include <algorithm>
 #include <cstdlib>
 #include <ctime>
+#include <iostream>
+#include <string>
+#include <vector>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 using namespace std;
 using namespace glm;
 
-#define PI 3.14159265358979323846
+const double PI = 3.14159265358979323846;
 
 class Random {
 public:

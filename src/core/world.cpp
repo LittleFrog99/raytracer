@@ -7,11 +7,10 @@
 #include "geometry/function2d.h"
 #include "sampler/regular.h"
 #include "sampler/multijittered.h"
-#include "camera/pinhole.h"
+#include "camera/thinlens.h"
 #include "utilities.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
-#include <iostream>
 
 void World::build() {
     vp.horRes = 400;
@@ -30,9 +29,11 @@ void World::build() {
     addObject(planeP);
 
     tracerP = new MultipleObjects(this);
-    cameraP = new PinHole(dvec3(0, 50, 300), dvec3(-10, 0, 0), 200);
-    // cameraP = new PinHole(dvec3(0, 200, 0), dvec3(0, 0, 0), 100); // vertical
-    cameraP->setRollAngles(radians(45.0f));
+    ThinLens *cam = new ThinLens(dvec3(0, 50, 300), dvec3(-10, 0, 0));
+    cam->setRollAngles(radians(45.0f));
+    cam->setParams(10, 250, 350);
+    cam->setSampler(new MultiJittered(25, 2));
+    cameraP = cam;
     _pixels = new unsigned char[vp.horRes * vp.vertRes * vp.numChannels];
 }
 
@@ -45,7 +46,7 @@ Shade World::intersectWithObjects(const Ray &ray) {
     double t;
     double tmin = numeric_limits<double>::max();
 
-    for (unsigned int i = 0; i < objects.size(); i++) {
+    for (int i = 0; i < objects.size(); i++) {
         if (objects[i]->intersect(ray, t, shade) && (t < tmin)) {
             shade.hasHit = true;
             tmin = t;
@@ -59,7 +60,7 @@ void World::renderScene() {
     cameraP->renderScene(*this);
 }
 
-void World::plotPoint(int row,int col, vec4 color) {
+void World::plotPoint(int row, int col, vec4 color) {
     static int MAX = numeric_limits<unsigned char>::max();
     unsigned int offset = vp.numChannels * vp.horRes * row + vp.numChannels * col;
     _pixels[offset] = static_cast<unsigned char>(MAX * color.r);             // red
@@ -77,6 +78,6 @@ World::~World() {
     delete tracerP;
     delete cameraP;
     delete _pixels;
-    for (unsigned int i = 0; i < objects.size(); i++)
+    for (int i = 0; i < objects.size(); i++)
         delete objects[i];
 }
