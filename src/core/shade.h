@@ -1,19 +1,24 @@
 #pragma once
 
 #include "utilities.h"
+#include "core/material.h"
+#include "core/ray.h"
 
 class World; // declared first, header is included in source file
 struct Shade {
 public:
-    bool hasHit;
-    dvec4 hitPoint;
+    bool hasHit = false;
+    Material *materialP = nullptr;
+    dvec3 hitPoint;
+    dvec3 localHitPoint;
     dvec3 normal;
     vec3 color;
+    Ray ray;
+    double t;
+    int depth = 0;
+    dvec3 direction;
     World &world;
 
-    Shade(World &wrd) : hasHit(false), hitPoint(), normal(), color(vec3()), world(wrd) {}
-    Shade(const Shade &shade);
-
-    Shade & operator = (const Shade &shade);
+    Shade(World &wrd) : world(wrd) {}
 };
 

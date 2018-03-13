@@ -1,5 +1,5 @@
 #include "geometry.h"
 
-bool Geometry::intersect(const Ray &ray, double &tmin, Shade &sr) const {
+bool Geometry::intersect(Ray &ray, double &tmin, Shade &sr) {
     return false;
 }

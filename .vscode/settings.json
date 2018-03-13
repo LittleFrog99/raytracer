@@ -13,5 +13,6 @@
         "typeinfo": "cpp",
         "vector": "cpp",
         "limits": "cpp"
-    }
+    },
+    "C_Cpp.errorSquiggles": "Enabled"
 }

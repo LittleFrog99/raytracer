@@ -40,9 +40,9 @@ void ThinLens::renderScene(World &world) {
                 
                 lensPt = samplerP->sampleUnitDisk() * lensRadius;
 
-                ray.origin = dvec4(eye + lensPt.x * u + lensPt.y * v, 1);
-                ray.direction = dvec4(rayDirection(pixPt, lensPt), 0);
-                color += world.tracerP->traceRay(ray, 0);
+                ray.origin = eye + lensPt.x * u + lensPt.y * v;
+                ray.direction = rayDirection(pixPt, lensPt);
+                color += world.tracerP->traceRay(ray);
             }
 
             color /= vp.numSamples;

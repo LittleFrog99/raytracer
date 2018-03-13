@@ -1,10 +1,10 @@
 #include "sphere.h"
 
-bool Sphere::intersect(const Ray &ray, double &tmin, Shade &shade) const {
+bool Sphere::intersect(Ray &ray, double &tmin, Shade &shade) {
     double t;
     dvec3 omc = dvec3(ray.origin) - center;
     double a = dot(ray.direction, ray.direction);
-    double b = 2.0 * dot(omc, dvec3(ray.direction));
+    double b = 2.0 * dot(omc, ray.direction);
     double c = dot(omc, omc) - radius * radius;
     double disc = b * b - 4.0 * a * c;
 

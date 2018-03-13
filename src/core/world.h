@@ -5,23 +5,26 @@
 #include "core/tracer.h"
 #include "core/geometry.h"
 #include "core/camera.h"
+#include "core/light.h"
 
 class World {
 public:
     ViewPlane vp;
-    vec3 bgColor;
     Tracer *tracerP;
     Camera *cameraP;
-    vector<Geometry *> objects;
+    vec3 bgColor;
+    vector<Geometry*> objects;
+    Light *ambientP;
+    vector<Light*> lights;
 
-    World() {}
-    ~World();
+    World() : bgColor(0.0) {}
     void build();
     void addObject(Geometry *obj);
-    Shade intersectWithObjects(const Ray &ray);
+    Shade hitObjects(Ray &ray);
     void renderScene();
     void plotPoint(int row, int col, vec4 color);
-    void output(string path) const;
+    void output(string path);
+    ~World();
 
 private:
     unsigned char *_pixels;

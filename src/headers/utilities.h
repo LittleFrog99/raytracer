@@ -13,7 +13,8 @@
 using namespace std;
 using namespace glm;
 
-const double PI = 3.14159265358979323846;
+static const double PI = 3.14159265358979323846;
+static const double INV_PI = 1.0 / PI;
 
 class Random {
 public:
@@ -41,5 +42,13 @@ public:
         return int(randomDouble(0, high - low + 1) + low);
     }
 
+};
+
+class Debug {
+public:
+    template<class T>
+    static void log(tvec3<T, highp> vec3) {
+        cout << "X: " << vec3.x << " Y: " << vec3.y << " Z: " << vec3.z << endl;
+    }
 };
 

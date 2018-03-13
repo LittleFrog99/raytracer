@@ -2,14 +2,15 @@
 
 #include "core/shade.h"
 #include "core/ray.h"
+#include "core/material.h"
 
 class Geometry {
 public:
-    vec3 color;
+    Material *materialP;
 
     Geometry() {}
-    Geometry(vec3 color) : color(color) {}
-    virtual bool intersect(const Ray &ray, double &tmin, Shade &sr) const;
+    Geometry(Material *material_ptr) : materialP(material_ptr) {}
+    virtual bool intersect(Ray &ray, double &tmin, Shade &sr);
     virtual ~Geometry() {}
 
 protected:

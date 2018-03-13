@@ -7,8 +7,13 @@ class World;
 class Tracer {
 public:
     Tracer(World *w_ptr) : worldP(w_ptr) {}
-    virtual ~Tracer() {} // no need to delete worldP
-    virtual vec3 traceRay(const Ray &ray, int depth) const;
+    virtual vec3 traceRay(Ray &ray, int depth = 0) {
+        return vec3();
+    }
+    virtual vec3 traceRay(Ray &ray, float &tmin, int depth) {
+        return vec3();
+    }
+
 protected:
     World *worldP;
 };

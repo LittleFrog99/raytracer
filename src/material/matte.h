@@ -1,0 +1,26 @@
+#pragma once
+
+#include "core/material.h"
+#include "brdf/lambertian.h"
+#include "sampler/multijittered.h"
+
+class Matte : public Material {
+public:
+    Matte(vec3 color = vec3(), float ambient_factor = 0.0, float diffuse_factor = 0.0);
+    virtual vec3 shade(Shade &shade);
+
+    inline void setAmbientFactor(float factor) { 
+        ambientBRDF->setReflectance(factor);
+    }
+    inline void setDiffuseFactor(float factor) {
+        diffuseBRDF->setReflectance(factor);
+    }
+    inline void setDiffuseColor(vec3 color) {
+        ambientBRDF->setColor(color);
+        diffuseBRDF->setColor(color);
+    }
+
+private:
+    Lambertian *ambientBRDF;
+    Lambertian *diffuseBRDF;
+};
