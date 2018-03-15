@@ -14,5 +14,6 @@
         "vector": "cpp",
         "limits": "cpp"
     },
-    "C_Cpp.errorSquiggles": "Enabled"
+    "C_Cpp.errorSquiggles": "Enabled",
+    "editor.minimap.enabled": false,
 }

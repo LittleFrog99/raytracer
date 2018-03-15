@@ -13,6 +13,7 @@
 #include "light/ambient.h"
 #include "light/pointlight.h"
 #include "material/matte.h"
+#include "material/phong.h"
 #include "utilities.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
@@ -27,19 +28,20 @@ void World::build() {
     vp.gamma = 1.0;
 
     /* Lights */
-    ambientP = new Ambient(vec3(1.0), 0.1);
+    ambientP = new Ambient(vec3(1.0), 0.05);
     PointLight *lightP = new PointLight(dvec3(100, 100, 100), vec3(3.0), 0.8);
     lights.push_back(lightP);
 
     /* Materials */
     Matte *material1P = new Matte(vec3(1.0, 0.0, 0.0), 1.0, 1.0);
-    Matte *material2P = new Matte(vec3(0.0, 1.0, 0.0), 1.0, 1.0);
+    Phong *material2P = new Phong(vec3(0.0, 1.0, 0.0), 1.0, 0.7, 0.25);
+    material2P->setSpecularColor(vec3(1.0f));
     Matte *material3P = new Matte(vec3(0.0, 0.0, 1.0), 1.0, 1.0);
 
     /* Geometry Objects */
-    auto *sphere1P = new Sphere(dvec3(-50.0, 0.0, 0.0), 80.0, material1P);
-    auto *sphere2P = new Sphere(dvec3(40.0, 0.0, 0.0), 60, material2P);
-    auto *plane1P = new Plane(dvec3(0, 1, 0), dvec3(0.0, -20.0, 0.0), material3P);
+    auto *sphere1P = new Sphere(dvec3(-60.0, 0.0, 10.0), 80.0, material1P);
+    auto *sphere2P = new Sphere(dvec3(40.0, 0.0, -10.0), 60, material2P);
+    auto *plane1P = new Plane(dvec3(0, 1, 0), dvec3(0.0, -40.0, 0.0), material3P);
     //addObject(sphere1P);
     addObject(sphere1P);addObject(sphere2P);addObject(plane1P);
 
@@ -87,12 +89,12 @@ void World::renderScene() {
 }
 
 void World::plotPoint(int row, int col, vec4 color) {
-    static int MAX = numeric_limits<unsigned char>::max();
+    static float MAX = numeric_limits<unsigned char>::max();
     unsigned int offset = vp.numChannels * vp.horRes * row + vp.numChannels * col;
-    _pixels[offset] = static_cast<unsigned char>(MAX * color.r);             // red
-    _pixels[offset + 1] = static_cast<unsigned char>(MAX * color.g);         // green
-    _pixels[offset + 2] = static_cast<unsigned char>(MAX * color.b);         // blue
-    _pixels[offset + 3] = static_cast<unsigned char>(MAX * color.a);         // alpha
+    _pixels[offset] = static_cast<unsigned char>(glm::clamp(MAX * color.r, 0.0f, MAX));
+    _pixels[offset + 1] = static_cast<unsigned char>(glm::clamp(MAX * color.g, 0.0f, MAX));
+    _pixels[offset + 2] = static_cast<unsigned char>(glm::clamp(MAX * color.b, 0.0f, MAX));
+    _pixels[offset + 3] = static_cast<unsigned char>(MAX * color.a);
 }
 
 void World::output(string path) {

@@ -1,12 +1,12 @@
 #include "matte.h"
 #include "core/world.h"
 
-Matte::Matte(vec3 color, float ambient_factor, float diffuse_factor) : Material() {
+Matte::Matte(vec3 color, float ambient_intensity, float diffuse_intensity) : Material() {
     ambientBRDF = new Lambertian(new MultiJittered(25, 2));
     diffuseBRDF = new Lambertian(new MultiJittered(25, 2));
     setDiffuseColor(color);
-    setAmbientFactor(ambient_factor);
-    setDiffuseFactor(diffuse_factor);
+    setAmbientIntensity(ambient_intensity);
+    setDiffuseIntensity(diffuse_intensity);
 }
 
 vec3 Matte::shade(Shade &shade) {
