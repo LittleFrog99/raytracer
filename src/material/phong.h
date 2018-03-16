@@ -26,6 +26,9 @@ public:
     inline void setSpecularColor(vec3 color) {
         specularBRDF->setColor(color);
     }
+    inline void setSpecularExponent(float exponent) {
+        specularBRDF->setExponent(exponent);
+    }
 
 private:
     Lambertian *ambientBRDF;

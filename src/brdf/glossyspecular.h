@@ -16,6 +16,9 @@ public:
     inline void setColor(vec3 color) {
         this->color = color;
     }
+    inline void setExponent(float exponent) {
+        this->exponent = exponent;
+    }
 
 private:
     float intensity;

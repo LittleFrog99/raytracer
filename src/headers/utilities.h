@@ -45,11 +45,9 @@ public:
 
 };
 
-class Debug {
-public:
+namespace Debug {
     template<class T>
-    static void log(tvec3<T, highp> vec3) {
+    void log(tvec3<T, highp> vec3) {
         cout << "X: " << vec3.x << " Y: " << vec3.y << " Z: " << vec3.z << endl;
     }
 };
-
