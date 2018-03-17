@@ -29,3 +29,30 @@ bool Sphere::intersect(Ray &ray, double &tmin, Shade &shade) {
     }
     return false;
 }
+
+bool Sphere::shadowIntersect(Ray &ray, double &tmin) {
+    double t;
+    dvec3 omc = dvec3(ray.origin) - center;
+    double a = dot(ray.direction, ray.direction);
+    double b = 2.0 * dot(omc, ray.direction);
+    double c = dot(omc, omc) - radius * radius;
+    double disc = b * b - 4.0 * a * c;
+
+    if (disc < 0)
+        return false;
+    else {
+        double e = sqrt(disc);
+        double denom = 2.0 * a;
+        t = (-b - e) / denom; // smaller root
+        if (t > EPSILON) {
+            tmin = t;
+            return true;
+        }
+        t = (-b + e) / denom;
+        if (t > EPSILON) {
+            tmin = t;
+            return true;
+        }
+    }
+    return false;
+}

@@ -8,5 +8,5 @@ public:
     dvec3 direction;
 
     Ray() {}
-    Ray(const dvec4 &origin, const dvec4 &dir) : origin(origin), direction(dir) {}
+    Ray(dvec3 &origin, dvec3 &dir) : origin(origin), direction(dir) {}
 };

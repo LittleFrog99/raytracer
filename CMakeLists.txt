@@ -6,7 +6,7 @@ project(raytracer)
 include_directories(/usr/local/include)
 include_directories(src/headers)
 include_directories(src)
-set(SOURCES_CORE src/main.cpp src/core/geometry.cpp src/core/world.cpp src/core/viewplane.cpp
+set(SOURCES_CORE src/main.cpp src/core/world.cpp src/core/viewplane.cpp
     src/core/sampler.cpp src/core/camera.cpp)
 set(SOURCES_GEOMETRY src/geometry/plane.cpp src/geometry/sphere.cpp)
 set(SOURCES_TRACER src/tracer/raycast.cpp)

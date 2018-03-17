@@ -28,8 +28,8 @@ void World::build() {
 
     /* Lights */
     ambientP = new Ambient(vec3(1.0), 0.05);
-    PointLight *light1P = new PointLight(dvec3(60, 100, 100), vec3(3.0), 0.8);
-    PointLight *light2P = new PointLight(dvec3(-100, 70, 100), vec3(1.0f), 0.7f);
+    PointLight *light1P = new PointLight(dvec3(150, 100, 200), vec3(2.0), 1.0);
+    PointLight *light2P = new PointLight(dvec3(-120, 100, 100), vec3(1.5), 1.0);
     lights.push_back(light1P); lights.push_back(light2P);
 
     /* Materials */
@@ -37,7 +37,7 @@ void World::build() {
     material1P->setSpecularExponent(16.0f);
     Phong *material2P = new Phong(vec3(0.0, 1.0, 0.0), 1.0, 0.7, 0.25);
     material2P->setSpecularExponent(12.0f);
-    Matte *material3P = new Matte(vec3(0.0, 0.0, 1.0), 1.0, 1.0);
+    Phong *material3P = new Phong(vec3(0.0, 0.0, 1.0), 1.0, 0.9, 0.1);
 
     /* Geometry Objects */
     auto *sphere1P = new Sphere(dvec3(-20.0, 0.0, 0.0), 80.0, material1P);
@@ -57,7 +57,7 @@ void World::addObject(Geometry *obj) {
     objects.push_back(obj);
 }
 
-Shade World::hitObjects(Ray &ray) {
+Shade World::intersectObjects(Ray &ray) {
     Shade shade(*this);
     double t;
     double tmin = numeric_limits<double>::max();

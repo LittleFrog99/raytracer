@@ -4,7 +4,12 @@
 
 class Ambient : public Light {
 public:
-    Ambient(vec3 color, float scale) : scale(scale), color(color) {}
+    Ambient(vec3 color, float scale) : scale(scale), color(color) {
+        _castShadow = false;
+    }
+    virtual bool inShadow(Ray shadow_ray, Shade shade)  {
+        return false;
+    }
     virtual dvec3 getDirection(Shade &shade) {
         return dvec3(0.0);
     }

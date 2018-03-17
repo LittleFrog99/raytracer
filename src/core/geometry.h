@@ -10,7 +10,8 @@ public:
 
     Geometry() {}
     Geometry(Material *material_ptr) : materialP(material_ptr) {}
-    virtual bool intersect(Ray &ray, double &tmin, Shade &sr);
+    virtual bool intersect(Ray &ray, double &tmin, Shade &sr) = 0;
+    virtual bool shadowIntersect(Ray &ray, double &tmin) = 0;
     virtual ~Geometry() {}
 
 protected:

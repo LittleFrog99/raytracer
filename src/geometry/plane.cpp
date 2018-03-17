@@ -16,3 +16,12 @@ bool Plane::intersect(Ray &ray, double &tmin, Shade &shade) {
     }
     else return false;
 }
+
+bool Plane::shadowIntersect(Ray &ray, double &tmin) {
+    double t = -dot(param, dvec4(ray.origin, 1.0)) / dot(param, dvec4(ray.direction, 0.0));
+    if (t > EPSILON) {
+        tmin = t;
+        return true;
+    }
+    else return false;
+}

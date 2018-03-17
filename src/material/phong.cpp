@@ -16,10 +16,21 @@ vec3 Phong::shade(Shade &shade) {
     for (int i = 0; i < shade.world.lights.size(); i++) {
         dvec3 in = shade.world.lights[i]->getDirection(shade);
         float nDotWi = dot(shade.normal, in);
-        if (nDotWi > 0.0)
-            color += (diffuseBRDF->calcBRDF(shade, in, out) +
-                specularBRDF->calcBRDF(shade, in, out)) * 
-                shade.world.lights[i]->incidRadiosity(shade) * nDotWi;
+        
+        if (nDotWi > 0.0) {
+            bool inShadow = false;
+            if (shade.world.lights[i]->castShadow()) {
+                Ray shadowRay(shade.hitPoint, in);
+                inShadow = shade.world.lights[i]->inShadow(shadowRay, shade);
+            }
+
+            if (!inShadow)
+                color += (diffuseBRDF->calcBRDF(shade, in, out) +
+                    specularBRDF->calcBRDF(shade, in, out)) *
+                    shade.world.lights[i]->incidRadiosity(shade) * nDotWi;
+        }
+
+            
     }
 
     return color;
