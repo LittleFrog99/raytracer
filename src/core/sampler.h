@@ -6,7 +6,7 @@ class Sampler {
 public:
     Sampler (int nspl, int nset) : numSamples(nspl), numSets(nset) {}
     void mapSamplesToUnitDisk();
-    void mapSamplesToHemisphere(const double e);
+    void mapSamplesToHemisphere(double exponent = 1);
     dvec2 sampleUnitSquare();
     dvec2 sampleUnitDisk();
     dvec3 sampleUnitHemisphere();

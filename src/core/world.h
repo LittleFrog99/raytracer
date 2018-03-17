@@ -8,7 +8,8 @@
 #include "core/light.h"
 
 class World {
-public:
+    friend void displayStatus(World *world);
+public: 
     ViewPlane vp;
     Tracer *tracerP;
     Camera *cameraP;
@@ -28,6 +29,7 @@ public:
 
 private:
     unsigned char *_pixels;
+    int finished = 0;
     constexpr static int DEFAULT_NUM_CHANNELS = 4;
 };
 

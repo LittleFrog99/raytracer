@@ -4,20 +4,20 @@
 
 class Ambient : public Light {
 public:
-    Ambient(vec3 color, float scale) : scale(scale), color(color) {
+    Ambient(vec3 color, float intensity) : intensity(intensity), color(color) {
         _castShadow = false;
     }
-    virtual bool inShadow(Ray shadow_ray, Shade shade)  {
+    virtual bool inShadow(Ray &shadow_ray, Shade &shade)  {
         return false;
     }
     virtual dvec3 getDirection(Shade &shade) {
         return dvec3(0.0);
     }
     virtual vec3 incidRadiosity(Shade &shade) {
-        return scale * color;
+        return intensity * color;
     }
 
 private:
-    float scale;
+    float intensity;
     vec3 color;
 };

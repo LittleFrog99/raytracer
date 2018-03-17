@@ -64,14 +64,14 @@ dvec2 Sampler::sampleUnitDisk() {
     return diskSamples[jump + shuffledIndices[jump + count++ % numSamples]];
 }
 
-void Sampler::mapSamplesToHemisphere(const double e) {
+void Sampler::mapSamplesToHemisphere(double exponent) {
     int size = numSamples * numSets;
     hemisphereSamples.reserve(size);
 
     for (int i = 0; i < size; i++) {
         double phi = 2.0 * PI * samples[i].x;
         double cos_phi = cos(phi), sin_phi = sin(phi);
-        double cos_theta = pow((1.0 - samples[i].y), 1.0 / (e + 1.0));
+        double cos_theta = pow((1.0 - samples[i].y), 1.0 / (exponent + 1.0));
         double sin_theta = sqrt(1 - cos_theta * cos_theta);
 
         dvec3 point(sin_theta * cos_phi, sin_theta * sin_phi, cos_theta);

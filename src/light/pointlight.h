@@ -7,7 +7,7 @@ public:
     PointLight(dvec3 location, vec3 color, float scale) : 
         scale(scale), color(color), location(location) {}
 
-    virtual bool inShadow(Ray shadow_ray, Shade shade) {
+    virtual bool inShadow(Ray &shadow_ray, Shade &shade) {
         double t;
         double d = distance(shadow_ray.origin, location);
 

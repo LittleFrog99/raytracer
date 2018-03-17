@@ -10,6 +10,7 @@
 #include "camera/pinhole.h"
 #include "camera/thinlens.h"
 #include "light/ambient.h"
+#include "light/ambientoccluder.h"
 #include "light/pointlight.h"
 #include "material/matte.h"
 #include "material/phong.h"
@@ -27,17 +28,27 @@ void World::build() {
     vp.gamma = 1.0;
 
     /* Lights */
-    ambientP = new Ambient(vec3(1.0), 0.05);
-    PointLight *light1P = new PointLight(dvec3(150, 100, 200), vec3(2.2), 1.0);
-    PointLight *light2P = new PointLight(dvec3(-120, 100, 100), vec3(1.7), 1.0);
+    bgColor = vec3(1.0);
+    AmbientOccluder *occluderP = new AmbientOccluder(vec3(1.0), 1.0, 0.2);
+    occluderP->setSampler(new MultiJittered(256, 2));
+    occluderP->setOcclusionSamples(99);
+    ambientP = occluderP;
+    PointLight *light1P = new PointLight(dvec3(150, 200, 250), vec3(2.2), 1.0);
+    PointLight *light2P = new PointLight(dvec3(-120, 200, 150), vec3(1.7), 1.0);
     lights.push_back(light1P); lights.push_back(light2P);
 
     /* Materials */
-    Phong *material1P = new Phong(vec3(1.0, 0.0, 0.0), 1.0, 0.75, 0.20);
+    Phong *material1P = new Phong(vec3(1.0, 0.0, 0.0), 0.2, 0.7, 0.1);
     material1P->setSpecularExponent(16.0f);
-    Phong *material2P = new Phong(vec3(0.0, 1.0, 0.0), 1.0, 0.7, 0.25);
+    Phong *material2P = new Phong(vec3(0.0, 1.0, 0.0), 0.2, 0.6, 0.2);
     material2P->setSpecularExponent(12.0f);
-    Phong *material3P = new Phong(vec3(0.0, 0.0, 1.0), 1.0, 0.9, 0.1);
+    Phong *material3P = new Phong(vec3(1.0, 1.0, 1.0), 1.0, 0, 0);
+
+    /*Phong *material1P = new Phong(vec3(1.0, 0.0, 0.0), 1, 0, 0);
+    material1P->setSpecularExponent(16.0f);
+    Phong *material2P = new Phong(vec3(0.0, 1.0, 0.0), 1, 0, 0);
+    material2P->setSpecularExponent(12.0f);
+    Phong *material3P = new Phong(vec3(0.0, 0.0, 1.0), 1, 0, 0);*/
 
     /* Geometry Objects */
     auto *sphere1P = new Sphere(dvec3(-20.0, 0.0, 0.0), 80.0, material1P);
@@ -84,8 +95,24 @@ Shade World::intersectObjects(Ray &ray) {
     return shade;
 }
 
+void displayStatus(World *world) {
+    int total = world->vp.horRes * world->vp.vertRes;
+    while (world->finished <= total)
+    {
+        cout << '\r';
+        cout << setw(8) << setprecision(4) << float(world->finished) * 100 / total << '%';
+        cout.flush();
+        if (world->finished == total)
+            break;
+        usleep(100000);
+    }
+}
+
 void World::renderScene() {
+    thread status(displayStatus, this);
+    status.detach();
     cameraP->renderScene(*this);
+    usleep(100000);
 }
 
 vec3 maxToOne(vec3 color) {
@@ -102,6 +129,8 @@ void World::plotPoint(int row, int col, vec4 color) {
     _pixels[offset + 1] = static_cast<unsigned char>(MAX * color.g);
     _pixels[offset + 2] = static_cast<unsigned char>(MAX * color.b);
     _pixels[offset + 3] = static_cast<unsigned char>(MAX * color.a);
+
+    finished++;
 }
 
 void World::output(string path) {
