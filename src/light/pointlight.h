@@ -9,12 +9,13 @@ public:
 
     virtual bool inShadow(Ray shadow_ray, Shade shade) {
         double t;
-        int numObjects = shade.world.lights.size();
         double d = distance(shadow_ray.origin, location);
 
-        for (int i = 0; i < numObjects; i++) 
-            if (shade.world.objects[i]->shadowIntersect(shadow_ray, t) && (t < d)) 
+        for (int i = 0; i < shade.world.lights.size(); i++) {
+            Geometry *object = shade.world.objects[i];
+            if (object->shadowIntersect(shadow_ray, t) && object->castShadow() && (t < d))
                 return true;
+        }
         
         return false;
     }

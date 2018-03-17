@@ -28,8 +28,8 @@ void World::build() {
 
     /* Lights */
     ambientP = new Ambient(vec3(1.0), 0.05);
-    PointLight *light1P = new PointLight(dvec3(150, 100, 200), vec3(2.0), 1.0);
-    PointLight *light2P = new PointLight(dvec3(-120, 100, 100), vec3(1.5), 1.0);
+    PointLight *light1P = new PointLight(dvec3(150, 100, 200), vec3(2.2), 1.0);
+    PointLight *light2P = new PointLight(dvec3(-120, 100, 100), vec3(1.7), 1.0);
     lights.push_back(light1P); lights.push_back(light2P);
 
     /* Materials */
@@ -43,7 +43,6 @@ void World::build() {
     auto *sphere1P = new Sphere(dvec3(-20.0, 0.0, 0.0), 80.0, material1P);
     auto *sphere2P = new Sphere(dvec3(80.0, 0.0, -20.0), 60, material2P);
     auto *plane1P = new Plane(dvec3(0, 1, 0), dvec3(0.0, -40.0, 0.0), material3P);
-    //addObject(sphere1P);
     addObject(sphere1P);addObject(sphere2P);addObject(plane1P);
 
     /* Camera & Tracer */ 
@@ -67,7 +66,7 @@ Shade World::intersectObjects(Ray &ray) {
         if (objects[i]->intersect(ray, t, shade) && (t < tmin)) {
             shade.hasHit = true;
             tmin = t;
-            shade.materialP = objects[i]->materialP;
+            shade.materialP = objects[i]->getMaterial();
             shade.hitPoint = ray.origin + t * ray.direction;
             normal = shade.normal;
             hitPoint = shade.hitPoint;
