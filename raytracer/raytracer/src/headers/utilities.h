@@ -49,8 +49,16 @@ public:
 };
 
 namespace Debug {
-    template<class T>
-    void log(tvec3<T, highp> vec3) {
+    template <class T>
+    inline void log(tvec3<T, highp> vec3) {
         cout << "X: " << vec3.x << " Y: " << vec3.y << " Z: " << vec3.z << endl;
     }
 };
+
+namespace Math {
+    template <class T>
+    inline T distanceSquared(tvec3<T, highp> a, tvec3<T, highp> b) {
+        return dot(a - b, a - b);
+    }
+};
+

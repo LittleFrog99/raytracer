@@ -20,14 +20,23 @@ public:
 
     World() : bgColor(0.0) {}
     void build();
-    void addObject(Geometry *obj);
     Shade intersectObjects(Ray &ray);
     void renderScene();
     void plotPoint(int row, int col, vec4 color);
     void output(string path);
     ~World();
 
-private:
+    inline void addObject(Geometry *obj_ptr) {
+        objects.push_back(obj_ptr);
+    }
+    inline void addLight(Light *light_ptr) {
+        lights.push_back(light_ptr);
+    }
+    inline void setAmbient(Light *ambient_ptr) {
+        ambientP = ambient_ptr;
+    }
+
+  private:
     unsigned char *_pixels;
     int finished = 0;
     constexpr static int DEFAULT_NUM_CHANNELS = 4;

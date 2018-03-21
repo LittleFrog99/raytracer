@@ -1,7 +1,6 @@
 #include "plane.h"
 
-Plane::Plane(dvec3 normal, dvec3 point, Material *material_ptr) : 
-    Geometry(material_ptr) {
+void Plane::setParams(dvec3 normal, dvec3 point) {
     double d = -dot(normal, point);
     param = dvec4(normal, d);
 }

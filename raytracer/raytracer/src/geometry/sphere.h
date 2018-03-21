@@ -5,7 +5,11 @@
 class Sphere : public Geometry {
 public:
     Sphere() {}
-    Sphere(dvec3 center, double radius, Material *material_ptr) : Geometry(material_ptr), center(center), radius(radius) {}
+    Sphere(Material *material_ptr) : Geometry(material_ptr) {}
+    void setParams(dvec3 center, double radius) {
+        this->center = center;
+        this->radius = radius;
+    }
     virtual bool intersect(Ray &ray, double &tmin, Shade &shade);
     virtual bool shadowIntersect(Ray &ray, double &tmin);
     

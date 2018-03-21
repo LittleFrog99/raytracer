@@ -30,12 +30,11 @@ vec3 AmbientOccluder::incidRadiosity(Shade &shade) {
     u = cross(v, w);
 
     Random random;
-    float occlusion = 0;
+    vec3 ambColor = intensity * minAmount * color;
     for (int i = 0; i < numOccSamples; i++) {
         Ray shadowRay(shade.hitPoint, getDirection(shade));
-        occlusion += inShadow(shadowRay, shade);
+        if (!inShadow(shadowRay, shade)) 
+            ambColor += intensity * (1 - minAmount) * color / float(numOccSamples);
     }
-    occlusion /= numOccSamples;
-    
-    return (1 - occlusion * (1 - minAmount)) * intensity * color;
+    return ambColor;
 }

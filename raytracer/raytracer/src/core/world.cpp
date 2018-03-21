@@ -2,18 +2,20 @@
 #include "core/tracer.h"
 #include "core/shade.h"
 #include "core/material.h"
-#include "tracer/raycast.h"
+#include "tracer/arealighttracer.h"
 #include "geometry/sphere.h"
 #include "geometry/plane.h"
+#include "geometry/rectangle.h"
 #include "sampler/regular.h"
 #include "sampler/multijittered.h"
 #include "camera/pinhole.h"
 #include "camera/thinlens.h"
-#include "light/ambient.h"
 #include "light/ambientoccluder.h"
 #include "light/pointlight.h"
+#include "light/arealight.h"
 #include "material/matte.h"
 #include "material/phong.h"
+#include "material/emissive.h"
 #include "utilities.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
@@ -27,44 +29,45 @@ void World::build() {
     vp.setSamples(25, 2);
     vp.gamma = 1.0;
 
-    /* Lights */
-    bgColor = vec3(1.0);
-    AmbientOccluder *occluderP = new AmbientOccluder(vec3(1.0), 1.0, 0.2);
-    occluderP->setSampler(new MultiJittered(256, 2));
-    occluderP->setOcclusionSamples(99);
-    ambientP = occluderP;
-    PointLight *light1P = new PointLight(dvec3(150, 200, 250), vec3(2.2), 1.0);
-    PointLight *light2P = new PointLight(dvec3(-120, 200, 150), vec3(1.7), 1.0);
-    lights.push_back(light1P); lights.push_back(light2P);
-
     /* Materials */
-    Phong *material1P = new Phong(vec3(1.0, 0.0, 0.0), 0.2, 0.7, 0.1);
-    material1P->setSpecularExponent(16.0f);
-    Phong *material2P = new Phong(vec3(0.0, 1.0, 0.0), 0.2, 0.6, 0.2);
-    material2P->setSpecularExponent(12.0f);
-    Phong *material3P = new Phong(vec3(1.0, 1.0, 1.0), 1.0, 0, 0);
-
-    /*Phong *material1P = new Phong(vec3(1.0, 0.0, 0.0), 1, 0, 0);
-    material1P->setSpecularExponent(16.0f);
-    Phong *material2P = new Phong(vec3(0.0, 1.0, 0.0), 1, 0, 0);
-    material2P->setSpecularExponent(12.0f);
-    Phong *material3P = new Phong(vec3(0.0, 0.0, 1.0), 1, 0, 0);*/
+    auto *material1P = new Matte(vec3(1.0, 0, 0), 0.2, 0.4);
+    auto *material2P = new Matte(vec3(0.0, 1.0, 0), 0.2, 0.4);
+    auto *material3P = new Matte(vec3(0.6), 0, 3.0);
+    auto *material4P = new Emissive(vec3(1.0), 100.0);
 
     /* Geometry Objects */
-    auto *sphere1P = new Sphere(dvec3(-20.0, 0.0, 0.0), 80.0, material1P);
-    auto *sphere2P = new Sphere(dvec3(80.0, 0.0, -20.0), 60, material2P);
-    auto *plane1P = new Plane(dvec3(0, 1, 0), dvec3(0.0, -40.0, 0.0), material3P);
-    addObject(sphere1P);addObject(sphere2P);addObject(plane1P);
+    auto *sphere1P = new Sphere(material1P);
+    sphere1P->setParams(dvec3(-30.0, 80.0, -20.0), 80.0);
+    auto *sphere2P = new Sphere(material2P);
+    sphere2P->setParams(dvec3(40.0, 40.0, 80.0), 40.0);
+    auto *plane1P = new Plane(material3P);
+    plane1P->setParams(dvec3(0, 1, 0), dvec3(0.0, 0.0, 0.0));
+    auto *rect1P = new Rectangle(material4P);
+    rect1P->setParams(dvec3(-50, 300, 200), dvec3(50, 0, 0), dvec3(0, -50, 0));
+    rect1P->setSampler(new MultiJittered(100, 2));
+    rect1P->toggleShadowCast(false);
+
+    addObject(sphere1P);
+    addObject(sphere2P);
+    addObject(plane1P);
+    // addObject(rect1P);
+
+    /* Lights */
+    bgColor = vec3(0.8);
+    AmbientOccluder *occluderP = new AmbientOccluder(vec3(1.0), 1.0, 0.2);
+    occluderP->setSampler(new MultiJittered(256, 2));
+    occluderP->setOcclusionSamples(1);
+    setAmbient(occluderP);
+
+    auto area1P = new AreaLight(rect1P);
+    area1P->toggleShadowCast(true);
+    addLight(area1P);
 
     /* Camera & Tracer */ 
-    tracerP = new RayCast(this);
-    PinHole *cam = new PinHole(dvec3(0, 50, 300), dvec3(10, 0, 0), 150);
+    tracerP = new AreaLightTracer(this);
+    PinHole *cam = new PinHole(dvec3(0, 300, 0), dvec3(0, 30, 0), 100);
     cameraP = cam;
     _pixels = new unsigned char[vp.horRes * vp.vertRes * vp.numChannels];
-}
-
-void World::addObject(Geometry *obj) {
-    objects.push_back(obj);
 }
 
 Shade World::intersectObjects(Ray &ray) {
@@ -97,8 +100,7 @@ Shade World::intersectObjects(Ray &ray) {
 
 void displayStatus(World *world) {
     int total = world->vp.horRes * world->vp.vertRes;
-    while (world->finished <= total)
-    {
+    while (world->finished <= total) {
         cout << '\r';
         cout << setw(8) << setprecision(4) << float(world->finished) * 100 / total << '%';
         cout.flush();

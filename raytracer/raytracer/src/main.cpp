@@ -5,11 +5,11 @@
 int main() {
     clock_t start = clock();
     World w;
-    cout << "Building scenes... \n";
+    cout << "Building scene... \n";
     w.build();
     cout << "Rendering... \nComplete: \n";
     w.renderScene();
-    cout << "\nOutputing scenes... \n";
+    cout << "\nOutputing image... \n";
     w.output("output.png");
     float duration = float(clock() - start) / CLOCKS_PER_SEC;
     cout << "Done. Time elapsed: " << setprecision(4) << duration << " seconds. \n";
