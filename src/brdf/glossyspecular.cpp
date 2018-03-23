@@ -11,7 +11,7 @@ vec3 GlossySpecular::calcReflectance(Shade &shade, dvec3 &out) {
     return vec3();
 }
 
-vec3 GlossySpecular::sampleF(Shade &shade, dvec3 &in, dvec3 &out, float *reflect) {
+vec3 GlossySpecular::sampleF(Shade &shade, dvec3 &in, dvec3 &out, float *prob_den) {
     float nDotWo = dot(shade.normal, out);
     dvec3 r = -out + 2.0 * nDotWo * shade.normal;
 
@@ -25,7 +25,7 @@ vec3 GlossySpecular::sampleF(Shade &shade, dvec3 &in, dvec3 &out, float *reflect
         (-sp.x * u - sp.y * v + sp.z * w);
     
     float phongLobe = powf(dot(r, in), exponent);
-    *reflect = phongLobe * dot(shade.normal, in);
+    if (prob_den) *prob_den = phongLobe * dot(shade.normal, in);
 
     return intensity * phongLobe * color;
 }

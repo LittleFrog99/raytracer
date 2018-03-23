@@ -26,13 +26,14 @@ void World::build() {
     vp.vertRes = 400;
     vp.pixelSize = 0.5;
     vp.numChannels = DEFAULT_NUM_CHANNELS;
-    vp.setSamples(100, 2);
+    vp.setSamples(25, 2);
     vp.gamma = 1.0;
 
     /* Materials */
-    auto *material1P = new Matte(vec3(0.2, 0.6, 1.0), 0.3, 0.5);
-    auto *material2P = new Matte(vec3(0.6, 0.14, 0.93), 0.3, 0.6);
-    auto *material3P = new Matte(vec3(1.0), 0.4, 1.0);
+    auto *material1P = new Phong(vec3(0.2, 0.6, 1.0), 0.3, 0.4, 0.1);
+    auto *material2P = new Phong(vec3(0.6, 0.14, 0.93), 0.3, 0.6, 0.1);
+    material2P->setSpecularExponent(8.0f);
+    auto *material3P = new Matte(vec3(1.0), 0.5, 1.0);
     auto *material4P = new Emissive(vec3(1.0), 100.0);
 
     /* Geometry Objects */
@@ -43,14 +44,13 @@ void World::build() {
     auto *plane1P = new Plane(material3P);
     plane1P->setParams(dvec3(0, 1, 0), dvec3(0.0, 0.0, 0.0));
     auto *rect1P = new Rectangle(material4P);
-    rect1P->setParams(dvec3(-70, 300, 200), dvec3(60, 0, 0), dvec3(0, -40, 20));
+    rect1P->setParams(dvec3(-30, 300, 200), dvec3(60, 0, 0), dvec3(0, -40, 20));
     rect1P->setSampler(new MultiJittered(100, 2));
     rect1P->toggleShadowCast(false);
 
     addObject(sphere1P);
     addObject(sphere2P);
     addObject(plane1P);
-    // addObject(rect1P);
 
     /* Lights */
     bgColor = vec3(0.41, 0.72, 0.83);
@@ -65,7 +65,7 @@ void World::build() {
 
     /* Camera & Tracer */ 
     tracerP = new AreaLightTracer(this);
-    PinHole *cam = new PinHole(dvec3(-200, 200, 200), dvec3(0, 30, 0), 100);
+    PinHole *cam = new PinHole(dvec3(-100, 180, 240), dvec3(0, 30, 0), 100);
     cameraP = cam;
     _pixels = new unsigned char[vp.horRes * vp.vertRes * vp.numChannels];
 }

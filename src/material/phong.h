@@ -9,6 +9,7 @@ public:
     Phong(vec3 color = vec3(), float ambient_intensity = 0.0, float diffuse_intensity = 0.0, 
     float specular_intensity = 0.0);
     virtual vec3 shade(Shade &shade);
+    virtual vec3 areaLightShade(Shade &shade);
 
     inline void setAmbientIntensity(float intensity) {
         ambientBRDF->setIntensity(intensity);
