@@ -60,5 +60,17 @@ namespace Math {
     inline T distanceSquared(tvec3<T, highp> a, tvec3<T, highp> b) {
         return dot(a - b, a - b);
     }
+
+    template <class T>
+    inline T maxComponent(tvec3<T, highp> vector) {
+        T max = vector[0] > vector[1] ? vector[0] : vector[1];
+        return vector[2] > max ? vector[2] : max;
+    }
+
+    template <class T>
+    inline T minComponent(tvec3<T, highp> vector) {
+        T min = vector[0] < vector[1] ? vector[0] : vector[1];
+        return vector[2] < min ? vector[2] : min;
+    }
 };
 

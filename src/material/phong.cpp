@@ -34,9 +34,7 @@ vec3 Phong::shade(Shade &shade) {
                 color += (diffuseBRDF->calcBRDF(shade, in, out) +
                     specularBRDF->calcBRDF(shade, in, out)) *
                     shade.world.lights[i]->incidRadiosity(shade) * nDotIn;
-        }
-
-            
+        }        
     }
 
     return color;
