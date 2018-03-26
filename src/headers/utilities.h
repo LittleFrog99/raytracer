@@ -63,14 +63,26 @@ namespace Math {
 
     template <class T>
     inline T maxComponent(tvec3<T, highp> vector) {
-        T max = vector[0] > vector[1] ? vector[0] : vector[1];
-        return vector[2] > max ? vector[2] : max;
+        return glm::max(glm::max(vector[0], vector[1]), vector[2]);
+    }
+
+    template <class T>
+    inline T maxComponent(tvec3<T, highp> vector, int &index) {
+        index = vector[0] > vector[1] ? 0 : 1;
+        index = vector[2] > vector[index] ? 2 : index;
+        return vector[index];
     }
 
     template <class T>
     inline T minComponent(tvec3<T, highp> vector) {
-        T min = vector[0] < vector[1] ? vector[0] : vector[1];
-        return vector[2] < min ? vector[2] : min;
+        return glm::min(glm::min(vector[0], vector[1]), vector[2]);
+    }
+
+    template <class T>
+    inline T minComponent(tvec3<T, highp> vector, int &index) {
+        index = vector[0] < vector[1] ? 0 : 1;
+        index = vector[2] < vector[index] ? 2 : index;
+        return vector[index];
     }
 };
 

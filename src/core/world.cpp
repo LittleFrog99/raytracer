@@ -6,6 +6,7 @@
 #include "geometry/sphere.h"
 #include "geometry/plane.h"
 #include "geometry/rectangle.h"
+#include "geometry/box.h"
 #include "sampler/regular.h"
 #include "sampler/multijittered.h"
 #include "camera/pinhole.h"
@@ -24,17 +25,18 @@ void World::build() {
     /* Viewplane */
     vp.horRes = 400;
     vp.vertRes = 400;
-    vp.pixelSize = 0.5;
+    vp.pixelSize = 1;
     vp.numChannels = DEFAULT_NUM_CHANNELS;
-    vp.setSamples(25, 2);
+    vp.setSamples(100, 2);
     vp.gamma = 1.0;
 
     /* Materials */
-    auto *material1P = new Phong(vec3(0.2, 0.6, 1.0), 0.3, 0.4, 0.1);
-    auto *material2P = new Phong(vec3(0.6, 0.14, 0.93), 0.3, 0.6, 0.1);
+    auto *material1P = new Phong(vec3(0.25, 0.72, 0.96), 0.4, 0.4, 0.1);
+    auto *material2P = new Phong(vec3(0.44, 0.24, 0.61), 0.4, 0.6, 0.1);
     material2P->setSpecularExponent(8.0f);
     auto *material3P = new Matte(vec3(1.0), 0.5, 1.0);
     auto *material4P = new Emissive(vec3(1.0), 100.0);
+    auto *material5P = new Phong(vec3(0.14, 0.47, 0.8), 0.3, 0.6, 0.1);
 
     /* Geometry Objects */
     auto *sphere1P = new Sphere(material1P);
@@ -47,10 +49,13 @@ void World::build() {
     rect1P->setParams(dvec3(-30, 300, 200), dvec3(60, 0, 0), dvec3(0, -40, 20));
     rect1P->setSampler(new MultiJittered(100, 2));
     rect1P->toggleShadowCast(false);
+    auto *box1P = new Box(material5P);
+    box1P->setParams(dvec3(50, 0, -120), dvec3(180, 180, -50));
 
     addObject(sphere1P);
     addObject(sphere2P);
     addObject(plane1P);
+    addObject(box1P);
 
     /* Lights */
     bgColor = vec3(0.41, 0.72, 0.83);
@@ -65,7 +70,7 @@ void World::build() {
 
     /* Camera & Tracer */ 
     tracerP = new AreaLightTracer(this);
-    PinHole *cam = new PinHole(dvec3(-100, 180, 240), dvec3(0, 30, 0), 100);
+    PinHole *cam = new PinHole(dvec3(-100, 150, 240), dvec3(0, 30, 0), 200);
     cameraP = cam;
     _pixels = new unsigned char[vp.horRes * vp.vertRes * vp.numChannels];
 }
@@ -118,7 +123,7 @@ void World::renderScene() {
 }
 
 vec3 maxToOne(vec3 color) {
-    float maxValue = glm::max(glm::max(color.r, color.g), color.b);
+    float maxValue = Math::maxComponent(color);
     return maxValue > 1 ? (color / maxValue) : color;
 }
 

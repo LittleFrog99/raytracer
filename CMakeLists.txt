@@ -9,7 +9,8 @@ include_directories(src)
 
 set(SOURCES_CORE src/main.cpp src/core/world.cpp src/core/viewplane.cpp
     src/core/sampler.cpp src/core/camera.cpp)
-set(SOURCES_GEOMETRY src/geometry/plane.cpp src/geometry/sphere.cpp src/geometry/rectangle.cpp)
+set(SOURCES_GEOMETRY src/geometry/plane.cpp src/geometry/sphere.cpp src/geometry/rectangle.cpp
+    src/geometry/box.cpp)
 set(SOURCES_TRACER src/tracer/raycast.cpp src/tracer/arealighttracer.cpp)
 set(SOURCES_SAMPLER src/sampler/regular.cpp src/sampler/multijittered.cpp)
 set(SOURCES_CAMERA src/camera/thinlens.cpp src/camera/pinhole.cpp)
