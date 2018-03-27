@@ -15,7 +15,6 @@ private:
     double lensRadius;
     double viewDist;
     double focalDist;
-    double zoom = 1;
     Sampler *samplerP = nullptr;
 
     dvec3 rayDirection(dvec2 &pix_pt, dvec2 &lens_pt);

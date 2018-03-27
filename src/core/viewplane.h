@@ -15,5 +15,12 @@ struct ViewPlane {
     void setSampler(Sampler *sampler_ptr);
     void setSamples(const int num_sampler, const int num_sets);
     ~ViewPlane() {}
+
+    inline ivec2 toPixelCoord(int index) {
+        return ivec2(index / horRes, index % horRes);
+    }
+    inline int toIndex(ivec2 coord) {
+        return horRes * coord.x + coord.y;
+    }
 };
 

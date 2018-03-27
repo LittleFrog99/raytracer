@@ -4,7 +4,7 @@
 
 class Sampler {
 public:
-    Sampler (int nspl, int nset) : numSamples(nspl), numSets(nset) {}
+    Sampler (int nspl, int nset) : numSamples(nspl), numSets(nset) { count = 0; }
     void mapSamplesToUnitDisk();
     void mapSamplesToHemisphere(double exponent = 1);
     dvec2 sampleUnitSquare();
@@ -20,7 +20,7 @@ protected:
     vector<dvec2> diskSamples;
     vector<dvec3> hemisphereSamples;
     vector<int> shuffledIndices;
-    int count = 0;
+    atomic<int> count;
     int jump;
 
     virtual void generateSamples() = 0;

@@ -25,7 +25,7 @@ dvec3 ThinLens::rayDirection(dvec2 &pix_pt, dvec2 &lens_pt) {
 
 void ThinLens::renderScene(World &world) {
     Ray ray;
-    ViewPlane vp(world.vp);
+    vp = world.vp;
     dvec2 smplPt, pixPt, lensPt;
     vp.pixelSize /= zoom;
 
