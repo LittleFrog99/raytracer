@@ -65,6 +65,11 @@ namespace Math {
     }
 
     template <class T>
+    inline T lengthSquared(tvec3<T, highp> vec) {
+        return dot(vec, vec);
+    }
+
+    template <class T>
     inline T maxComponent(tvec3<T, highp> vector) {
         return glm::max(glm::max(vector[0], vector[1]), vector[2]);
     }
@@ -87,5 +92,11 @@ namespace Math {
         index = vector[2] < vector[index] ? 2 : index;
         return vector[index];
     }
+
+    int solveQuadric(double *coeff, double *solution);
+    
+    int solveCubic(double *coeff, double *solution);
+
+    int solveQuartic(double *coeff, double *solution);
 };
 
