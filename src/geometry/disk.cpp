@@ -16,7 +16,7 @@ bool Disk::intersect(Ray &ray, double &tmin, Shade &shade) {
         tmin = t;
         shade.normal = normal;
         shade.localHitPoint = hitPt;
-        shade.localHitPoint = shade.hitPoint;
+        shade.hitPoint = shade.localHitPoint;
         return true;
     }
     else return false;
@@ -37,8 +37,8 @@ bool Disk::shadowIntersect(Ray &ray, double &tmin) {
 void Disk::setSampler(Sampler *sampler_ptr) {
     Geometry::setSampler(sampler_ptr);
     samplerP->mapSamplesToUnitDisk();
-    u = cross(UP_VECTOR, normal);
-    v = cross(normal, u);
+    v = normalize(cross(UP_VECTOR, normal));
+    u = cross(v, normal);
 }
 
 dvec3 Disk::sample() {

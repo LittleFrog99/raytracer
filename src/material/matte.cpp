@@ -48,6 +48,6 @@ vec3 Matte::areaLightShade(Shade &shade) {
                     * float(light->geometryTerm(shade) * nDotIn / light->probDensity(shade));
         }
     }
-    
+
     return color;
 }

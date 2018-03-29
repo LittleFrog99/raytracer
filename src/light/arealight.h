@@ -5,6 +5,8 @@
 
 class AreaLight : public Light {
 public:
+    enum Attenuation { LINEAR, SQUARE };
+
     AreaLight() {}
     AreaLight(Geometry *object_ptr) : objectP(object_ptr) {}
     virtual dvec3 getDirection(Shade &shade);
@@ -14,9 +16,14 @@ public:
     virtual float geometryTerm(Shade &shade);
     virtual ~AreaLight() {}
 
+    inline void setAttenuationType(Attenuation type) {
+        atten = type;
+    }
+
 private:
     Geometry *objectP = nullptr;
     dvec3 samplePt;
     dvec3 normal;
     dvec3 out;
+    Attenuation atten = LINEAR;
 };

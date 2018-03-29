@@ -35,7 +35,7 @@ void Camera::renderThread(int index, int step) {
     }
 };
 
-void Camera::renderScene(World &w) {
+void Camera::render(World &w) {
     world = &w;
     vp = w.vp;
     vp.pixelSize /= zoom;

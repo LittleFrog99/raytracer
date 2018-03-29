@@ -10,7 +10,8 @@ bool Plane::intersect(Ray &ray, double &tmin, Shade &shade) {
     if (t > EPSILON) {
         tmin = t;
         shade.normal = vec3(param);
-        shade.hitPoint = ray.origin + t * ray.direction;
+        shade.localHitPoint = ray.origin + t * ray.direction;
+        shade.hitPoint = shade.localHitPoint;
         return true;
     }
     else return false;

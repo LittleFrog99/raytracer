@@ -21,7 +21,7 @@ public:
     World() : bgColor(0.0) {}
     void build();
     Shade intersectObjects(Ray &ray);
-    void renderScene();
+    void render();
     void plotPoint(int row, int col, vec4 color);
     void output(string path);
     ~World();

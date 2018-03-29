@@ -8,7 +8,7 @@ int main() {
     cout << "Building scene... \n";
     w.build();
     cout << "Rendering... \nComplete: \n";
-    w.renderScene();
+    w.render();
     cout << "\nOutputing image... \n";
     w.output("output.png");
     float duration = float(clock() - start) / CLOCKS_PER_SEC;

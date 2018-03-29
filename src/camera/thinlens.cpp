@@ -23,7 +23,7 @@ dvec3 ThinLens::rayDirection(dvec2 &pix_pt, dvec2 &lens_pt) {
     return normalize(dir);
 }
 
-void ThinLens::renderScene(World &world) {
+void ThinLens::render(World &world) {
     Ray ray;
     vp = world.vp;
     dvec2 smplPt, pixPt, lensPt;

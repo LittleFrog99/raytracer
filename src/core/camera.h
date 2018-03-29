@@ -12,7 +12,7 @@ public:
     Camera(dvec3 eye, dvec3 look_at, dvec3 up = dvec3(0, 1, 0), float exp_time = 1.0);
     inline void setExposureTime(float time) { exposureTime = time; }
     void setRollAngles(double radians);
-    virtual void renderScene(World &w);
+    virtual void render(World &w);
     virtual void renderPixel(int row, int col) = 0;
     virtual ~Camera() {}
 

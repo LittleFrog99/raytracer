@@ -23,7 +23,8 @@ bool Sphere::intersect(Ray &ray, double &tmin, Shade &shade) {
         if (t > EPSILON) {
             tmin = t;
             shade.normal = (omc + t * dvec3(ray.direction)) / radius;
-            shade.hitPoint = ray.origin + t * ray.direction;
+            shade.localHitPoint = ray.origin + t * ray.direction;
+            shade.hitPoint = shade.localHitPoint;
             return true;
         }
     }

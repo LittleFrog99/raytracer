@@ -9,7 +9,7 @@ public:
     : Camera(eye, look_at, up) {}
     void setSampler(Sampler *smpl);
     void setParams(double radius, double view_dist, double focal_dist, double zoomf = 1);
-    virtual void renderScene(World &w);
+    virtual void render(World &w);
 
 private:
     double lensRadius;
