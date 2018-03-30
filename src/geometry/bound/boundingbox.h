@@ -1,6 +1,6 @@
 #pragma once
 
-#include "geometry/bound.h"
+#include "geometry/bound/bound.h"
 
 class BoundingBox : public Bound {
 public:

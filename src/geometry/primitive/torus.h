@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core/geometry.h"
-#include "geometry/boundingbox.h"
+#include "geometry/bound/boundingbox.h"
 
 class Torus : public Geometry {
 public:

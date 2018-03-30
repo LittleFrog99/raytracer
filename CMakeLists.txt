@@ -7,16 +7,21 @@ include_directories(/usr/local/include)
 include_directories(src/utilities)
 include_directories(src)
 
-set(SOURCES_CORE src/main.cpp src/core/world.cpp src/core/viewplane.cpp
-    src/core/sampler.cpp src/core/camera.cpp src/core/scene.cpp)
-set(SOURCES_GEOMETRY src/geometry/plane.cpp src/geometry/sphere.cpp src/geometry/rectangle.cpp
-    src/geometry/box.cpp src/geometry/triangle.cpp src/geometry/disk.cpp
-    src/geometry/opencylinder.cpp src/geometry/torus.cpp src/geometry/boundingbox.cpp)
+set(SOURCES_CORE src/main.cpp 
+    src/core/world.cpp src/core/viewplane.cpp
+    src/core/sampler.cpp src/core/camera.cpp 
+    src/core/scene.cpp)
+set(SOURCES_GEOMETRY src/geometry/primitive/plane.cpp 
+    src/geometry/primitive/sphere.cpp src/geometry/primitive/rectangle.cpp
+    src/geometry/primitive/box.cpp src/geometry/primitive/triangle.cpp 
+    src/geometry/primitive/disk.cpp src/geometry/primitive/opencylinder.cpp 
+    src/geometry/primitive/torus.cpp src/geometry/bound/boundingbox.cpp)
 set(SOURCES_TRACER src/tracer/raycast.cpp src/tracer/arealighttracer.cpp)
 set(SOURCES_SAMPLER src/sampler/regular.cpp src/sampler/multijittered.cpp)
 set(SOURCES_CAMERA src/camera/thinlens.cpp src/camera/pinhole.cpp)
 set(SOURCES_BRDF src/brdf/lambertian.cpp src/brdf/glossyspecular.cpp)
-set(SOURCES_MATERIAL src/material/matte.cpp src/material/phong.cpp src/material/emissive.cpp)
+set(SOURCES_MATERIAL src/material/matte.cpp src/material/phong.cpp 
+    src/material/emissive.cpp)
 set(SOURCES_LIGHT src/light/ambientoccluder.cpp src/light/arealight.cpp)
 set(SOURCES_UTILITIES src/utilities/equations.cpp)
 

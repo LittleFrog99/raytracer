@@ -1,12 +1,12 @@
 #include "world.h"
-#include "geometry/sphere.h"
-#include "geometry/plane.h"
-#include "geometry/rectangle.h"
-#include "geometry/box.h"
-#include "geometry/triangle.h"
-#include "geometry/disk.h"
-#include "geometry/opencylinder.h"
-#include "geometry/torus.h"
+#include "geometry/primitive/sphere.h"
+#include "geometry/primitive/plane.h"
+#include "geometry/primitive/rectangle.h"
+#include "geometry/primitive/box.h"
+#include "geometry/primitive/triangle.h"
+#include "geometry/primitive/disk.h"
+#include "geometry/primitive/opencylinder.h"
+#include "geometry/primitive/torus.h"
 #include "material/matte.h"
 #include "material/phong.h"
 #include "material/emissive.h"
@@ -52,8 +52,6 @@ void World::build() {
     disk1P->setParams(dvec3(0, 200, 120), dvec3(0, -1, 0), 30);
     disk1P->setSampler(new MultiJittered(256, 2));
     disk1P->toggleShadowCast(false);
-    auto torusP = new Torus(material6P);
-    torusP->setParams(80, 20);
 
     addObject(sphere1P);
     addObject(sphere2P);
@@ -61,7 +59,6 @@ void World::build() {
     addObject(box1P);
     addObject(triangle1P);
     addObject(disk1P);
-    addObject(torusP);
 
     /* Lights */
     bgColor = vec3(0.41, 0.72, 0.83);
