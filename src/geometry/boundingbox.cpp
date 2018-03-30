@@ -9,7 +9,7 @@ BoundingBox::BoundingBox(dvec3 vertex1, dvec3 vertex2) {
 bool BoundingBox::intersect(Ray &ray) {
     dvec3 tMin, tMax;
     for (int i = 0; i < 3; i++) {
-        double component = 1.0 / ray.direction[i];
+        double component = ray.direction[i];
         tMin[i] = (component >= 0 ? (vertMin[i] - ray.origin[i]) 
                                   : (vertMax[i] - ray.origin[i])) / component;
         tMax[i] = (component >= 0 ? (vertMax[i] - ray.origin[i])

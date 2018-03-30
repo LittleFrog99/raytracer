@@ -6,6 +6,7 @@
 #include "geometry/triangle.h"
 #include "geometry/disk.h"
 #include "geometry/opencylinder.h"
+#include "geometry/torus.h"
 #include "material/matte.h"
 #include "material/phong.h"
 #include "material/emissive.h"
@@ -42,7 +43,7 @@ void World::build() {
     auto *sphere2P = new Sphere(material2P);
     sphere2P->setParams(dvec3(80.0, 45.0, 120.0), 45.0);
     auto *plane1P = new Plane(material3P);
-    plane1P->setParams(dvec3(0, 1, 0), dvec3(0.0, 0.0, 0.0));
+    plane1P->setParams(dvec3(0, 1, 0), dvec3(0.0, -30.0, 0.0));
     auto *box1P = new Box(material5P);
     box1P->setParams(dvec3(30, 0, -30), dvec3(160, 120, 40));
     auto *triangle1P = new Triangle(material6P);
@@ -51,6 +52,8 @@ void World::build() {
     disk1P->setParams(dvec3(0, 200, 120), dvec3(0, -1, 0), 30);
     disk1P->setSampler(new MultiJittered(256, 2));
     disk1P->toggleShadowCast(false);
+    auto torusP = new Torus(material6P);
+    torusP->setParams(80, 20);
 
     addObject(sphere1P);
     addObject(sphere2P);
@@ -58,6 +61,7 @@ void World::build() {
     addObject(box1P);
     addObject(triangle1P);
     addObject(disk1P);
+    addObject(torusP);
 
     /* Lights */
     bgColor = vec3(0.41, 0.72, 0.83);
