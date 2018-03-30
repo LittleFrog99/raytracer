@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 14)
 project(raytracer)
 
 include_directories(/usr/local/include)
-include_directories(src/headers)
+include_directories(src/utilities)
 include_directories(src)
 
 set(SOURCES_CORE src/main.cpp src/core/world.cpp src/core/viewplane.cpp
@@ -18,7 +18,7 @@ set(SOURCES_CAMERA src/camera/thinlens.cpp src/camera/pinhole.cpp)
 set(SOURCES_BRDF src/brdf/lambertian.cpp src/brdf/glossyspecular.cpp)
 set(SOURCES_MATERIAL src/material/matte.cpp src/material/phong.cpp src/material/emissive.cpp)
 set(SOURCES_LIGHT src/light/ambientoccluder.cpp src/light/arealight.cpp)
-set(SOURCES_UTILITIES src/headers/equations.cpp)
+set(SOURCES_UTILITIES src/utilities/equations.cpp)
 
 set(SOURCES ${SOURCES_CORE} ${SOURCES_GEOMETRY} ${SOURCES_TRACER} ${SOURCES_SAMPLER} 
     ${SOURCES_CAMERA} ${SOURCES_LIGHT} ${SOURCES_BRDF} ${SOURCES_MATERIAL} ${SOURCES_LIGHT}
