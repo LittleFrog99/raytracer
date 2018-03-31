@@ -1,14 +1,22 @@
 #include "partsphere.h"
 
-void PartSphere::setParams(dvec3 center, double radius, double phi_min, 
-                           double phi_max, double theta_min, double theta_max) {
+void PartSphere::setParams(dvec3 center, double radius, double azim_min,
+                           double azim_max, double polar_min, double polar_max) {
     Sphere::setParams(center, radius);
-    this->thetaMax = theta_max;
-    this->cosThetaMax = cos(theta_max);
-    this->cosThetaMin = cos(theta_min);
-    this->thetaMin = theta_min;
-    this->phiMax = phi_max;
-    this->phiMin = phi_min;
+    this->azimMin = azim_min;
+    this->azimMax = azim_max;
+    this->polarMin = polar_min;
+    this->polarMax = polar_max;
+    this->cosPolarMin = cos(polar_min);
+    this->cosPolarMax = cos(polar_max);
+}
+
+inline bool PartSphere::inRange(dvec3 &hitDir) {
+    double azim = atan2(hitDir.x, hitDir.z);
+    if (azim < 0.0)
+        azim += 2 * PI;
+    return hitDir.y < (radius * cosPolarMin) && hitDir.y > (radius * cosPolarMax) 
+           && azim > azimMin && azim < azimMax;
 }
 
 bool PartSphere::intersect(Ray &ray, double &tmin, Shade &shade) {
@@ -91,11 +99,4 @@ bool PartSphere::shadowIntersect(Ray &ray, double &tmin) {
     }
 
     return false;
-}
-
-inline bool PartSphere::inRange(dvec3 &hitDir) {
-    double phi = atan2(hitDir.x, hitDir.z);
-    if (phi < 0.0) phi += 2 * PI;
-    return hitDir.y < radius * cosThetaMin && hitDir.y > radius * cosThetaMax
-           && phi > phiMin && phi < phiMax;
 }
