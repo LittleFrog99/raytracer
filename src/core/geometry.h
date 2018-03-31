@@ -14,21 +14,26 @@ public:
     virtual dvec3 getNormal(dvec3 &point) { return vec3(); }
     virtual dvec3 sample() { return vec3(); }
     virtual float probDensity(Shade &shade) { return 1.0; }
+
     virtual void setSampler(Sampler *sampler_ptr) {
         if (samplerP) delete samplerP;
         samplerP = sampler_ptr;
     }
+
+    virtual void setMaterial(Material *material_ptr) {
+        materialP = material_ptr;
+    }
+
     virtual ~Geometry() {}
 
     inline Material *getMaterial() {
         return materialP;
     }
-    inline void setMaterial(Material *material_ptr) {
-        materialP = material_ptr;
-    }
+
     inline void toggleShadowCast(bool shadow) {
         _castShadow = shadow;
     }
+    
     inline bool castShadow() {
         return _castShadow;
     }

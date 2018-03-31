@@ -9,6 +9,7 @@
 #include "geometry/primitive/torus.h"
 #include "geometry/part/parttorus.h"
 #include "geometry/part/partsphere.h"
+#include "geometry/compound/solidcylinder.h"
 #include "material/matte.h"
 #include "material/phong.h"
 #include "material/emissive.h"
@@ -54,10 +55,6 @@ void World::build() {
     disk1P->setParams(dvec3(0, 200, 120), dvec3(0, -1, 0), 30);
     disk1P->setSampler(new MultiJittered(256, 2));
     disk1P->toggleShadowCast(false);
-    auto *part1P = new PartTorus(material1P);
-    part1P->setParams(80, 20, radians(0.0), radians(270.0), radians(30.0), radians(240.0));
-    auto *part2P = new PartSphere(material1P);
-    part2P->setParams(dvec3(0.0), 80, radians(60.0), radians(270.0), radians(30.0), radians(120.0));
 
     addObject(sphere1P);
     addObject(sphere2P);
