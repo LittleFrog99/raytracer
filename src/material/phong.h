@@ -2,7 +2,7 @@
 
 #include "core/material.h"
 #include "brdf/lambertian.h"
-#include "brdf/glossyspecular.h"
+#include "brdf/specular.h"
 
 class Phong : public Material {
 public:
@@ -34,5 +34,5 @@ public:
 private:
     Lambertian *ambientBRDF;
     Lambertian *diffuseBRDF;
-    GlossySpecular *specularBRDF;
+    Specular *specularBRDF;
 };

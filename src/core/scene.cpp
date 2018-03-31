@@ -43,7 +43,7 @@ void World::build() {
     auto *sphere2P = new Sphere(material2P);
     sphere2P->setParams(dvec3(80.0, 45.0, 120.0), 45.0);
     auto *plane1P = new Plane(material3P);
-    plane1P->setParams(dvec3(0, 1, 0), dvec3(0.0, -30.0, 0.0));
+    plane1P->setParams(dvec3(0, 1, 0), dvec3(0.0, 0.0, 0.0));
     auto *box1P = new Box(material5P);
     box1P->setParams(dvec3(30, 0, -30), dvec3(160, 120, 40));
     auto *triangle1P = new Triangle(material6P);

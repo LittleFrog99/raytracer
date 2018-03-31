@@ -15,11 +15,12 @@ set(SOURCES_GEOMETRY src/geometry/primitive/plane.cpp
     src/geometry/primitive/sphere.cpp src/geometry/primitive/rectangle.cpp
     src/geometry/primitive/box.cpp src/geometry/primitive/triangle.cpp 
     src/geometry/primitive/disk.cpp src/geometry/primitive/opencylinder.cpp 
-    src/geometry/primitive/torus.cpp src/geometry/bound/boundingbox.cpp)
+    src/geometry/primitive/torus.cpp src/geometry/bound/boundingbox.cpp
+    src/geometry/part/partsphere.cpp)
 set(SOURCES_TRACER src/tracer/raycast.cpp src/tracer/arealighttracer.cpp)
 set(SOURCES_SAMPLER src/sampler/regular.cpp src/sampler/multijittered.cpp)
 set(SOURCES_CAMERA src/camera/thinlens.cpp src/camera/pinhole.cpp)
-set(SOURCES_BRDF src/brdf/lambertian.cpp src/brdf/glossyspecular.cpp)
+set(SOURCES_BRDF src/brdf/lambertian.cpp src/brdf/specular.cpp)
 set(SOURCES_MATERIAL src/material/matte.cpp src/material/phong.cpp 
     src/material/emissive.cpp)
 set(SOURCES_LIGHT src/light/ambientoccluder.cpp src/light/arealight.cpp)

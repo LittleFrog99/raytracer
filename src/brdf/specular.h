@@ -2,9 +2,9 @@
 
 #include "core/brdf.h"
 
-class GlossySpecular : public BRDF {
+class Specular : public BRDF {
 public:
-    GlossySpecular(Sampler *sampler = nullptr, float intensity = 0.0, vec3 color = vec3(), 
+    Specular(Sampler *sampler = nullptr, float intensity = 0.0, vec3 color = vec3(), 
         float exponent = 16.0f) : BRDF(sampler), intensity(intensity), color(color), 
         exponent(exponent) {}
     virtual vec3 calcBRDF(Shade &shade, dvec3 &in, dvec3 &out);

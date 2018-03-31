@@ -2,7 +2,7 @@
 
 bool Sphere::intersect(Ray &ray, double &tmin, Shade &shade) {
     double t;
-    dvec3 omc = dvec3(ray.origin) - center;
+    dvec3 omc = ray.origin - center;
     double a = dot(ray.direction, ray.direction);
     double b = 2.0 * dot(omc, ray.direction);
     double c = dot(omc, omc) - radius * radius;
@@ -33,7 +33,7 @@ bool Sphere::intersect(Ray &ray, double &tmin, Shade &shade) {
 
 bool Sphere::shadowIntersect(Ray &ray, double &tmin) {
     double t;
-    dvec3 omc = dvec3(ray.origin) - center;
+    dvec3 omc = ray.origin - center;
     double a = dot(ray.direction, ray.direction);
     double b = 2.0 * dot(omc, ray.direction);
     double c = dot(omc, omc) - radius * radius;

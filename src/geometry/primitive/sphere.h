@@ -13,7 +13,7 @@ public:
     virtual bool intersect(Ray &ray, double &tmin, Shade &shade);
     virtual bool shadowIntersect(Ray &ray, double &tmin);
     
-private:
+protected:
     dvec3 center;
     double radius;
 };

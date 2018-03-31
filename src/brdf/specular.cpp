@@ -1,17 +1,17 @@
-#include "glossyspecular.h"
+#include "specular.h"
 
-vec3 GlossySpecular::calcBRDF(Shade &shade, dvec3 &in, dvec3 &out) {
+vec3 Specular::calcBRDF(Shade &shade, dvec3 &in, dvec3 &out) {
     double nDotWi = dot(shade.normal, in);
     dvec3 ref = -in + 2.0 * nDotWi * shade.normal;
     float rDotWo = dot(ref, out);
     return rDotWo > 0.0 ? (intensity * powf(rDotWo, exponent) * color) : vec3();
 }
 
-vec3 GlossySpecular::calcReflectance(Shade &shade, dvec3 &out) {
+vec3 Specular::calcReflectance(Shade &shade, dvec3 &out) {
     return vec3();
 }
 
-vec3 GlossySpecular::sampleF(Shade &shade, dvec3 &in, dvec3 &out, float *prob_den) {
+vec3 Specular::sampleF(Shade &shade, dvec3 &in, dvec3 &out, float *prob_den) {
     float nDotWo = dot(shade.normal, out);
     dvec3 r = -out + 2.0 * nDotWo * shade.normal;
 

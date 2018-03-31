@@ -5,7 +5,7 @@
 Phong::Phong(vec3 color, float amb_int, float diff_int, float spec_int) {
     ambientBRDF = new Lambertian();
     diffuseBRDF = new Lambertian();
-    specularBRDF = new GlossySpecular();
+    specularBRDF = new Specular();
     setAmbientIntensity(amb_int);
     setDiffuseColor(color);
     setDiffuseIntensity(diff_int);
