@@ -1,7 +1,7 @@
 #include "partsphere.h"
 
-void PartSphere::setParams(dvec3 center, double radius, double theta_min,
-                           double theta_max, double phi_min, double phi_max) {
+void PartSphere::setParams(dvec3 center, double radius, double phi_min, 
+                           double phi_max, double theta_min, double theta_max) {
     Sphere::setParams(center, radius);
     this->thetaMax = theta_max;
     this->cosThetaMax = cos(theta_max);
@@ -45,6 +45,8 @@ bool PartSphere::intersect(Ray &ray, double &tmin, Shade &shade) {
         if (inRange(hitDir)) {
             tmin = t;
             shade.normal = normalize(hitDir);
+            if (dot(-ray.direction, shade.normal) < 0.0)
+                shade.normal = -shade.normal;
             shade.localHitPoint = hitPt;
             shade.hitPoint = shade.localHitPoint;
             return true;
@@ -91,7 +93,7 @@ bool PartSphere::shadowIntersect(Ray &ray, double &tmin) {
     return false;
 }
 
-inline bool PartSphere::inRange(dvec3 hitDir) {
+inline bool PartSphere::inRange(dvec3 &hitDir) {
     double phi = atan2(hitDir.x, hitDir.z);
     if (phi < 0.0) phi += 2 * PI;
     return hitDir.y < radius * cosThetaMin && hitDir.y > radius * cosThetaMax

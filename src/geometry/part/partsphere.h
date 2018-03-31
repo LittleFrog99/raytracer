@@ -6,8 +6,8 @@ class PartSphere : public Sphere {
 public:
     PartSphere() {}
     PartSphere(Material *mat_ptr) : Sphere(mat_ptr) {}
-    void setParams(dvec3 center, double radius, double theta_min, 
-                   double theta_max, double phi_min, double phi_max);
+    void setParams(dvec3 center, double radius, double phi_min, 
+                   double phi_max, double theta_min, double theta_max);
     virtual bool intersect(Ray &ray, double &tmin, Shade &shade);
     virtual bool shadowIntersect(Ray &ray, double &tmin);
 
@@ -15,5 +15,5 @@ private:
     double thetaMin, thetaMax, phiMin, phiMax;
     double cosThetaMin, cosThetaMax;
 
-    bool inRange(dvec3 dir);
+    bool inRange(dvec3 &dir);
 };

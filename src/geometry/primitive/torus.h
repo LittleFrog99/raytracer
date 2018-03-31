@@ -12,7 +12,7 @@ public:
     virtual bool shadowIntersect(Ray &ray, double &tmin);
     virtual dvec3 getNormal(dvec3 &point);
 
-private:
+protected:
     double sweptR;
     double tubeR;
     BoundingBox bndBox;
