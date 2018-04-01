@@ -8,17 +8,17 @@ Instance * Instance::transform(dmat4 trans) {
 }
 
 Instance * Instance::translate(dvec3 dir) {
-    Instance::transform(glm::translate(IDENTITY_MATRIX, dir));
+    transform(glm::translate(IDENTITY_MATRIX, dir));
     return this;
 }
 
 Instance * Instance::rotate(dvec3 axis, double angle) {
-    Instance::transform(glm::rotate(IDENTITY_MATRIX, angle, axis));
+    transform(glm::rotate(IDENTITY_MATRIX, angle, axis));
     return this;
 }
 
 Instance * Instance::scale(dvec3 scale) {
-    Instance::transform(glm::scale(IDENTITY_MATRIX, scale));
+    transform(glm::scale(IDENTITY_MATRIX, scale));
     return this;
 }
 
@@ -29,7 +29,7 @@ bool Instance::intersect(Ray &ray, double &tmin, Shade &shade) {
 
     if (objectP->intersect(invRay, tmin, shade)) {
         shade.normal = normalize(normalMat * shade.normal);
-        shade.hitPoint = matrix * dvec4(shade.localHitPoint, 1.0);
+        shade.hitPoint = matrix * dvec4(shade.hitPoint, 1.0);
         if (objectP->getMaterial())
             materialP = objectP->getMaterial();
         return true;

@@ -12,6 +12,11 @@ public:
     Instance * translate(dvec3 dir);
     Instance * rotate(dvec3 axis, double angle);
     Instance * scale(dvec3 scale);
+
+    virtual void setMaterial(Material *material_ptr) {
+        objectP->setMaterial(material_ptr);
+    }
+    
     virtual ~Instance() {
         if (objectP) delete objectP;
     }

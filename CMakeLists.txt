@@ -18,7 +18,7 @@ set(SOURCES_GEOMETRY src/geometry/primitive/plane.cpp
     src/geometry/primitive/torus.cpp src/geometry/bound/boundingbox.cpp
     src/geometry/part/partsphere.cpp src/geometry/part/parttorus.cpp
     src/geometry/compound/compound.cpp src/geometry/compound/solidcylinder.cpp
-    src/geometry/instance.cpp)
+    src/geometry/instance.cpp src/geometry/compound/beveledcylinder.cpp)
 set(SOURCES_TRACER src/tracer/raycast.cpp src/tracer/arealighttracer.cpp)
 set(SOURCES_SAMPLER src/sampler/regular.cpp src/sampler/multijittered.cpp)
 set(SOURCES_CAMERA src/camera/thinlens.cpp src/camera/pinhole.cpp)

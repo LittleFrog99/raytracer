@@ -9,7 +9,7 @@
 #include "geometry/primitive/torus.h"
 #include "geometry/part/parttorus.h"
 #include "geometry/part/partsphere.h"
-#include "geometry/compound/solidcylinder.h"
+#include "geometry/compound/beveledcylinder.h"
 #include "geometry/instance.h"
 #include "material/matte.h"
 #include "material/phong.h"
@@ -58,6 +58,8 @@ void World::build() {
     disk1P->toggleShadowCast(false);
     auto inst1P = new Instance(sphere1P);
     inst1P->scale(dvec3(1.3, 1, 1))->rotate(dvec3(0, 1, 0), radians(30.0))->translate(dvec3(0, 80, 0));
+    auto bevCylP = new BeveledCylinder(material1P);
+    bevCylP->setParams(0, 120, 60, 5);
 
     // addObject(sphere1P);
     addObject(sphere2P);
@@ -65,7 +67,7 @@ void World::build() {
     // addObject(box1P);
     addObject(triangle1P);
     addObject(disk1P);
-    addObject(inst1P);
+    addObject(bevCylP);
 
     /* Lights */
     bgColor = vec3(0.41, 0.72, 0.83);
