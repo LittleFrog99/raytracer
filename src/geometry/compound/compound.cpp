@@ -6,7 +6,8 @@ void Compound::setMaterial(Material *material_ptr) {
 }
 
 bool Compound::intersect(Ray &ray, double &tmin, Shade &shade) {
-    double t = numeric_limits<double>::max();
+    tmin = numeric_limits<double>::max();
+    double t;
     dvec3 normal, hitPt, localHitPt;
     bool hit = false;
 
@@ -23,6 +24,7 @@ bool Compound::intersect(Ray &ray, double &tmin, Shade &shade) {
 
     if (hit) {
         shade.normal = normal;
+        shade.hitPoint = hitPt;
         shade.localHitPoint = localHitPt;
     }
     return hit;
