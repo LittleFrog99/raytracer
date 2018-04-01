@@ -10,6 +10,7 @@
 #include "geometry/part/parttorus.h"
 #include "geometry/part/partsphere.h"
 #include "geometry/compound/solidcylinder.h"
+#include "geometry/instance.h"
 #include "material/matte.h"
 #include "material/phong.h"
 #include "material/emissive.h"
@@ -32,36 +33,39 @@ void World::build() {
     vp.gamma = 1.0;
 
     /* Materials */
-    auto *material1P = new Phong(vec3(0.25, 0.72, 0.96), 0.4, 0.4, 0.1);
-    auto *material2P = new Phong(vec3(0.44, 0.24, 0.61), 0.4, 0.6, 0.1);
+    auto material1P = new Phong(vec3(0.25, 0.72, 0.96), 0.4, 0.4, 0.1);
+    auto material2P = new Phong(vec3(0.44, 0.24, 0.61), 0.4, 0.6, 0.1);
     material2P->setSpecularExponent(8.0f);
-    auto *material3P = new Matte(vec3(1.0), 0.5, 0.7);
-    auto *material4P = new Emissive(vec3(1.0), 1000.0);
-    auto *material5P = new Phong(vec3(0.14, 0.47, 0.8), 0.3, 0.6, 0.1);
-    auto *material6P = new Phong(vec3(0.89, 0.36, 0.14), 0.3, 0.6, 0.15);
+    auto material3P = new Matte(vec3(1.0), 0.5, 0.7);
+    auto material4P = new Emissive(vec3(1.0), 1000.0);
+    auto material5P = new Phong(vec3(0.14, 0.47, 0.8), 0.3, 0.6, 0.1);
+    auto material6P = new Phong(vec3(0.89, 0.36, 0.14), 0.3, 0.6, 0.15);
 
     /* Geometry Objects */
-    auto *sphere1P = new Sphere(material1P);
-    sphere1P->setParams(dvec3(-100, 80, -50), 80.0);
-    auto *sphere2P = new Sphere(material2P);
+    auto sphere1P = new Sphere(material1P);
+    sphere1P->setParams(dvec3(0, 0, 0), 80.0);
+    auto sphere2P = new Sphere(material2P);
     sphere2P->setParams(dvec3(80.0, 45.0, 120.0), 45.0);
-    auto *plane1P = new Plane(material3P);
+    auto plane1P = new Plane(material3P);
     plane1P->setParams(dvec3(0, 1, 0), dvec3(0.0, 0.0, 0.0));
-    auto *box1P = new Box(material5P);
+    auto box1P = new Box(material5P);
     box1P->setParams(dvec3(30, 0, -30), dvec3(160, 120, 40));
-    auto *triangle1P = new Triangle(material6P);
+    auto triangle1P = new Triangle(material6P);
     triangle1P->setParams(dvec3(-80, 40, 140), dvec3(-20, 15, 180), dvec3(40, 60, 130));
-    auto *disk1P = new Disk(material4P);
+    auto disk1P = new Disk(material4P);
     disk1P->setParams(dvec3(0, 200, 120), dvec3(0, -1, 0), 30);
     disk1P->setSampler(new MultiJittered(256, 2));
     disk1P->toggleShadowCast(false);
+    auto inst1P = new Instance(sphere1P);
+    inst1P->scale(dvec3(1.3, 1, 1))->rotate(dvec3(0, 1, 0), radians(30.0))->translate(dvec3(0, 80, 0));
 
-    addObject(sphere1P);
+    // addObject(sphere1P);
     addObject(sphere2P);
     addObject(plane1P);
-    addObject(box1P);
+    // addObject(box1P);
     addObject(triangle1P);
     addObject(disk1P);
+    addObject(inst1P);
 
     /* Lights */
     bgColor = vec3(0.41, 0.72, 0.83);

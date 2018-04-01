@@ -20,6 +20,10 @@ using namespace glm;
 static const double PI = 3.14159265358979323846;
 static const double INV_PI = 1.0 / PI;
 static const dvec3 UP_VECTOR = dvec3(0.0034, 1, 0.0071);
+static const dmat4 IDENTITY_MATRIX = dmat4(dvec4(1, 0, 0, 0),
+                                           dvec4(0, 1, 0, 0),
+                                           dvec4(0, 0, 1, 0),
+                                           dvec4(0, 0, 0, 1));
 
 static mutex mut;
 

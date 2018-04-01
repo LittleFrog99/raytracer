@@ -12,7 +12,8 @@
         "stdexcept": "cpp",
         "typeinfo": "cpp",
         "vector": "cpp",
-        "limits": "cpp"
+        "limits": "cpp",
+        "__locale": "cpp"
     },
     "C_Cpp.errorSquiggles": "Enabled",
     "editor.minimap.enabled": false,
