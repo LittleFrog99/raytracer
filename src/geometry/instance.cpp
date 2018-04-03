@@ -29,7 +29,7 @@ bool Instance::intersect(Ray &ray, double &tmin, Shade &shade) {
 
     if (objectP->intersect(invRay, tmin, shade)) {
         shade.normal = normalize(normalMat * shade.normal);
-        shade.hitPoint = matrix * dvec4(shade.hitPoint, 1.0);
+        shade.hitPoint = dvec3(matrix * dvec4(shade.hitPoint, 1.0));
         if (objectP->getMaterial())
             materialP = objectP->getMaterial();
         return true;

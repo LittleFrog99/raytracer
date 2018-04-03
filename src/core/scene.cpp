@@ -11,6 +11,7 @@
 #include "geometry/part/partsphere.h"
 #include "geometry/compound/beveledcylinder.h"
 #include "geometry/instance.h"
+#include "geometry/compound/grid.h"
 #include "material/matte.h"
 #include "material/phong.h"
 #include "material/emissive.h"
@@ -56,10 +57,11 @@ void World::build() {
     disk1P->setParams(dvec3(0, 200, 120), dvec3(0, -1, 0), 30);
     disk1P->setSampler(new MultiJittered(256, 2));
     disk1P->toggleShadowCast(false);
-    auto bevCylP = new BeveledCylinder(material1P);
-    bevCylP->setParams(0, 160, 60, 5);
-    auto inst1P = new Instance(bevCylP);
-    inst1P->rotate(dvec3(0, 0, 1), radians(30.0))->translate(dvec3(0, 30, 0));
+    auto bevCyl1P = new BeveledCylinder(material1P);
+    bevCyl1P->setParams(0, 160, 60, 5);
+    auto gridP = new Grid();
+    gridP->addObject(bevCyl1P);
+    gridP->setupCells();
 
     // addObject(sphere1P);
     addObject(sphere2P);
@@ -67,7 +69,7 @@ void World::build() {
     // addObject(box1P);
     addObject(triangle1P);
     addObject(disk1P);
-    addObject(inst1P);
+    addObject(gridP);
 
     /* Lights */
     bgColor = vec3(0.41, 0.72, 0.83);

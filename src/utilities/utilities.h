@@ -19,6 +19,7 @@ using namespace glm;
 
 static const double PI = 3.14159265358979323846;
 static const double INV_PI = 1.0 / PI;
+static const double EPSILON = 1e-6;
 static const dvec3 UP_VECTOR = dvec3(0.0034, 1, 0.0071);
 static const dmat4 IDENTITY_MATRIX = dmat4(dvec4(1, 0, 0, 0),
                                            dvec4(0, 1, 0, 0),
@@ -53,13 +54,6 @@ public:
         return int(randomDouble(0, high - low + 1) + low);
     }
 
-};
-
-namespace Debug {
-    template <class T>
-    inline void log(tvec3<T, highp> vec3) {
-        cout << "X: " << vec3.x << " Y: " << vec3.y << " Z: " << vec3.z << endl;
-    }
 };
 
 namespace Math {
@@ -97,6 +91,11 @@ namespace Math {
         return vector[index];
     }
 
+    template<class T>
+    inline bool inside(T value, T min, T max) {
+        return value > min && value < max;
+    }
+
     int solveQuadric(double *coeff, double *solution);
     
     int solveCubic(double *coeff, double *solution);
@@ -104,3 +103,11 @@ namespace Math {
     int solveQuartic(double *coeff, double *solution);
 };
 
+namespace Collections {
+    template <class T>
+    inline void fill(vector<T> &vec, T obj, int num) {
+        vec.reserve(num);
+        for (int i = 0; i < num; i++) 
+            vec[i] = obj;
+    }
+}

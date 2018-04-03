@@ -31,14 +31,14 @@ void BeveledCylinder::setParams(double bottom_pos, double top_pos, double radius
     topTorusInst->translate(dvec3(0, top_pos - bevel_radius, 0));
     ((Torus *) topTorusInst->getObject())->setParams(radius - bevel_radius, bevel_radius);
 
-    bndBox = BoundingBox(dvec3(-radius, bottom_pos, -radius), 
-                         dvec3(radius, top_pos, radius));
+    createBoundingBox(dvec3(-radius, bottom_pos, -radius), 
+                      dvec3(radius, top_pos, radius));
 }
 
-inline bool BeveledCylinder::intersect(Ray &ray, double &tmin, Shade &shade) {
+bool BeveledCylinder::intersect(Ray &ray, double &tmin, Shade &shade) {
     return bndBox.intersect(ray) && Compound::intersect(ray, tmin, shade);
 }
 
-inline bool BeveledCylinder::shadowIntersect(Ray &ray, double &tmin) {
+bool BeveledCylinder::shadowIntersect(Ray &ray, double &tmin) {
     return bndBox.intersect(ray) && Compound::shadowIntersect(ray, tmin);
 }

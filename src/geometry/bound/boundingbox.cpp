@@ -21,3 +21,9 @@ bool BoundingBox::intersect(Ray &ray) {
 
    return in < out && out > EPSILON;
 }
+
+bool BoundingBox::inside(dvec3 &point) {
+    return Math::inside(point.x, vertMin.x, vertMax.x) &&
+           Math::inside(point.y, vertMin.y, vertMax.y) &&
+           Math::inside(point.z, vertMin.z, vertMax.z);
+}

@@ -43,6 +43,4 @@ protected:
     Material *materialP = nullptr;
     Sampler *samplerP = nullptr;
     bool _castShadow = true;
-    static constexpr double EPSILON = 1e-6;
 };
-
