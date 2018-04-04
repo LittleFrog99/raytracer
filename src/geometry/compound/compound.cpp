@@ -31,7 +31,8 @@ bool Compound::intersect(Ray &ray, double &tmin, Shade &shade) {
 }
 
 bool Compound::shadowIntersect(Ray &ray, double &tmin) {
-    double t = numeric_limits<double>::max();
+    tmin = numeric_limits<double>::max();
+    double t;
     bool hit = false;
 
     for (int i = 0; i < objects.size(); i++) {

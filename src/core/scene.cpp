@@ -30,7 +30,7 @@ void World::build() {
     vp.vertRes = 400;
     vp.pixelSize = 1;
     vp.numChannels = DEFAULT_NUM_CHANNELS;
-    vp.setSamples(16, 2);
+    vp.setSamples(100, 2);
     vp.gamma = 1.0;
 
     /* Materials */
@@ -52,7 +52,7 @@ void World::build() {
     auto box1P = new Box(material5P);
     box1P->setParams(dvec3(30, 0, -30), dvec3(160, 120, 40));
     auto triangle1P = new Triangle(material6P);
-    triangle1P->setParams(dvec3(-80, 40, 140), dvec3(-20, 15, 180), dvec3(40, 60, 130));
+    triangle1P->setParams(dvec3(-80, 40, 120), dvec3(-20, 15, 160), dvec3(50, 60, 80));
     auto disk1P = new Disk(material4P);
     disk1P->setParams(dvec3(0, 200, 120), dvec3(0, -1, 0), 30);
     disk1P->setSampler(new MultiJittered(256, 2));

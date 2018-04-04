@@ -9,9 +9,8 @@ void Grid::addObject(Geometry *object_ptr) {
 
 dvec3 Grid::minBounds() {
     dvec3 minCoord(numeric_limits<double>::max());
-    for (int i = 0; i < objects.size(); i++) {
-        auto obj = dynamic_cast<BoxBounded *>(objects[i]);
-        dvec3 minVert = obj->getBoundingBox().vertMin;
+    for (Geometry *objP : objects) {
+        dvec3 minVert = dynamic_cast<BoxBounded *>(objP)->getBoundingBox().vertMin;
         minCoord.x = glm::min(minCoord.x, minVert.x);
         minCoord.y = glm::min(minCoord.y, minVert.y);
         minCoord.z = glm::min(minCoord.z, minVert.z);
@@ -21,9 +20,8 @@ dvec3 Grid::minBounds() {
 
 dvec3 Grid::maxBounds() {
     dvec3 maxCoord(numeric_limits<double>::min());
-    for (int i = 0; i < objects.size(); i++) {
-        auto obj = dynamic_cast<BoxBounded *>(objects[i]);
-        dvec3 maxVert = obj->getBoundingBox().vertMax;
+    for (Geometry *objP : objects) {
+        dvec3 maxVert = dynamic_cast<BoxBounded *>(objP)->getBoundingBox().vertMax;
         maxCoord.x = glm::max(maxCoord.x, maxVert.x);
         maxCoord.y = glm::max(maxCoord.y, maxVert.y);
         maxCoord.z = glm::max(maxCoord.z, maxVert.z);
@@ -37,7 +35,7 @@ void Grid::setupCells() {
 
     int numObjs = objects.size();
     dvec3 ext = max - min;
-    float step = powf(ext.x * ext.y * ext.z / numObjs, 1.0 / 3.0);
+    double step = pow(ext.x * ext.y * ext.z / numObjs, 1.0 / 3.0);
     numCells = ivec3(GRID_MULTIPLIER * ext.x / step + 1,
                      GRID_MULTIPLIER * ext.y / step + 1, 
                      GRID_MULTIPLIER * ext.z / step + 1);
@@ -47,9 +45,8 @@ void Grid::setupCells() {
     vector<int> counts;
     Collections::fill(counts, 0, totalCells);
 
-    for (int i = 0; i < numObjs; i++) {
-        BoxBounded *objP = dynamic_cast<BoxBounded *>(objects[i]);
-        BoundingBox objBnd = objP->getBoundingBox();
+    for (Geometry *objP : objects) {
+        BoundingBox objBnd = dynamic_cast<BoxBounded *>(objP)->getBoundingBox();
 
         ivec3 indexMin, indexMax;
         for (int t = 0; t < 3; t++) {
@@ -67,26 +64,23 @@ void Grid::setupCells() {
                     int index = gridCoordsToIndex(ix, iy, iz);
 
                     if (counts[index] == 0) // no object before, add current object pointer
-                        cells[index] = objects[i];
+                        cells[index] = objP;
                     else if (counts[index] == 1) { // one object exists, create a compound, add the 
                     // previously existing object and current object to the compound
                         auto compound_ptr = new Compound();
                         compound_ptr->addObject(cells[index]);
-                        compound_ptr->addObject(objects[i]);
+                        compound_ptr->addObject(objP);
                         cells[index] = compound_ptr;
                     } 
                     else { // counts[index] > 1, must be a compound object
-                        auto compound_ptr = (Compound *) cells[index];
-                        compound_ptr->addObject(objects[i]);
+                        auto compound_ptr = dynamic_cast<Compound *>(cells[index]);
+                        compound_ptr->addObject(objP);
                     }
                     counts[index]++;
                 }
     }
 
     objects.erase(objects.begin(), objects.end());
-
-    // code for statistics on cell objects counts
-
     counts.erase(counts.begin(), counts.end());
 }
 
@@ -118,12 +112,12 @@ bool Grid::intersect(Ray &ray, double &tmin, Shade &shade) {
 
     for (int i = 0; i < 3; i++) {
         double component = ray.direction[i];
-        if (component > 0) {
+        if (component > 0.0) {
             tNext[i] = tMin[i] + (index[i] + 1) * deltaT[i];
-            indexStep[i] = 1;
+            indexStep[i] = +1;
             indexStop[i] = numCells[i];
         }
-        else if (component < 0) {
+        else if (component < 0.0) {
             tNext[i] = tMin[i] + (numCells[i] - index[i]) * deltaT[i];
             indexStep[i] = -1;
             indexStop[i] = -1;
