@@ -60,12 +60,12 @@ void World::build() {
     auto bevCyl1P = new BeveledCylinder(material1P);
     bevCyl1P->setParams(0, 170, 60, 5);
     auto gridP = new Grid();
-    // gridP->addObject(sphere1P);
-    // gridP->addObject(sphere2P);
-    // gridP->addObject(triangle1P);
-    // gridP->setupCells();
+    gridP->addObject(sphere1P);
+    gridP->addObject(sphere2P);
+    gridP->addObject(triangle1P);
+    gridP->setupCells();
 
-    int numSpheres = 1000000;
+    /* int numSpheres = 10000;
     double size = 250;
     double volume = pow(size, 3) / numSpheres;
     double radius = pow(0.75 * volume / PI, 1.0 / 3);
@@ -82,11 +82,11 @@ void World::build() {
         sphere_ptr->setParams(dvec3(-size/2.0) + size * dvec3(random.randomDouble(), random.randomDouble(), random.randomDouble()), radius);
         gridP->addObject(sphere_ptr);
     }
-    gridP->setupCells();
+    gridP->setupCells();*/
 
     // addObject(sphere1P);
     // addObject(sphere2P);
-    // addObject(plane1P);
+    addObject(plane1P);
     // addObject(box1P);
     // addObject(triangle1P);
     addObject(disk1P);

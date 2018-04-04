@@ -54,11 +54,11 @@ void Grid::setupCells() {
         ivec3 indexMin, indexMax;
         for (int t = 0; t < 3; t++) {
             indexMin[t] = glm::clamp(
-                int((objBnd.vertMin[t] - min[t]) * numCells[t] / (max[t] - min[t])), 
-                0, numCells[t] - 1);
+                (objBnd.vertMin[t] - min[t]) * numCells[t] / (max[t] - min[t]), 
+                0.0, double(numCells[t] - 1));
             indexMax[t] = glm::clamp(
-                int((objBnd.vertMax[t] - min[t]) * numCells[t] / (max[t] - min[t])),
-                0, numCells[t] - 1);
+                (objBnd.vertMax[t] - min[t]) * numCells[t] / (max[t] - min[t]),
+                0.0, double(numCells[t] - 1));
         }
 
         for (int iz = indexMin.z; iz <= indexMax.z; iz++)
@@ -106,10 +106,10 @@ bool Grid::intersect(Ray &ray, double &tmin, Shade &shade) {
 
     ivec3 index;
     if (bndBox.inside(ray.origin)) 
-        index = getGridCoords(ray.origin);
+        index = calcGridCoords(ray.origin);
     else {
         dvec3 bndHitPt = ray.origin + tIn * ray.direction;
-        index = getGridCoords(bndHitPt);
+        index = calcGridCoords(bndHitPt);
     }
 
     dvec3 deltaT = (tMax - tMin) / dvec3(numCells);
@@ -168,10 +168,10 @@ bool Grid::shadowIntersect(Ray &ray, double &tmin) {
 
     ivec3 index;
     if (bndBox.inside(ray.origin)) 
-        index = getGridCoords(ray.origin);
+        index = calcGridCoords(ray.origin);
     else {
         dvec3 bndHitPt = ray.origin + tIn * ray.direction;
-        index = getGridCoords(bndHitPt);
+        index = calcGridCoords(bndHitPt);
     }
 
     dvec3 deltaT = (tMax - tMin) / dvec3(numCells);
@@ -214,12 +214,12 @@ bool Grid::shadowIntersect(Ray &ray, double &tmin) {
     }
 }
 
-ivec3 Grid::getGridCoords(dvec3 &point) {
+ivec3 Grid::calcGridCoords(dvec3 &point) {
     ivec3 index;
     for (int i = 0; i < 3; i++)
-        index[i] = glm::clamp(int((point[i] - bndBox.vertMin[i]) * numCells[i] /
-                                  (bndBox.vertMax[i] - bndBox.vertMin[i])),
-                              0, numCells[i] - 1);
+        index[i] = glm::clamp((point[i] - bndBox.vertMin[i]) * numCells[i] /
+                                  (bndBox.vertMax[i] - bndBox.vertMin[i]),
+                              0.0, double(numCells[i] - 1));
     return index;
 }
 

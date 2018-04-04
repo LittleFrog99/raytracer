@@ -19,7 +19,7 @@ private:
 
     dvec3 minBounds();
     dvec3 maxBounds();
-    ivec3 getGridCoords(dvec3 &point);
+    ivec3 calcGridCoords(dvec3 &point);
     ivec3 indexToGridCoords(int index);
     int gridCoordsToIndex(ivec3 coord);
 
