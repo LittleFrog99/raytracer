@@ -44,7 +44,7 @@ void World::build() {
 
     /* Geometry Objects */
     auto sphere1P = new Sphere(material1P);
-    sphere1P->setParams(dvec3(0, 0, 0), 80.0);
+    sphere1P->setParams(dvec3(-100, 80, 0), 80.0);
     auto sphere2P = new Sphere(material2P);
     sphere2P->setParams(dvec3(80.0, 45.0, 120.0), 45.0);
     auto plane1P = new Plane(material3P);
@@ -58,16 +58,37 @@ void World::build() {
     disk1P->setSampler(new MultiJittered(256, 2));
     disk1P->toggleShadowCast(false);
     auto bevCyl1P = new BeveledCylinder(material1P);
-    bevCyl1P->setParams(0, 160, 60, 5);
+    bevCyl1P->setParams(0, 170, 60, 5);
     auto gridP = new Grid();
-    gridP->addObject(bevCyl1P);
+    // gridP->addObject(sphere1P);
+    // gridP->addObject(sphere2P);
+    // gridP->addObject(triangle1P);
+    // gridP->setupCells();
+
+    int numSpheres = 1000000;
+    double size = 250;
+    double volume = pow(size, 3) / numSpheres;
+    double radius = pow(0.75 * volume / PI, 1.0 / 3);
+
+    Random random(15);
+    for (int i = 0; i < numSpheres; i++) {
+        Phong *mat_ptr = new Phong();
+        mat_ptr->setAmbientIntensity(0.4);
+        mat_ptr->setDiffuseIntensity(0.5);
+        mat_ptr->setSpecularIntensity(0.1);
+        mat_ptr->setDiffuseColor(vec3(random.randomFloat(), random.randomFloat(), random.randomFloat()));
+
+        Sphere *sphere_ptr = new Sphere(mat_ptr);
+        sphere_ptr->setParams(dvec3(-size/2.0) + size * dvec3(random.randomDouble(), random.randomDouble(), random.randomDouble()), radius);
+        gridP->addObject(sphere_ptr);
+    }
     gridP->setupCells();
 
     // addObject(sphere1P);
-    addObject(sphere2P);
-    addObject(plane1P);
+    // addObject(sphere2P);
+    // addObject(plane1P);
     // addObject(box1P);
-    addObject(triangle1P);
+    // addObject(triangle1P);
     addObject(disk1P);
     addObject(gridP);
 

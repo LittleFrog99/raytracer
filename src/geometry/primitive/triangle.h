@@ -1,8 +1,9 @@
 #pragma once
 
 #include "core/geometry.h"
+#include "geometry/bound/boundingbox.h"
 
-class Triangle : public Geometry {
+class Triangle : public Geometry, public BoxBounded {
 public:
     Triangle() {}
     Triangle(Material *material_ptr) : Geometry(material_ptr) {}

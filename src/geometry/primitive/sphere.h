@@ -1,15 +1,13 @@
 #pragma once
 
 #include "core/geometry.h"
+#include "geometry/bound/boundingbox.h"
 
-class Sphere : public Geometry {
+class Sphere : public Geometry, public BoxBounded {
 public:
     Sphere() {}
     Sphere(Material *material_ptr) : Geometry(material_ptr) {}
-    void setParams(dvec3 center, double radius) {
-        this->center = center;
-        this->radius = radius;
-    }
+    void setParams(dvec3 center, double radius);
     virtual bool intersect(Ray &ray, double &tmin, Shade &shade);
     virtual bool shadowIntersect(Ray &ray, double &tmin);
     
