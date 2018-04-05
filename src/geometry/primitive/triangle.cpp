@@ -2,7 +2,9 @@
 
 void Triangle::setParams(dvec3 vert_a, dvec3 vert_b, dvec3 vert_c) {
     vertA = vert_a, vertB = vert_b, vertC = vert_c;
-    normal = normalize(cross(vert_b - vert_a, vert_c - vert_a));
+    dvec3 crossVec = cross(vert_b - vert_a, vert_c - vert_a);
+    normal = normalize(crossVec);
+    area = length(crossVec);
 }
 
 bool Triangle::intersect(Ray &ray, double &tmin, Shade &shade) {

@@ -54,7 +54,7 @@ BoundingBox Instance::calcBoundingBox() {
 bool Instance::intersect(Ray &ray, double &tmin, Shade &shade) {
     dvec4 invOrigin = invMat * dvec4(ray.origin, 1.0);
     dvec4 invDir = invMat * dvec4(ray.direction, 0.0);
-    Ray invRay = { dvec3(invOrigin), normalize(dvec3(invDir)) };
+    Ray invRay = { dvec3(invOrigin), dvec3(invDir) };
 
     if (objectP->intersect(invRay, tmin, shade)) {
         shade.normal = normalize(normalMat * shade.normal);
@@ -69,7 +69,7 @@ bool Instance::intersect(Ray &ray, double &tmin, Shade &shade) {
 bool Instance::shadowIntersect(Ray &ray, double &tmin) {
     dvec4 invOrigin = invMat * dvec4(ray.origin, 1.0);
     dvec4 invDir = invMat * dvec4(ray.direction, 0.0);
-    Ray invRay = { dvec3(invOrigin), normalize(dvec3(invDir)) };
+    Ray invRay = { dvec3(invOrigin), dvec3(invDir) };
 
     if (objectP->shadowIntersect(invRay, tmin)) 
         return true;

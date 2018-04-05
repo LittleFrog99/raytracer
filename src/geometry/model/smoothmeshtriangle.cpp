@@ -1,4 +1,5 @@
 #include "smoothmeshtriangle.h"
+#include "debug.h"
 
 bool SmoothMeshTriangle::intersect(Ray &ray, double &tmin, Shade &shade) {
     double t, beta, gamma;
@@ -13,8 +14,8 @@ bool SmoothMeshTriangle::intersect(Ray &ray, double &tmin, Shade &shade) {
 }
 
 dvec3 SmoothMeshTriangle::interpolateNormal(double beta, double gamma) {
-    dvec3 normA = (1 - beta - gamma) * meshP->normals[index[0]];
-    dvec3 normB = beta * meshP->normals[index[1]];
-    dvec3 normC = gamma * meshP->normals[index[2]];
+    dvec3 normA = (1 - beta - gamma) * meshP->vertices[index[0]].normal;
+    dvec3 normB = beta * meshP->vertices[index[1]].normal;
+    dvec3 normC = gamma * meshP->vertices[index[2]].normal;
     return normalize(normA + normB + normC);
 }

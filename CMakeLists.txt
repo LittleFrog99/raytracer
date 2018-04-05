@@ -7,6 +7,8 @@ include_directories(/usr/local/include)
 include_directories(src/utilities)
 include_directories(src)
 
+find_library(ASSIMP assimp)
+
 set(SOURCES_CORE src/main.cpp 
     src/core/world.cpp src/core/viewplane.cpp
     src/core/sampler.cpp src/core/camera.cpp 
@@ -20,7 +22,7 @@ set(SOURCES_GEOMETRY src/geometry/primitive/plane.cpp
     src/geometry/compound/compound.cpp src/geometry/compound/solidcylinder.cpp
     src/geometry/instance.cpp src/geometry/compound/beveledcylinder.cpp
     src/geometry/compound/grid.cpp src/geometry/model/meshtriangle.cpp
-    src/geometry/model/smoothmeshtriangle.cpp)
+    src/geometry/model/smoothmeshtriangle.cpp src/geometry/model/model.cpp)
 set(SOURCES_TRACER src/tracer/raycast.cpp src/tracer/arealighttracer.cpp)
 set(SOURCES_SAMPLER src/sampler/regular.cpp src/sampler/multijittered.cpp)
 set(SOURCES_CAMERA src/camera/thinlens.cpp src/camera/pinhole.cpp)
@@ -34,3 +36,4 @@ set(SOURCES ${SOURCES_CORE} ${SOURCES_GEOMETRY} ${SOURCES_TRACER} ${SOURCES_SAMP
     ${SOURCES_CAMERA} ${SOURCES_LIGHT} ${SOURCES_BRDF} ${SOURCES_MATERIAL} ${SOURCES_LIGHT}
     ${SOURCES_UTILITIES})
 add_executable(${PROJECT_NAME} ${SOURCES})
+target_link_libraries(${PROJECT_NAME} ${ASSIMP})

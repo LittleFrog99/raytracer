@@ -1,5 +1,11 @@
 #include "grid.h"
 
+void Grid::setMaterial(Material *mat_ptr) {
+    Compound::setMaterial(mat_ptr);
+    for (Geometry *objP : cells) 
+        objP->setMaterial(mat_ptr);
+}
+
 dvec3 Grid::minBounds() {
     dvec3 minCoord(numeric_limits<double>::max());
     for (Geometry *objP : objects) {

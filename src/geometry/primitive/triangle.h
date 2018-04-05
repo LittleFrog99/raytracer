@@ -15,6 +15,7 @@ public:
 protected:
     dvec3 vertA, vertB, vertC;
     dvec3 normal;
+    double area;
 
     virtual BoundingBox calcBoundingBox();
     bool commonIntersect(Ray &ray, double &t, double &beta, double &gamma);

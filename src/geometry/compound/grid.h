@@ -8,11 +8,12 @@ public:
     static constexpr int GRID_MULTIPLIER = 2;
 
     Grid() {}
+    virtual void setMaterial(Material *mat_ptr);
     virtual bool intersect(Ray &ray, double &tmin, Shade &shade);
     virtual bool shadowIntersect(Ray &ray, double &tmin);
     void setupCells();
 
-private:
+protected:
     vector<Geometry *> cells;
     ivec3 numCells;
 
