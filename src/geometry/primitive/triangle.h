@@ -12,9 +12,10 @@ public:
     virtual bool shadowIntersect(Ray &ray, double &tmin);
     virtual dvec3 getNormal(dvec3 &point) { return normal; }
 
-private:
+protected:
     dvec3 vertA, vertB, vertC;
     dvec3 normal;
 
     virtual BoundingBox calcBoundingBox();
+    bool commonIntersect(Ray &ray, double &t, double &beta, double &gamma);
 };
