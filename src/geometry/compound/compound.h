@@ -15,4 +15,6 @@ public:
 
 protected:
     vector<Geometry*> objects;
+
+    virtual BoundingBox calcBoundingBox();
 };

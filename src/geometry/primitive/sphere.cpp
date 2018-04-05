@@ -61,5 +61,8 @@ bool Sphere::shadowIntersect(Ray &ray, double &tmin) {
 void Sphere::setParams(dvec3 center, double radius) {
     this->center = center;
     this->radius = radius;
-    createBoundingBox(center - dvec3(radius), center + dvec3(radius));
+}
+
+BoundingBox Sphere::calcBoundingBox() {
+    return BoundingBox(center - dvec3(radius), center + dvec3(radius));
 }

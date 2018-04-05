@@ -10,7 +10,6 @@ public:
     Grid() {}
     virtual bool intersect(Ray &ray, double &tmin, Shade &shade);
     virtual bool shadowIntersect(Ray &ray, double &tmin);
-    virtual void addObject(Geometry *object_ptr);
     void setupCells();
 
 private:

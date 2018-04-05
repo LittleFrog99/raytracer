@@ -12,11 +12,11 @@ Shade World::intersectObjects(Ray &ray) {
     double tmin = numeric_limits<double>::max();
     dvec3 normal, hitPoint, localHitPoint;
 
-    for (int i = 0; i < objects.size(); i++) {
-        if (objects[i]->intersect(ray, t, shade) && (t < tmin)) {
+    for (Geometry *objP : objects) {
+        if (objP->intersect(ray, t, shade) && (t < tmin)) {
             shade.hasHit = true;
             tmin = t;
-            shade.materialP = objects[i]->getMaterial();
+            shade.materialP = objP->getMaterial();
             shade.hitPoint = ray.origin + t * ray.direction;
             normal = shade.normal;
             hitPoint = shade.hitPoint;
@@ -80,9 +80,9 @@ World::~World() {
     delete tracerP;
     delete cameraP;
     delete ambientP;
-    for (int i = 0; i < objects.size(); i++)
-        delete objects[i];
-    for (int i = 0; i < lights.size(); i++)
-        delete lights[i];
+    for (Geometry *objP : objects)
+        delete objP;
+    for (Light *lightP : lights)
+        delete lightP;
     delete _pixels;
 }

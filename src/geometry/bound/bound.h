@@ -1,8 +1,9 @@
 #pragma once
 
-#include "core/geometry.h"
+#include "utilities.h"
+#include "core/ray.h"
 
-class Bound : public Geometry {
+class Bound {
 public:
     Bound() {}
     virtual bool intersect(Ray &ray) = 0;

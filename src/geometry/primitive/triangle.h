@@ -3,7 +3,7 @@
 #include "core/geometry.h"
 #include "geometry/bound/boundingbox.h"
 
-class Triangle : public Geometry, public BoxBounded {
+class Triangle : public Geometry {
 public:
     Triangle() {}
     Triangle(Material *material_ptr) : Geometry(material_ptr) {}
@@ -15,4 +15,6 @@ public:
 private:
     dvec3 vertA, vertB, vertC;
     dvec3 normal;
+
+    virtual BoundingBox calcBoundingBox();
 };

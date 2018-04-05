@@ -4,6 +4,7 @@
 #include "core/ray.h"
 #include "core/material.h"
 #include "core/sampler.h"
+#include "geometry/bound/boundingbox.h"
 
 class Geometry {
 public:
@@ -14,11 +15,8 @@ public:
     virtual dvec3 getNormal(dvec3 &point) { return vec3(); }
     virtual dvec3 sample() { return vec3(); }
     virtual float probDensity(Shade &shade) { return 1.0; }
-
-    virtual void setSampler(Sampler *sampler_ptr) {
-        if (samplerP) delete samplerP;
-        samplerP = sampler_ptr;
-    }
+    virtual void setSampler(Sampler *sampler_ptr);
+    BoundingBox getBoundingBox();
 
     virtual void setMaterial(Material *material_ptr) {
         materialP = material_ptr;
@@ -43,4 +41,9 @@ protected:
     Material *materialP = nullptr;
     Sampler *samplerP = nullptr;
     bool _castShadow = true;
+
+    /* for geometric objects that does not inherit from BoxBounded */
+    virtual BoundingBox calcBoundingBox() {  
+        return BoundingBox(dvec3(), dvec3()); 
+    }
 };

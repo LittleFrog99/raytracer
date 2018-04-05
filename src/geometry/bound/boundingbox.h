@@ -21,6 +21,10 @@ public:
         bndBox = BoundingBox(vert1, vert2);
     }
 
+    inline void createBoundingBox(BoundingBox bnd_box) {
+        bndBox = bnd_box;
+    }
+
 protected:
     BoundingBox bndBox;
 };

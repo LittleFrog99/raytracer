@@ -1,11 +1,12 @@
 #pragma once
 
 #include "core/geometry.h"
+#include "geometry/bound/boundingbox.h"
 
-class Instance : public Geometry {
+class Instance : public Geometry, public BoxBounded {
 public:
     Instance() {}
-    Instance(Geometry *obj_ptr) : objectP(obj_ptr) {}
+    Instance(Geometry *obj_ptr);
     virtual bool intersect(Ray &ray, double &tmin, Shade &shade);
     virtual bool shadowIntersect(Ray &ray, double &tmin);
     Instance * transform(dmat4 matrix);
@@ -25,6 +26,8 @@ public:
 
 private:
     Geometry *objectP = nullptr;
-    dmat4 matrix = IDENTITY_MATRIX, invMat;
-    dmat3 normalMat;
+    dmat4 matrix = IDENTITY_MATRIX_FOUR, invMat = IDENTITY_MATRIX_FOUR;
+    dmat3 normalMat = IDENTITY_MATRIX_THREE;
+
+    virtual BoundingBox calcBoundingBox();
 };

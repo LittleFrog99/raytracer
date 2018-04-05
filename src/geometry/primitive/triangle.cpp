@@ -3,12 +3,6 @@
 void Triangle::setParams(dvec3 vert_a, dvec3 vert_b, dvec3 vert_c) {
     vertA = vert_a, vertB = vert_b, vertC = vert_c;
     normal = normalize(cross(vert_b - vert_a, vert_c - vert_a));
-
-    dmat3 trans = transpose(dmat3(vertA, vertB, vertC));
-    using namespace Math;
-    dvec3 minBnd = dvec3(minComponent(trans[0]), minComponent(trans[1]), minComponent(trans[2]));
-    dvec3 maxBnd = dvec3(maxComponent(trans[0]), maxComponent(trans[1]), maxComponent(trans[2]));
-    createBoundingBox(minBnd, maxBnd);
 }
 
 bool Triangle::intersect(Ray &ray, double &tmin, Shade &shade) {
@@ -48,4 +42,12 @@ bool Triangle::shadowIntersect(Ray &ray, double &tmin) {
 
     tmin = t;
     return true;
+}
+
+BoundingBox Triangle::calcBoundingBox() {
+    using namespace Math;
+    dmat3 trans = transpose(dmat3(vertA, vertB, vertC));
+    dvec3 minBnd = dvec3(minComponent(trans[0]), minComponent(trans[1]), minComponent(trans[2]));
+    dvec3 maxBnd = dvec3(maxComponent(trans[0]), maxComponent(trans[1]), maxComponent(trans[2]));
+    return BoundingBox(minBnd - dvec3(EPSILON), maxBnd + dvec3(EPSILON));
 }

@@ -10,7 +10,7 @@ include_directories(src)
 set(SOURCES_CORE src/main.cpp 
     src/core/world.cpp src/core/viewplane.cpp
     src/core/sampler.cpp src/core/camera.cpp 
-    src/core/scene.cpp)
+    src/core/scene.cpp src/core/geometry.cpp)
 set(SOURCES_GEOMETRY src/geometry/primitive/plane.cpp 
     src/geometry/primitive/sphere.cpp src/geometry/primitive/rectangle.cpp
     src/geometry/primitive/box.cpp src/geometry/primitive/triangle.cpp 

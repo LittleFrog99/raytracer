@@ -1,16 +1,9 @@
 #include "grid.h"
-#include "debug.h"
-
-void Grid::addObject(Geometry *object_ptr) {
-    if (dynamic_cast<BoxBounded *>(object_ptr))
-        Compound::addObject(object_ptr);
-    else throw object_ptr;
-}
 
 dvec3 Grid::minBounds() {
     dvec3 minCoord(numeric_limits<double>::max());
     for (Geometry *objP : objects) {
-        dvec3 minVert = dynamic_cast<BoxBounded *>(objP)->getBoundingBox().vertMin;
+        dvec3 minVert = objP->getBoundingBox().vertMin;
         minCoord.x = glm::min(minCoord.x, minVert.x);
         minCoord.y = glm::min(minCoord.y, minVert.y);
         minCoord.z = glm::min(minCoord.z, minVert.z);
@@ -21,7 +14,7 @@ dvec3 Grid::minBounds() {
 dvec3 Grid::maxBounds() {
     dvec3 maxCoord(numeric_limits<double>::min());
     for (Geometry *objP : objects) {
-        dvec3 maxVert = dynamic_cast<BoxBounded *>(objP)->getBoundingBox().vertMax;
+        dvec3 maxVert = objP->getBoundingBox().vertMax;
         maxCoord.x = glm::max(maxCoord.x, maxVert.x);
         maxCoord.y = glm::max(maxCoord.y, maxVert.y);
         maxCoord.z = glm::max(maxCoord.z, maxVert.z);
@@ -46,7 +39,7 @@ void Grid::setupCells() {
     Collections::fill(counts, 0, totalCells);
 
     for (Geometry *objP : objects) {
-        BoundingBox objBnd = dynamic_cast<BoxBounded *>(objP)->getBoundingBox();
+        BoundingBox objBnd = objP->getBoundingBox();
 
         ivec3 indexMin, indexMax;
         for (int t = 0; t < 3; t++) {

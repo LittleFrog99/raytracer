@@ -3,7 +3,7 @@
 #include "core/geometry.h"
 #include "geometry/bound/boundingbox.h"
 
-class Sphere : public Geometry, public BoxBounded {
+class Sphere : public Geometry {
 public:
     Sphere() {}
     Sphere(Material *material_ptr) : Geometry(material_ptr) {}
@@ -14,5 +14,7 @@ public:
 protected:
     dvec3 center;
     double radius;
+    
+    virtual BoundingBox calcBoundingBox();
 };
 

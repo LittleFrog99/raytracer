@@ -1,15 +1,9 @@
 #include "world.h"
 #include "geometry/primitive/sphere.h"
 #include "geometry/primitive/plane.h"
-#include "geometry/primitive/rectangle.h"
 #include "geometry/primitive/box.h"
 #include "geometry/primitive/triangle.h"
 #include "geometry/primitive/disk.h"
-#include "geometry/primitive/opencylinder.h"
-#include "geometry/primitive/torus.h"
-#include "geometry/part/parttorus.h"
-#include "geometry/part/partsphere.h"
-#include "geometry/compound/beveledcylinder.h"
 #include "geometry/instance.h"
 #include "geometry/compound/grid.h"
 #include "material/matte.h"
@@ -30,7 +24,7 @@ void World::build() {
     vp.vertRes = 400;
     vp.pixelSize = 1;
     vp.numChannels = DEFAULT_NUM_CHANNELS;
-    vp.setSamples(100, 2);
+    vp.setSamples(16, 2);
     vp.gamma = 1.0;
 
     /* Materials */
@@ -57,38 +51,13 @@ void World::build() {
     disk1P->setParams(dvec3(0, 200, 120), dvec3(0, -1, 0), 30);
     disk1P->setSampler(new MultiJittered(256, 2));
     disk1P->toggleShadowCast(false);
-    auto bevCyl1P = new BeveledCylinder(material1P);
-    bevCyl1P->setParams(0, 170, 60, 5);
     auto gridP = new Grid();
     gridP->addObject(sphere1P);
     gridP->addObject(sphere2P);
     gridP->addObject(triangle1P);
     gridP->setupCells();
 
-    /* int numSpheres = 10000;
-    double size = 250;
-    double volume = pow(size, 3) / numSpheres;
-    double radius = pow(0.75 * volume / PI, 1.0 / 3);
-
-    Random random(15);
-    for (int i = 0; i < numSpheres; i++) {
-        Phong *mat_ptr = new Phong();
-        mat_ptr->setAmbientIntensity(0.4);
-        mat_ptr->setDiffuseIntensity(0.5);
-        mat_ptr->setSpecularIntensity(0.1);
-        mat_ptr->setDiffuseColor(vec3(random.randomFloat(), random.randomFloat(), random.randomFloat()));
-
-        Sphere *sphere_ptr = new Sphere(mat_ptr);
-        sphere_ptr->setParams(dvec3(-size/2.0) + size * dvec3(random.randomDouble(), random.randomDouble(), random.randomDouble()), radius);
-        gridP->addObject(sphere_ptr);
-    }
-    gridP->setupCells();*/
-
-    // addObject(sphere1P);
-    // addObject(sphere2P);
     addObject(plane1P);
-    // addObject(box1P);
-    // addObject(triangle1P);
     addObject(disk1P);
     addObject(gridP);
 
