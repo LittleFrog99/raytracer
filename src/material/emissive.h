@@ -7,7 +7,7 @@ public:
     Emissive() {}
     Emissive(vec3 color, float intensity) : color(color), intensity(intensity) {}
     virtual vec3 getEmissiveLight(Shade &shade);
-    virtual vec3 areaLightShade(Shade &shade);
+    virtual vec3 shade(Shade &shade);
 
     inline void setIntensity(float intensity) {
         this->intensity = intensity;

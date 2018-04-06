@@ -11,8 +11,8 @@ Model::Model(string path, Material *mat_ptr, TriangleMode mode) {
 void Model::loadModel(string path) {
     Assimp::Importer importer;
     const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate | 
-                                             aiProcess_FlipUVs | 
-                                             aiProcess_CalcTangentSpace);
+                                                   aiProcess_FlipUVs | 
+                                                   aiProcess_CalcTangentSpace);
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         cout << "ERROR::ASSIMP::" << importer.GetErrorString() << endl;
         return;
@@ -45,7 +45,7 @@ Mesh * Model::processMesh(aiMesh *mesh, const aiScene *scene) {
         vertices.push_back(vert);
     }
 
-    for (int i = 0; i < mesh->mNumFaces; i++) {
+    for (int i = 0; i < mesh->mNumFaces; i++) { // load indices
         aiFace face = mesh->mFaces[i];
         for (int j = 0; j < face.mNumIndices; j++) 
             indices.push_back(face.mIndices[j]);

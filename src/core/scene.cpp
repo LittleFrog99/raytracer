@@ -10,10 +10,11 @@
 #include "material/matte.h"
 #include "material/phong.h"
 #include "material/emissive.h"
+#include "material/reflective.h"
 #include "light/ambientoccluder.h"
 #include "light/pointlight.h"
 #include "light/arealight.h"
-#include "tracer/arealighttracer.h"
+#include "tracer/whitted.h"
 #include "camera/pinhole.h"
 #include "camera/thinlens.h"
 #include "sampler/regular.h"
@@ -25,6 +26,7 @@ void World::build() {
     vp.vertRes = 400;
     vp.pixelSize = 1;
     vp.numChannels = DEFAULT_NUM_CHANNELS;
+    vp.maxDepth = 2;
     vp.setSamples(100, 2);
     vp.gamma = 1.0;
 
@@ -36,6 +38,8 @@ void World::build() {
     auto material4P = new Emissive(vec3(1.0), 1000.0);
     auto material5P = new Phong(vec3(0.14, 0.47, 0.8), 0.3, 0.6, 0.1);
     auto material6P = new Phong(vec3(0.89, 0.36, 0.14), 0.3, 0.6, 0.15);
+    auto material7P = new Reflective(vec3(1.0), 0.1, 0.2, 0.1, 0.7);
+    material7P->setReflectiveSampler(new MultiJittered(100, 2));
 
     /* Geometry Objects */
     auto sphere1P = new Sphere(material1P);
@@ -49,7 +53,7 @@ void World::build() {
     auto triangle1P = new Triangle(material6P);
     triangle1P->setParams(dvec3(-80, 40, 120), dvec3(-20, 15, 160), dvec3(50, 60, 80));
     auto disk1P = new Disk(material4P);
-    disk1P->setParams(dvec3(0, 250, 120), dvec3(0, -1, 0), 25);
+    disk1P->setParams(dvec3(0, 250, 120), dvec3(0, -1, 0), 30);
     disk1P->setSampler(new MultiJittered(256, 2));
     disk1P->toggleShadowCast(false);
     auto gridP = new Grid();
@@ -57,8 +61,7 @@ void World::build() {
     gridP->addObject(sphere2P);
     gridP->addObject(triangle1P);
     gridP->setupCells();
-    auto modelP = new Model("resources/bunny.obj", material1P);
-    modelP->setMaterial(material1P);
+    auto modelP = new Model("resources/bunny.obj", material7P);
     auto inst1P = new Instance(modelP);
     inst1P->scale(dvec3(100))->translate(dvec3(30, 0, 20));
 
@@ -78,7 +81,7 @@ void World::build() {
     addLight(area1P);
 
     /* Camera & Tracer */
-    tracerP = new AreaLightTracer(this);
+    tracerP = new Whitted(this);
     PinHole *cam = new PinHole(dvec3(0, 150, 250), dvec3(0, 50, 0), 200);
     cameraP = cam;
     _pixels = new unsigned char[vp.horRes * vp.vertRes * vp.numChannels];

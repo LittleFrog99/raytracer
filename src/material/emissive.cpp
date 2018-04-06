@@ -1,7 +1,7 @@
 #include "emissive.h"
 #include "core/shade.h"
 
-vec3 Emissive::areaLightShade(Shade &shade) {
+vec3 Emissive::shade(Shade &shade) {
     return (-dot(shade.normal, shade.ray.direction) > 0.0) ?
         intensity * color : vec3();
 }

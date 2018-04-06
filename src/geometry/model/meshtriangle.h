@@ -7,7 +7,7 @@ class MeshTriangle : public Triangle {
 public:
     MeshTriangle() {}
     MeshTriangle(Mesh *mesh_ptr) : meshP(mesh_ptr) {}
-    void setVertex(int index0, int index1, int index2);
+    void setVertex(unsigned int index0, unsigned int index1, unsigned int index2);
 
 protected:
     Mesh *meshP;
