@@ -4,6 +4,7 @@
 #include "geometry/primitive/box.h"
 #include "geometry/primitive/triangle.h"
 #include "geometry/primitive/disk.h"
+#include "geometry/primitive/rectangle.h"
 #include "geometry/instance.h"
 #include "geometry/compound/grid.h"
 #include "geometry/model/model.h"
@@ -26,7 +27,7 @@ void World::build() {
     vp.vertRes = 400;
     vp.pixelSize = 1;
     vp.numChannels = DEFAULT_NUM_CHANNELS;
-    vp.maxDepth = 2;
+    vp.maxDepth = 5;
     vp.setSamples(100, 2);
     vp.gamma = 1.0;
 
@@ -44,8 +45,8 @@ void World::build() {
     /* Geometry Objects */
     auto sphere1P = new Sphere(material1P);
     sphere1P->setParams(dvec3(-100, 80, 0), 80.0);
-    auto sphere2P = new Sphere(material2P);
-    sphere2P->setParams(dvec3(0, 1, 0), 1);
+    auto sphere2P = new Sphere(material7P);
+    sphere2P->setParams(dvec3(0, 60, 0), 60);
     auto plane1P = new Plane(material3P);
     plane1P->setParams(dvec3(0, 1, 0), dvec3(0.0, 0.0, 0.0));
     auto box1P = new Box(material5P);
@@ -53,7 +54,7 @@ void World::build() {
     auto triangle1P = new Triangle(material6P);
     triangle1P->setParams(dvec3(-80, 40, 120), dvec3(-20, 15, 160), dvec3(50, 60, 80));
     auto disk1P = new Disk(material4P);
-    disk1P->setParams(dvec3(0, 250, 120), dvec3(0, -1, 0), 30);
+    disk1P->setParams(dvec3(0, 250, 120), dvec3(0, -1, 0), 40);
     disk1P->setSampler(new MultiJittered(256, 2));
     disk1P->toggleShadowCast(false);
     auto gridP = new Grid();
@@ -64,10 +65,13 @@ void World::build() {
     auto modelP = new Model("resources/bunny.obj", material7P);
     auto inst1P = new Instance(modelP);
     inst1P->scale(dvec3(100))->translate(dvec3(30, 0, 20));
+    auto rect1P = new Rectangle(material7P);
+    rect1P->setParams(dvec3(-200, 250, -150), dvec3(0, -250, 0), dvec3(400, 0, 0));
 
     addObject(plane1P);
     addObject(disk1P);
-    addObject(inst1P);
+    addObject(sphere2P);
+    addObject(rect1P);
 
     /* Lights */
     bgColor = vec3(0.41, 0.72, 0.83);
@@ -82,7 +86,7 @@ void World::build() {
 
     /* Camera & Tracer */
     tracerP = new Whitted(this);
-    PinHole *cam = new PinHole(dvec3(0, 150, 250), dvec3(0, 50, 0), 200);
+    PinHole *cam = new PinHole(dvec3(-100, 150, 200), dvec3(0, 50, 0), 200);
     cameraP = cam;
     _pixels = new unsigned char[vp.horRes * vp.vertRes * vp.numChannels];
     finished = 0;
