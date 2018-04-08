@@ -39,9 +39,12 @@ void World::build() {
     auto material3P = new Matte(vec3(1.0), 0.5, 0.7);
     auto material4P = new Emissive(vec3(1.0), 1000.0);
     auto material5P = new Phong(vec3(0.14, 0.47, 0.8), 0.3, 0.6, 0.1);
-    auto material6P = new GlossyReflector(vec3(0.89, 0.36, 0.14), 0.3, 0.2, 0.1, 1.0);
+    auto material6P = new GlossyReflector(vec3(0.89, 0.36, 0.14), 0.2, 0.2, 0.1, 0.6);
     auto material7P = new Reflective(vec3(1.0), 0.1, 0.2, 0.1, 0.7);
     material7P->setReflectiveSampler(new MultiJittered(100, 2));
+    auto material8P = new GlossyReflector(vec3(1.0), 0.2, 0.2, 0.1, 0.7);
+    material8P->setGlossyReflectionExponent(100.0f);
+    material8P->setGlossyReflectionSampler(new MultiJittered(100, 2));
 
     /* Geometry Objects */
     auto sphere1P = new Sphere(material1P);
