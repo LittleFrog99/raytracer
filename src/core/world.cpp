@@ -53,13 +53,8 @@ void World::render() {
     usleep(100000);
 }
 
-vec3 maxToOne(vec3 color) {
-    float maxValue = Math::maxComponent(color);
-    return maxValue > 1 ? (color / maxValue) : color;
-}
-
 void World::plotPoint(int row, int col, vec4 color) {
-    color = vec4(maxToOne(vec3(color)), color.a);
+    color = vec4(vec3(color), color.a);
 
     static float MAX = numeric_limits<unsigned char>::max();
     unsigned int offset = vp.numChannels * vp.horRes * row + vp.numChannels * col;

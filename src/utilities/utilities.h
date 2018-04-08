@@ -25,7 +25,7 @@ static const dmat4 IDENTITY_MATRIX_FOUR = dmat4(dvec4(1, 0, 0, 0),
                                            dvec4(0, 1, 0, 0),
                                            dvec4(0, 0, 1, 0),
                                            dvec4(0, 0, 0, 1));
-static const dmat4 IDENTITY_MATRIX_THREE = dmat3(dvec3(1, 0, 0), 
+static const dmat3 IDENTITY_MATRIX_THREE = dmat3(dvec3(1, 0, 0), 
                                                 dvec3(0, 1, 0),
                                                 dvec3(0, 0, 1));
 
@@ -112,5 +112,12 @@ namespace Collections {
         vec.reserve(num);
         for (int i = 0; i < num; i++) 
             vec[i] = obj;
+    }
+}
+
+namespace PostProc {
+    inline vec3 maxToOne(vec3 color) {
+        float maxValue = Math::maxComponent(color);
+        return maxValue > 1 ? (color / maxValue) : color;
     }
 }

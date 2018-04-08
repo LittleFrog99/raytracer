@@ -28,9 +28,10 @@ set(SOURCES_TRACER src/tracer/raycast.cpp src/tracer/arealighttracer.cpp
 set(SOURCES_SAMPLER src/sampler/regular.cpp src/sampler/multijittered.cpp)
 set(SOURCES_CAMERA src/camera/thinlens.cpp src/camera/pinhole.cpp)
 set(SOURCES_BRDF src/brdf/lambertian.cpp src/brdf/specular.cpp
-    src/brdf/perfectspecular.cpp)
+    src/brdf/perfectspecular.cpp src/brdf/glossyspecular.cpp)
 set(SOURCES_MATERIAL src/material/matte.cpp src/material/phong.cpp 
-    src/material/emissive.cpp src/material/reflective.cpp)
+    src/material/emissive.cpp src/material/reflective.cpp
+    src/material/glossyreflector.cpp)
 set(SOURCES_LIGHT src/light/ambientoccluder.cpp src/light/arealight.cpp)
 set(SOURCES_UTILITIES src/utilities/equations.cpp)
 

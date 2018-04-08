@@ -39,7 +39,7 @@ Mesh * Model::processMesh(aiMesh *mesh, const aiScene *scene) {
         vert.position = convertVector(mesh->mVertices[i]);
         vert.normal = convertVector(mesh->mNormals[i]);
         if (mesh->mTextureCoords[0]) 
-            vert.texCoords = convertVector(mesh->mTextureCoords[0][i]);
+            vert.texCoords = vec2(convertVector(mesh->mTextureCoords[0][i]));
         vert.tangent = convertVector(mesh->mTangents[i]);
         vert.biTangent = convertVector(mesh->mBitangents[i]);
         vertices.push_back(vert);

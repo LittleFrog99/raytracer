@@ -1,7 +1,5 @@
 #include "core/world.h"
 
-
-
 int main() {
     clock_t start = clock();
     World w;

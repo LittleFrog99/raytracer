@@ -12,7 +12,7 @@ void PinHole::renderPixel(int row, int col) {
         pixelPt = dvec2(vp.pixelSize * (col - 0.5 * vp.horRes + samplePt.x),
                         vp.pixelSize * (row - 0.5 * vp.vertRes + samplePt.y));
         ray.direction = rayDirection(pixelPt);
-        color += world->tracerP->traceRay(ray);
+        color += PostProc::maxToOne(world->tracerP->traceRay(ray));
     }
 
     color /= vp.numSamples;
