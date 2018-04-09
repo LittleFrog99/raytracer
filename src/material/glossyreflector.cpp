@@ -5,11 +5,11 @@
 GlossyReflector::GlossyReflector(vec3 color, float amb_int, float diff_int, 
     float spec_int, float refl_int) : Phong(color, amb_int, diff_int, spec_int) 
 {
-    glossySpecularBRDF = new GlossySpecular();
+    glossySpecularBRDF = new Specular();
     setGlossyReflectionIntensity(refl_int);
     setGlossyReflectionColor(color);
-    setGlossyReflectionExponent(1000.0f);
-    setGlossyReflectionSampler(new MultiJittered(256, 2));
+    setGlossyReflectionExponent(DEFAULT_GLOSSY_REFLECTION_EXPONENT);
+    setGlossyReflectionSampler(new MultiJittered(DEFAULT_NUM_SAMPLES, DEFAULT_NUM_SETS));
 }
 
 vec3 GlossyReflector::shade(Shade &shade) {
@@ -22,4 +22,9 @@ vec3 GlossyReflector::shade(Shade &shade) {
     color += brdf * shade.world.tracerP->traceRay(reflRay, shade.depth + 1) *
              float(dot(shade.normal, in)) / probDensity;
     return color;
+}
+
+GlossyReflector::~GlossyReflector() {
+    Phong::~Phong();
+    delete glossySpecularBRDF;
 }

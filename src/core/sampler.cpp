@@ -23,6 +23,7 @@ dvec2 Sampler::sampleUnitSquare() {
 }
 
 void Sampler::mapSamplesToUnitDisk() {
+    diskSamples.clear();
     int size = numSamples * numSets;
     double radius, phi;
     diskSamples.reserve(size);
@@ -65,6 +66,7 @@ dvec2 Sampler::sampleUnitDisk() {
 }
 
 void Sampler::mapSamplesToHemisphere(double exponent) {
+    hemisphereSamples.clear();
     int size = numSamples * numSets;
     hemisphereSamples.reserve(size);
 

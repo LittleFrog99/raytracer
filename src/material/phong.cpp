@@ -40,3 +40,32 @@ vec3 Phong::shade(Shade &shade) {
 
     return color;
 }
+
+vec3 Phong::globalShade(Shade &shade) {
+    vec3 color;
+    if (shade.depth == 0)
+        color = this->shade(shade);
+    
+    dvec3 in, out = -shade.ray.direction;
+    float probDensity;
+
+    vec3 brdf = diffuseBRDF->sampleF(shade, in, out, &probDensity); // diffuse layer
+    float nDotIn = dot(shade.normal, in);
+    Ray reflRay = Ray(shade.hitPoint, in);
+    color += brdf * shade.world.tracerP->traceRay(reflRay, shade.depth + 1)
+             * nDotIn / probDensity;
+    
+    brdf = specularBRDF->sampleF(shade, in, out, &probDensity); // specular layer
+    nDotIn = dot(shade.normal, in);
+    reflRay = Ray(shade.hitPoint, in);
+    color += brdf * shade.world.tracerP->traceRay(reflRay, shade.depth + 1)
+             * nDotIn / probDensity;
+    
+    return color;
+}
+
+Phong::~Phong() {
+    delete ambientBRDF;
+    delete diffuseBRDF;
+    delete specularBRDF;
+}

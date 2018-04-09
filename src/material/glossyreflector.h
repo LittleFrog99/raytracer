@@ -1,14 +1,17 @@
 #pragma once
 
 #include "material/phong.h"
-#include "brdf/glossyspecular.h"
+#include "brdf/specular.h"
 
 class GlossyReflector : public Phong {
 public:
+    static constexpr float DEFAULT_GLOSSY_REFLECTION_EXPONENT = 1000.0f;
+
     GlossyReflector() {}
     GlossyReflector(vec3 color = vec3(), float amb_int = 0.0, float diff_int = 0.0, 
                float spec_int = 0.0, float refl_int = 0.0);
     virtual vec3 shade(Shade &shade);
+    virtual ~GlossyReflector();
 
     inline void setGlossyReflectionIntensity(float value) {
         glossySpecularBRDF->setIntensity(value);
@@ -27,5 +30,5 @@ public:
     }
 
 private:
-    GlossySpecular *glossySpecularBRDF;
+    Specular *glossySpecularBRDF;
 };

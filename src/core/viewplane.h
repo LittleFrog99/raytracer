@@ -11,6 +11,7 @@ struct ViewPlane {
     double pixelSize;
     float gamma;
     float invGamma; // 1/gamma
+    bool globalIllum;
     Sampler *samplerP = nullptr;
 
     void setSampler(Sampler *sampler_ptr);

@@ -8,6 +8,8 @@ class Matte : public Material {
 public:
     Matte(vec3 color = vec3(), float ambient_factor = 0.0, float diffuse_factor = 0.0);
     virtual vec3 shade(Shade &shade);
+    virtual vec3 globalShade(Shade &shade);
+    virtual ~Matte();
 
     inline void setAmbientIntensity(float factor) {
         ambientBRDF->setIntensity(factor);

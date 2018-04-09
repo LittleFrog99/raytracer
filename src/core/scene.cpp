@@ -29,18 +29,19 @@ void World::build() {
     vp.pixelSize = 1;
     vp.numChannels = DEFAULT_NUM_CHANNELS;
     vp.maxDepth = 5;
+    vp.globalIllum = true;
     vp.setSamples(100, 2);
     vp.gamma = 1.0;
 
     /* Materials */
-    auto material1P = new Phong(vec3(0.25, 0.72, 0.96), 0.4, 0.6, 0.2);
+    auto material1P = new Phong(vec3(0.25, 0.72, 0.96), 0.2, 0.4, 0.3);
     auto material2P = new Phong(vec3(0.44, 0.24, 0.61), 0.4, 0.6, 0.1);
     material2P->setSpecularExponent(8.0f);
-    auto material3P = new Matte(vec3(1.0), 0.5, 0.7);
+    auto material3P = new Matte(vec3(1.0), 0.3, 0.7);
     auto material4P = new Emissive(vec3(1.0), 1000.0);
     auto material5P = new Phong(vec3(0.14, 0.47, 0.8), 0.3, 0.6, 0.1);
     auto material6P = new GlossyReflector(vec3(0.89, 0.36, 0.14), 0.2, 0.2, 0.1, 0.6);
-    auto material7P = new Reflective(vec3(1.0), 0.1, 0.2, 0.1, 0.7);
+    auto material7P = new Reflective(vec3(1.0), 0.1, 0.2, 0.1, 0.8);
     material7P->setReflectiveSampler(new MultiJittered(100, 2));
     auto material8P = new GlossyReflector(vec3(1.0), 0.2, 0.2, 0.1, 0.7);
     material8P->setGlossyReflectionExponent(100.0f);
@@ -66,7 +67,7 @@ void World::build() {
     gridP->addObject(sphere2P);
     gridP->addObject(triangle1P);
     gridP->setupCells();
-    auto modelP = new Model("resources/bunny.obj", material6P);
+    auto modelP = new Model("resources/bunny.obj", material1P);
     auto inst1P = new Instance(modelP);
     inst1P->scale(dvec3(100))->translate(dvec3(30, 0, 20));
     auto rect1P = new Rectangle(material7P);

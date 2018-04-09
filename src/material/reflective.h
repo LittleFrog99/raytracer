@@ -9,6 +9,8 @@ public:
     Reflective(vec3 color = vec3(), float amb_int = 0.0, float diff_int = 0.0, 
                float spec_int = 0.0, float reflec_int = 0.0);
     virtual vec3 shade(Shade &shade);
+    virtual vec3 globalShade(Shade &shade);
+    virtual ~Reflective();
 
     inline void setReflectiveIntensity(float value) {
         reflectiveBRDF->setIntensity(value);
@@ -19,7 +21,7 @@ public:
     }
 
     inline void setReflectiveSampler(Sampler *sampler_ptr) {
-        reflectiveBRDF->setSampler(sampler_ptr, 1.0);
+        reflectiveBRDF->setSampler(sampler_ptr);
     }
 
 private:

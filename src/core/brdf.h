@@ -12,7 +12,7 @@ public:
     virtual vec3 calcReflectance(Shade &shade, dvec3 &out) { return vec3(); };
     virtual ~BRDF() { if (samplerP) delete samplerP; }
     
-    inline void setSampler(Sampler *sampler_ptr, float exp) {
+    inline void setSampler(Sampler *sampler_ptr, float exp = 1.0f) {
         samplerP = sampler_ptr;
         samplerP->mapSamplesToHemisphere(exp);
     } 
