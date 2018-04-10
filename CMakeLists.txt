@@ -23,8 +23,7 @@ set(SOURCES_GEOMETRY src/geometry/primitive/plane.cpp
     src/geometry/instance.cpp src/geometry/compound/beveledcylinder.cpp
     src/geometry/compound/grid.cpp src/geometry/model/meshtriangle.cpp
     src/geometry/model/smoothmeshtriangle.cpp src/geometry/model/model.cpp)
-set(SOURCES_TRACER src/tracer/raycast.cpp src/tracer/arealighttracer.cpp
-    src/tracer/whitted.cpp)
+set(SOURCES_TRACER src/tracer/globaltracer.cpp)
 set(SOURCES_SAMPLER src/sampler/regular.cpp src/sampler/multijittered.cpp)
 set(SOURCES_CAMERA src/camera/thinlens.cpp src/camera/pinhole.cpp)
 set(SOURCES_BRDF src/brdf/lambertian.cpp src/brdf/specular.cpp

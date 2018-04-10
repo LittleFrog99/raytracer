@@ -11,6 +11,7 @@ public:
     GlossyReflector(vec3 color = vec3(), float amb_int = 0.0, float diff_int = 0.0, 
                float spec_int = 0.0, float refl_int = 0.0);
     virtual vec3 shade(Shade &shade);
+    virtual vec3 globalShade(Shade &shade);
     virtual ~GlossyReflector();
 
     inline void setGlossyReflectionIntensity(float value) {

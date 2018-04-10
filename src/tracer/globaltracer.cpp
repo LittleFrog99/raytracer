@@ -1,4 +1,4 @@
-#include "whitted.h"
+#include "globaltracer.h"
 #include "core/world.h"
 
 vec3 Whitted::traceRay(Ray &ray, int depth) {

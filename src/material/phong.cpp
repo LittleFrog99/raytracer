@@ -44,7 +44,7 @@ vec3 Phong::shade(Shade &shade) {
 vec3 Phong::globalShade(Shade &shade) {
     vec3 color;
     if (shade.depth == 0)
-        color = this->shade(shade);
+        color = Phong::shade(shade);
     
     dvec3 in, out = -shade.ray.direction;
     float probDensity;
