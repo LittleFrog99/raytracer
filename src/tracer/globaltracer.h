@@ -2,8 +2,8 @@
 
 #include "core/tracer.h"
 
-class Whitted : public Tracer {
+class GlobalTracer : public Tracer {
 public:
-    Whitted(World *w_ptr) : Tracer(w_ptr) {}
+    GlobalTracer(World *w_ptr) : Tracer(w_ptr) {}
     virtual vec3 traceRay(Ray &ray, int depth = 0);
 };

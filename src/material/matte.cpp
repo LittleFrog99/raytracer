@@ -36,9 +36,7 @@ vec3 Matte::shade(Shade &shade) {
 }
 
 vec3 Matte::globalShade(Shade &shade) {
-    vec3 color;
-    if (shade.depth == 0)
-        color = this->shade(shade);
+    vec3 color = Matte::shade(shade);
     
     dvec3 in, out = -shade.ray.direction;
     float probDensity;

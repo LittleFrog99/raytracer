@@ -23,21 +23,20 @@ vec3 Reflective::shade(Shade &shade) {
 }
 
 vec3 Reflective::globalShade(Shade &shade) {
-    vec3 color;
-    if (shade.depth == 0)
-        color = Phong::shade(shade);
+    vec3 color = Phong::shade(shade);
     
-    dvec3 in, out = -shade.ray.direction;
+    dvec3 in;
+    dvec3 out = -shade.ray.direction;
     float probDensity;
     vec3 brdf = reflectiveBRDF->sampleF(shade, in, out, &probDensity);
     Ray reflRay = Ray(shade.hitPoint, in);
 
     if (shade.depth == 0)
-        color += brdf * shade.world.tracerP->traceRay(reflRay, shade.depth + 2)
-                 * float(dot(shade.normal, in)) / probDensity;
-    else
-        color += color + brdf * shade.world.tracerP->traceRay(reflRay, shade.depth + 1) 
-                 * float(dot(shade.normal, in)) / probDensity;
+        color += brdf * shade.world.tracerP->traceRay(reflRay, shade.depth + 2) 
+                    * float(dot(shade.normal, in)) / probDensity;
+    else 
+        color += brdf * shade.world.tracerP->traceRay(reflRay, shade.depth + 1) 
+                    * float(dot(shade.normal, in)) / probDensity;
     
     return color;
 }
