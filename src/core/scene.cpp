@@ -25,10 +25,9 @@ void World::build() {
     vp.horRes = 400;
     vp.vertRes = 400;
     vp.pixelSize = 0.5;
-    vp.numChannels = DEFAULT_NUM_CHANNELS;
     vp.maxDepth = 5;
     vp.globalIllum = true;
-    vp.setSamples(100, 4);
+    vp.setSamples(4, 4);
     vp.gamma = 1.0;
 
     /* Materials */

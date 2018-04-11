@@ -18,7 +18,7 @@ vec3 Specular::calcReflectance(Shade &shade, dvec3 &out) {
     return vec3();
 }
 
-vec3 Specular::sampleF(Shade &shade, dvec3 &in, dvec3 &out, float *prob_den) {
+vec3 Specular::sampleF(Shade &shade, dvec3 &in, dvec3 &out, float *pdf) {
     dvec3 refl = reflect(-out, shade.normal);
     dvec3 w = refl;
     dvec3 u = normalize(cross(UP_VECTOR, w));
@@ -29,6 +29,6 @@ vec3 Specular::sampleF(Shade &shade, dvec3 &in, dvec3 &out, float *prob_den) {
                                       : (-samplePt.x * u - samplePt.y * v + samplePt.z * w);
 
     float phongLobe = pow(dot(refl, in), exponent);
-    *prob_den = phongLobe * dot(shade.normal, in);
+    *pdf = phongLobe * dot(shade.normal, in);
     return intensity * phongLobe * color;
 }

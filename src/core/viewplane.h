@@ -1,12 +1,13 @@
 #pragma once
 
 #include "core/sampler.h"
+#include "utilities.h"
 
 struct ViewPlane {
     int horRes;
     int vertRes;
     int numSamples;
-    int numChannels;
+    int numChannels = 4;
     int maxDepth;
     double pixelSize;
     float gamma;

@@ -14,7 +14,7 @@ public:
     virtual bool shadowIntersect(Ray &ray, double &tmin) { return false; }
     virtual dvec3 getNormal(dvec3 &point) { return vec3(); }
     virtual dvec3 sample() { return vec3(); }
-    virtual float probDensity(Shade &shade) { return 1.0; }
+    virtual float probDenFunc(Shade &shade) { return 1.0; }
     virtual void setSampler(Sampler *sampler_ptr);
     BoundingBox getBoundingBox();
 

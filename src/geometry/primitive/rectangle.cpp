@@ -17,10 +17,6 @@ dvec3 Rectangle::sample() {
     return (origin + samplePt.x * sideA + samplePt.y * sideB);
 }
 
-float Rectangle::probDensity(Shade &shade) {
-    return invArea;
-}
-
 bool Rectangle::intersect(Ray &ray, double &tmin, Shade &shade) {
     double t = dot(origin - ray.origin, normal) / dot(ray.direction, normal);
     if (t <= EPSILON) return false;

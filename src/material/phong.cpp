@@ -34,7 +34,7 @@ vec3 Phong::shade(Shade &shade) {
             if (!inShadow)
                 color += (diffuseBRDF->calcBRDF(shade, in, out) 
                 + specularBRDF->calcBRDF(shade, in, out)) * light->incidRadiosity(shade) 
-                * light->geometryTerm(shade) * nDotIn / light->probDensity(shade);
+                * light->geoTerm(shade) * nDotIn / light->probDenFunc(shade);
         }
     }
 
@@ -45,19 +45,19 @@ vec3 Phong::globalShade(Shade &shade) {
     vec3 color = Phong::shade(shade);
     
     dvec3 in, out = -shade.ray.direction;
-    float probDensity;
+    float pdf;
 
-    vec3 brdf = diffuseBRDF->sampleF(shade, in, out, &probDensity); // diffuse layer
+    vec3 brdf = diffuseBRDF->sampleF(shade, in, out, &pdf); // diffuse layer
     float nDotIn = dot(shade.normal, in);
     Ray reflRay = Ray(shade.hitPoint, in);
     color += brdf * shade.world.tracerP->traceRay(reflRay, shade.depth + 1)
-             * nDotIn / probDensity;
+             * nDotIn / pdf;
     
-    brdf = specularBRDF->sampleF(shade, in, out, &probDensity); // specular layer
+    brdf = specularBRDF->sampleF(shade, in, out, &pdf); // specular layer
     nDotIn = dot(shade.normal, in);
     reflRay = Ray(shade.hitPoint, in);
     color += brdf * shade.world.tracerP->traceRay(reflRay, shade.depth + 1)
-             * nDotIn / probDensity;
+             * nDotIn / pdf;
     
     return color;
 }

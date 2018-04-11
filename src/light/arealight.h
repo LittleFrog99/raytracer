@@ -12,8 +12,8 @@ public:
     virtual dvec3 getDirection(Shade &shade);
     virtual vec3 incidRadiosity(Shade &shade);
     virtual bool inShadow(Ray &shadow_ray, Shade &shade);
-    virtual float probDensity(Shade &shade);
-    virtual float geometryTerm(Shade &shade);
+    virtual float probDenFunc(Shade &shade);
+    virtual float geoTerm(Shade &shade);
     virtual ~AreaLight() {}
 
     inline void setAttenuationType(Attenuation type) {

@@ -28,7 +28,7 @@ vec3 Matte::shade(Shade &shade) {
 
             if (!inShadow)
                 color += diffuseBRDF->calcBRDF(shade, in, out) * light->incidRadiosity(shade)
-                    * float(light->geometryTerm(shade) * nDotIn / light->probDensity(shade));
+                    * float(light->geoTerm(shade) * nDotIn / light->probDenFunc(shade));
         }
     }
 
@@ -39,13 +39,13 @@ vec3 Matte::globalShade(Shade &shade) {
     vec3 color = Matte::shade(shade);
     
     dvec3 in, out = -shade.ray.direction;
-    float probDensity;
+    float pdf;
 
-    vec3 brdf = diffuseBRDF->sampleF(shade, in, out, &probDensity);
+    vec3 brdf = diffuseBRDF->sampleF(shade, in, out, &pdf);
     float nDotIn = dot(shade.normal, in);
     Ray reflRay = Ray(shade.hitPoint, in);
     color += brdf * shade.world.tracerP->traceRay(reflRay, shade.depth + 1)
-             * nDotIn / probDensity;
+             * nDotIn / pdf;
     
     return color;
 }

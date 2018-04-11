@@ -7,7 +7,7 @@ public:
     Specular(float intensity = 0.0, vec3 color = vec3(), float exponent = 16.0f);
     virtual vec3 calcBRDF(Shade &shade, dvec3 &in, dvec3 &out);
     virtual vec3 calcReflectance(Shade &shade, dvec3 &out);
-    virtual vec3 sampleF(Shade &shade, dvec3 &in, dvec3 &out, float *prob_den = (float *)nullptr);
+    virtual vec3 sampleF(Shade &shade, dvec3 &in, dvec3 &out, float *pdf = (float *)nullptr);
 
     inline void setIntensity(float value) {
         intensity = value;

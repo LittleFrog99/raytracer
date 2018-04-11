@@ -35,10 +35,10 @@ Shade World::intersectObjects(Ray &ray) {
 }
 
 void World::displayStatus() {
-    int total = vp.horRes * vp.vertRes;
+    unsigned long total = vp.horRes * vp.vertRes;
     while (finished <= total) {
         cout << '\r';
-        cout << setw(8) << setprecision(4) << float(finished) * 100 / total << '%';
+        cout << setw(8) << setprecision(4) << double(finished) * 100 / total << '%';
         cout.flush();
         if (finished == total)
             break;

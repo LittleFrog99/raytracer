@@ -27,16 +27,16 @@ vec3 Reflective::globalShade(Shade &shade) {
     
     dvec3 in;
     dvec3 out = -shade.ray.direction;
-    float probDensity;
-    vec3 brdf = reflectiveBRDF->sampleF(shade, in, out, &probDensity);
+    float pdf;
+    vec3 brdf = reflectiveBRDF->sampleF(shade, in, out, &pdf);
     Ray reflRay = Ray(shade.hitPoint, in);
 
     if (shade.depth == 0)
         color += brdf * shade.world.tracerP->traceRay(reflRay, shade.depth + 2) 
-                    * float(dot(shade.normal, in)) / probDensity;
+                    * float(dot(shade.normal, in)) / pdf;
     else 
         color += brdf * shade.world.tracerP->traceRay(reflRay, shade.depth + 1) 
-                    * float(dot(shade.normal, in)) / probDensity;
+                    * float(dot(shade.normal, in)) / pdf;
     
     return color;
 }

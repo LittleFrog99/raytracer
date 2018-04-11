@@ -24,11 +24,11 @@ bool AreaLight::inShadow(Ray &ray, Shade &shade) {
     return false;
 }
 
-float AreaLight::probDensity(Shade &shade) {
-    return objectP->probDensity(shade);
+float AreaLight::probDenFunc(Shade &shade) {
+    return objectP->probDenFunc(shade);
 }
 
-float AreaLight::geometryTerm(Shade &shade) {
+float AreaLight::geoTerm(Shade &shade) {
     float nDotD = dot(-normal, out);
     float dSquared = atten == LINEAR ? distance(samplePt, shade.hitPoint)
                                      : Math::distanceSquared(samplePt, shade.hitPoint);

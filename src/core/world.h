@@ -38,8 +38,7 @@ public:
 
   private:
     unsigned char *_pixels;
-    atomic<int> finished;
-    constexpr static int DEFAULT_NUM_CHANNELS = 4;
+    atomic<unsigned long> finished;
 
     void displayStatus();
 };
