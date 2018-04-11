@@ -26,8 +26,8 @@ set(SOURCES_GEOMETRY src/geometry/primitive/plane.cpp
 set(SOURCES_TRACER src/tracer/globaltracer.cpp)
 set(SOURCES_SAMPLER src/sampler/regular.cpp src/sampler/multijittered.cpp)
 set(SOURCES_CAMERA src/camera/thinlens.cpp src/camera/pinhole.cpp)
-set(SOURCES_BRDF src/brdf/lambertian.cpp src/brdf/specular.cpp
-    src/brdf/perfectspecular.cpp)
+set(SOURCES_BRDF src/bsdf/lambertian.cpp src/bsdf/specular.cpp
+    src/bsdf/perfectspecular.cpp)
 set(SOURCES_MATERIAL src/material/matte.cpp src/material/phong.cpp 
     src/material/emissive.cpp src/material/reflective.cpp
     src/material/glossyreflector.cpp)

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "material/phong.h"
-#include "brdf/perfectspecular.h"
+#include "bsdf/perfectspecular.h"
 
 class Reflective : public Phong {
 public:

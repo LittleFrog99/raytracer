@@ -1,8 +1,8 @@
 #pragma once
 
 #include "core/material.h"
-#include "brdf/lambertian.h"
-#include "brdf/specular.h"
+#include "bsdf/lambertian.h"
+#include "bsdf/specular.h"
 
 class Phong : public Material {
 public:

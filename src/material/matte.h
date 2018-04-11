@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core/material.h"
-#include "brdf/lambertian.h"
+#include "bsdf/lambertian.h"
 #include "sampler/multijittered.h"
 
 class Matte : public Material {

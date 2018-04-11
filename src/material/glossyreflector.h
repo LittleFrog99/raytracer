@@ -1,7 +1,7 @@
 #pragma once
 
 #include "material/phong.h"
-#include "brdf/specular.h"
+#include "bsdf/specular.h"
 
 class GlossyReflector : public Phong {
 public:
