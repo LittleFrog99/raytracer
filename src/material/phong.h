@@ -6,47 +6,49 @@
 
 class Phong : public Material {
 public:
-    Phong(vec3 color = vec3(), float ambient_intensity = 0.0, float diffuse_intensity = 0.0, 
-    float specular_intensity = 0.0);
+    static constexpr float DEFAULT_SPECULAR_EXPONENT = 16.0f;
+
+    Phong() {}
+    Phong(vec3 color, float amb_int, float diff_int, float spec_int);
     virtual vec3 shade(Shade &shade);
     virtual vec3 globalShade(Shade &shade);
     virtual ~Phong();
 
     inline void setAmbientIntensity(float intensity) {
-        ambientBRDF->setIntensity(intensity);
+        ambBRDF->setIntensity(intensity);
     }
 
     inline void setDiffuseIntensity(float intensity) {
-        diffuseBRDF->setIntensity(intensity);
+        diffBRDF->setIntensity(intensity);
     }
 
     inline void setDiffuseColor(vec3 color) {
-        ambientBRDF->setColor(color);
-        diffuseBRDF->setColor(color);
+        ambBRDF->setColor(color);
+        diffBRDF->setColor(color);
     }
 
     inline void setDiffuseSampler(Sampler *sampler_ptr) {
-        diffuseBRDF->setSampler(sampler_ptr);
+        diffBRDF->setSampler(sampler_ptr);
     }
 
     inline void setSpecularIntensity(float intensity) {
-        specularBRDF->setIntensity(intensity);
+        specBRDF->setIntensity(intensity);
     }
 
     inline void setSpecularColor(vec3 color) {
-        specularBRDF->setColor(color);
+        specBRDF->setColor(color);
     }
 
     inline void setSpecularExponent(float exponent) {
-        specularBRDF->setExponent(exponent);
+        specBRDF->setExponent(exponent);
     }
 
     inline void setSpecularSampler(Sampler *sampler_ptr) {
-        specularBRDF->setSampler(sampler_ptr, specularBRDF->getExponent());
+        specBRDF->setSampler(sampler_ptr, specBRDF->getExponent());
     }
 
 protected:
-    Lambertian *ambientBRDF;
-    Lambertian *diffuseBRDF;
-    Specular *specularBRDF;
+    Lambertian *ambBRDF;
+    Lambertian *diffBRDF;
+    Specular *specBRDF;
 };

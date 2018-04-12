@@ -16,7 +16,7 @@ vec3 Lambertian::calcReflectance(Shade &shade, dvec3 &wo) {
     return intensity * color;
 }
 
-vec3 Lambertian::sampleF(Shade &shade, dvec3 &in, dvec3 &out, float *pdf) {
+vec3 Lambertian::sampleBRDF(Shade &shade, dvec3 &in, dvec3 &out, float *pdf) {
     dvec3 w = shade.normal;
     dvec3 v = normalize(cross(UP_VECTOR, w));
     dvec3 u = cross(v, w);

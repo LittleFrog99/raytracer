@@ -18,7 +18,7 @@ vec3 Specular::calcReflectance(Shade &shade, dvec3 &out) {
     return vec3();
 }
 
-vec3 Specular::sampleF(Shade &shade, dvec3 &in, dvec3 &out, float *pdf) {
+vec3 Specular::sampleBRDF(Shade &shade, dvec3 &in, dvec3 &out, float *pdf) {
     dvec3 refl = reflect(-out, shade.normal);
     dvec3 w = refl;
     dvec3 u = normalize(cross(UP_VECTOR, w));

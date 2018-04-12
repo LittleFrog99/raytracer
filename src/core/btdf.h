@@ -4,14 +4,16 @@
 #include "core/shade.h"
 #include "utilities.h"
 
-class BRDF {
+class BTDF {
 public:
-    BRDF() {}
-    virtual vec3 calcBRDF(Shade &shade, dvec3 &in, dvec3 &out) { return vec3(); }
-    virtual vec3 sampleBRDF(Shade &shade, dvec3 &in, dvec3 &out, float *pdf = nullptr) { return vec3(); }
+    BTDF() {}
+    virtual vec3 calcBTDF(Shade &shade, dvec3 &in, dvec3 &out) { return vec3(); }
+    virtual vec3 sampleBTDF(Shade &shade, dvec3 &in, dvec3 &out, float *pdf = nullptr) 
+        { return vec3(); }
     virtual vec3 calcReflectance(Shade &shade, dvec3 &out) { return vec3(); };
-    virtual ~BRDF() { if (samplerP) delete samplerP; }
-    
+    virtual bool isTIR(Shade &shade) = 0;
+    virtual ~BTDF() { if (samplerP) delete samplerP; }
+
     inline void setSampler(Sampler *sampler_ptr, float exp = 1.0f) {
         samplerP = sampler_ptr;
         samplerP->mapSamplesToHemisphere(exp);

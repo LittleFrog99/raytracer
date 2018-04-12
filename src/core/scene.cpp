@@ -12,6 +12,7 @@
 #include "material/emissive.h"
 #include "material/reflective.h"
 #include "material/glossyreflector.h"
+#include "material/transparent.h"
 #include "light/ambientoccluder.h"
 #include "light/arealight.h"
 #include "tracer/globaltracer.h"
@@ -26,7 +27,7 @@ void World::build() {
     vp.vertRes = 400;
     vp.pixelSize = 0.5;
     vp.maxDepth = 5;
-    vp.globalIllum = true;
+    vp.globalIllum = false;
     vp.setSamples(4, 4);
     vp.gamma = 1.0;
 
@@ -39,26 +40,25 @@ void World::build() {
     auto material5P = new Phong(vec3(0.14, 0.47, 0.8), 0.3, 0.6, 0.1);
     auto material6P = new GlossyReflector(vec3(0.89, 0.36, 0.14), 0.2, 0.2, 0.1, 0.6);
     auto material7P = new Reflective(vec3(1.0), 0.1, 0.2, 0.1, 0.8);
-    material7P->setReflectiveSampler(new MultiJittered(100, 2));
     auto material8P = new GlossyReflector(vec3(1.0), 0.2, 0.2, 0.1, 0.7);
     material8P->setGlossyReflectionExponent(100.0f);
-    material8P->setGlossyReflectionSampler(new MultiJittered(100, 2));
     auto material9P = new Matte(vec3(0.9, 0.2, 0.13), 0.3, 0.7);
     auto material10P = new Matte(vec3(0.33, 0.78, 0.25), 0.3, 0.7);
     auto material11P = new Reflective(vec3(1.0), 0.2, 0.2, 0.2, 0.6);
+    auto material12P = new Transparent(vec3(1.0), 0.2, 0.1, 0.1, 1.0, 0.0, 1.33);
 
     /* Geometry Objects */
     auto sphere1P = new Sphere(material1P);
     sphere1P->setParams(dvec3(-100, 80, 0), 80.0);
-    auto sphere2P = new Sphere(material6P);
-    sphere2P->setParams(dvec3(0, 60, 0), 60);
+    auto sphere2P = new Sphere(material12P);
+    sphere2P->setParams(dvec3(0, 50, -100), 50);
     auto plane1P = new Plane(material3P);
     plane1P->setParams(dvec3(0, 1, 0), dvec3(0.0, 0.0, 0.0));
     auto disk1P = new Disk(material4P);
     disk1P->setParams(dvec3(0, 199.9, -100), dvec3(0, -1, 0), 30);
     disk1P->setSampler(new MultiJittered(256, 2));
     disk1P->toggleShadowCast(false);
-    auto modelP = new Model("resources/bunny.obj", material3P);
+    auto modelP = new Model("resources/bunny.obj", material12P);
     auto inst1P = new Instance(modelP);
     inst1P->scale(dvec3(50))->translate(dvec3(10, 0, -120));
     auto rect1P = new Rectangle(material8P); // back

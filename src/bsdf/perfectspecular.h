@@ -4,8 +4,9 @@
 
 class PerfectSpecular : public BRDF {
 public:
-    PerfectSpecular(Sampler *sampler = nullptr) : BRDF(sampler) {}
-    virtual vec3 sampleF(Shade &shade, dvec3 &in, dvec3 &out, float *pdf = nullptr);
+    PerfectSpecular();
+    PerfectSpecular(float intensity, vec3 color = vec3(1.0));
+    virtual vec3 sampleBRDF(Shade &shade, dvec3 &in, dvec3 &out, float *pdf = nullptr);
 
     inline void setIntensity(float value) {
         intensity = value;

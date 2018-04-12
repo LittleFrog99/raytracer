@@ -12,17 +12,17 @@ public:
     virtual ~Matte();
 
     inline void setAmbientIntensity(float factor) {
-        ambientBRDF->setIntensity(factor);
+        ambBRDF->setIntensity(factor);
     }
     inline void setDiffuseIntensity(float factor) {
-        diffuseBRDF->setIntensity(factor);
+        diffBRDF->setIntensity(factor);
     }
     inline void setDiffuseColor(vec3 color) {
-        ambientBRDF->setColor(color);
-        diffuseBRDF->setColor(color);
+        ambBRDF->setColor(color);
+        diffBRDF->setColor(color);
     }
 
 private:
-    Lambertian *ambientBRDF;
-    Lambertian *diffuseBRDF;
+    Lambertian *ambBRDF;
+    Lambertian *diffBRDF;
 };

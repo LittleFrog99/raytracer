@@ -26,16 +26,16 @@ set(SOURCES_GEOMETRY src/geometry/primitive/plane.cpp
 set(SOURCES_TRACER src/tracer/globaltracer.cpp)
 set(SOURCES_SAMPLER src/sampler/regular.cpp src/sampler/multijittered.cpp)
 set(SOURCES_CAMERA src/camera/thinlens.cpp src/camera/pinhole.cpp)
-set(SOURCES_BRDF src/bsdf/lambertian.cpp src/bsdf/specular.cpp
-    src/bsdf/perfectspecular.cpp)
+set(SOURCES_BSDF src/bsdf/lambertian.cpp src/bsdf/specular.cpp
+    src/bsdf/perfectspecular.cpp src/bsdf/perfecttransmitter.cpp)
 set(SOURCES_MATERIAL src/material/matte.cpp src/material/phong.cpp 
     src/material/emissive.cpp src/material/reflective.cpp
-    src/material/glossyreflector.cpp)
+    src/material/glossyreflector.cpp src/material/transparent.cpp)
 set(SOURCES_LIGHT src/light/ambientoccluder.cpp src/light/arealight.cpp)
 set(SOURCES_UTILITIES src/utilities/equations.cpp)
 
 set(SOURCES ${SOURCES_CORE} ${SOURCES_GEOMETRY} ${SOURCES_TRACER} ${SOURCES_SAMPLER} 
-    ${SOURCES_CAMERA} ${SOURCES_LIGHT} ${SOURCES_BRDF} ${SOURCES_MATERIAL} ${SOURCES_LIGHT}
+    ${SOURCES_CAMERA} ${SOURCES_LIGHT} ${SOURCES_BSDF} ${SOURCES_MATERIAL} ${SOURCES_LIGHT}
     ${SOURCES_UTILITIES})
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(${PROJECT_NAME} ${ASSIMP})
