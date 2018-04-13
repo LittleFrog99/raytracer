@@ -13,7 +13,7 @@ Transparent::Transparent(vec3 color, float amb_int, float diff_int, float spec_i
 vec3 Transparent::shade(Shade &shade) {
     vec3 color = Phong::shade(shade);
 
-    dvec3 out = -shade.direction;
+    dvec3 out = -shade.ray.direction;
     dvec3 in;
     vec3 brdf = reflBRDF->sampleBRDF(shade, in, out);
     Ray reflRay = Ray(shade.hitPoint, in);

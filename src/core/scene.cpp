@@ -32,44 +32,44 @@ void World::build() {
     vp.gamma = 1.0;
 
     /* Materials */
-    auto material1P = new Phong(vec3(0.25, 0.72, 0.96), 0.2, 0.4, 0.3);
-    auto material2P = new Phong(vec3(0.44, 0.24, 0.61), 0.4, 0.6, 0.1);
-    material2P->setSpecularExponent(8.0f);
-    auto material3P = new Matte(vec3(1.0), 0.4, 0.6);
-    auto material4P = new Emissive(vec3(1.0, 0.82, 0.59), 200000.0);
-    auto material5P = new Phong(vec3(0.14, 0.47, 0.8), 0.3, 0.6, 0.1);
-    auto material6P = new GlossyReflector(vec3(0.89, 0.36, 0.14), 0.2, 0.2, 0.1, 0.6);
-    auto material7P = new Reflective(vec3(1.0), 0.1, 0.2, 0.1, 0.8);
-    auto material8P = new GlossyReflector(vec3(1.0), 0.2, 0.2, 0.1, 0.7);
-    material8P->setGlossyReflectionExponent(100.0f);
-    auto material9P = new Matte(vec3(0.9, 0.2, 0.13), 0.3, 0.7);
-    auto material10P = new Matte(vec3(0.33, 0.78, 0.25), 0.3, 0.7);
-    auto material11P = new Reflective(vec3(1.0), 0.2, 0.2, 0.2, 0.6);
-    auto material12P = new Transparent(vec3(1.0), 0.2, 0.1, 0.1, 1.0, 0.0, 1.33);
+    auto plastic1P = new Phong(vec3(0.25, 0.72, 0.96), 0.2, 0.4, 0.3);
+    auto plastic2P = new Phong(vec3(0.44, 0.24, 0.61), 0.4, 0.6, 0.1);
+    plastic2P->setSpecularExponent(8.0f);
+    auto plastic3P = new Matte(vec3(1.0), 0.4, 0.6);
+    auto emi1P = new Emissive(vec3(1.0, 0.82, 0.59), 200000.0);
+    auto plastic4P = new Phong(vec3(0.14, 0.47, 0.8), 0.3, 0.6, 0.1);
+    auto bronzeP = new GlossyReflector(vec3(0.89, 0.36, 0.14), 0.2, 0.2, 0.1, 0.6);
+    auto silver1P = new Reflective(vec3(1.0), 0.1, 0.2, 0.1, 0.8);
+    auto silver2P = new GlossyReflector(vec3(1.0), 0.2, 0.2, 0.1, 0.7);
+    silver2P->setGlossyReflectionExponent(100.0f);
+    auto plastic5P = new Matte(vec3(0.9, 0.2, 0.13), 0.3, 0.7);
+    auto plastic6P = new Matte(vec3(0.33, 0.78, 0.25), 0.3, 0.7);
+    auto mirror1P = new Reflective(vec3(1.0), 0.2, 0.2, 0.3, 0.6);
+    auto glass1P = new Transparent(vec3(1.0), 0.2, 0.1, 0.1, 0.3, 0.5, 1.5);
 
     /* Geometry Objects */
-    auto sphere1P = new Sphere(material1P);
+    auto sphere1P = new Sphere(plastic1P);
     sphere1P->setParams(dvec3(-100, 80, 0), 80.0);
-    auto sphere2P = new Sphere(material12P);
-    sphere2P->setParams(dvec3(0, 50, -100), 50);
-    auto plane1P = new Plane(material3P);
+    auto sphere2P = new Sphere(glass1P);
+    sphere2P->setParams(dvec3(0, 40, -100), 40.01);
+    auto plane1P = new Plane(plastic3P);
     plane1P->setParams(dvec3(0, 1, 0), dvec3(0.0, 0.0, 0.0));
-    auto disk1P = new Disk(material4P);
+    auto disk1P = new Disk(emi1P);
     disk1P->setParams(dvec3(0, 199.9, -100), dvec3(0, -1, 0), 30);
     disk1P->setSampler(new MultiJittered(256, 2));
     disk1P->toggleShadowCast(false);
-    auto modelP = new Model("resources/bunny.obj", material12P);
+    auto modelP = new Model("resources/bunny.obj", glass1P);
     auto inst1P = new Instance(modelP);
     inst1P->scale(dvec3(50))->translate(dvec3(10, 0, -120));
-    auto rect1P = new Rectangle(material8P); // back
+    auto rect1P = new Rectangle(silver2P); // back
     rect1P->setParams(dvec3(-100, 200, -200), dvec3(0, -200, 0), dvec3(200, 0, 0));
-    auto rect2P = new Rectangle(material3P); // up
+    auto rect2P = new Rectangle(plastic3P); // up
     rect2P->setParams(dvec3(-100, 200, -200), dvec3(200, 0, 0), dvec3(0, 0, 200));
-    auto rect3P = new Rectangle(material9P); // left
+    auto rect3P = new Rectangle(plastic5P); // left
     rect3P->setParams(dvec3(-100, 200, -200), dvec3(0, 0, 200), dvec3(0, -200, 0));
-    auto rect4P = new Rectangle(material11P); // bottom
+    auto rect4P = new Rectangle(mirror1P); // bottom
     rect4P->setParams(dvec3(-100, 0, -200), dvec3(0, 0, 200), dvec3(200, 0, 0));
-    auto rect5P = new Rectangle(material10P); // right
+    auto rect5P = new Rectangle(plastic6P); // right
     rect5P->setParams(dvec3(100, 0, -200), dvec3(0, 0, 200), dvec3(0, 200, 0));
 
     // addObject(plane1P);

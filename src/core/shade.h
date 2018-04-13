@@ -16,7 +16,6 @@ public:
     Ray ray;
     double t;
     int depth = 0;
-    dvec3 direction;
     World &world;
 
     Shade(World &wrd) : world(wrd) {}

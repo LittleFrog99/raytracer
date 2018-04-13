@@ -9,10 +9,10 @@ PerfectTransmitter::PerfectTransmitter(float intensity, float ior)
 
 bool PerfectTransmitter::isTIR(Shade &shade) {
     dvec3 out = -shade.ray.direction;
-    float cosTheta = dot(shade.normal, out);
-    float eta = cosTheta > 0.0 ? ior : 1.0 / ior;
+    float cosThetaI = dot(shade.normal, out);
+    float eta = cosThetaI > 0.0 ? ior : 1.0 / ior;
 
-    return (1.0 - (1.0 - cosTheta * cosTheta) / (eta * eta)) < 0.0;
+    return 1.0 - (1.0 - cosThetaI * cosThetaI) / (eta * eta) < 0.0;
 }
 
 vec3 PerfectTransmitter::sampleBTDF(Shade &shade, dvec3 &trans, dvec3 &out) {
