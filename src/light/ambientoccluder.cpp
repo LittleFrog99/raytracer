@@ -1,13 +1,19 @@
 #include "ambientoccluder.h"
 #include "core/world.h"
 #include "core/shade.h"
+#include "sampler/multijittered.h"
+
+AmbientOccluder::AmbientOccluder(vec3 color, float intensity, float min_amount)
+    : color(color), intensity(intensity) 
+{
+    setSampler(new MultiJittered(DEFAULT_NUM_SAMPLES, DEFAULT_NUM_SETS));
+}
 
 void AmbientOccluder::setSampler(Sampler *sampler_ptr) {
     if (samplerP) {
         delete samplerP;
         samplerP = nullptr;
     }
-
     samplerP = sampler_ptr;
     samplerP->mapSamplesToHemisphere(1.0);
 }

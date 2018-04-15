@@ -30,7 +30,6 @@ float AreaLight::probDenFunc(Shade &shade) {
 
 float AreaLight::geoTerm(Shade &shade) {
     float nDotD = dot(-normal, out);
-    float dSquared = atten == LINEAR ? distance(samplePt, shade.hitPoint)
-                                     : Math::distanceSquared(samplePt, shade.hitPoint);
+    float dSquared = Math::distanceSquared(samplePt, shade.hitPoint);
     return nDotD / dSquared;
 }

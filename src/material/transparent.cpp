@@ -32,3 +32,27 @@ vec3 Transparent::shade(Shade &shade) {
 
     return color;
 }
+
+vec3 Transparent::globalShade(Shade &shade) {
+    vec3 color = Phong::shade(shade);
+
+    dvec3 out = -shade.ray.direction;
+    dvec3 in, trans;
+    vec3 brdf = reflBRDF->sampleBRDF(shade, in, out);
+    Ray reflRay = Ray(shade.hitPoint, in);
+    vec3 reflection = shade.depth == 0 ? shade.world.tracerP->traceRay(reflRay, shade.depth + 2)
+                                       : shade.world.tracerP->traceRay(reflRay, shade.depth + 1);
+
+    if (specBTDF->isTIR(shade)) 
+        color += reflection;
+    else {
+        vec3 btdf = specBTDF->sampleBTDF(shade, trans, out);
+        Ray transRay = Ray(shade.hitPoint, trans);
+        color += brdf * reflection * float(fabs(dot(shade.normal, in)));
+        vec3 transmission = shade.depth == 0 ? shade.world.tracerP->traceRay(transRay, shade.depth + 2)
+                                             : shade.world.tracerP->traceRay(transRay, shade.depth + 1);
+        color += btdf * transmission * float(fabs(dot(shade.normal, trans)));
+    }
+    
+    return color;
+}

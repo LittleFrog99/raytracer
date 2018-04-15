@@ -16,14 +16,9 @@ public:
     virtual float geoTerm(Shade &shade);
     virtual ~AreaLight() {}
 
-    inline void setAttenuationType(Attenuation type) {
-        atten = type;
-    }
-
 private:
     Geometry *objectP = nullptr;
     dvec3 samplePt;
     dvec3 normal;
     dvec3 out;
-    Attenuation atten = LINEAR;
 };

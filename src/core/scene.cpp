@@ -25,10 +25,10 @@ void World::build() {
     /* Viewplane */
     vp.horRes = 400;
     vp.vertRes = 400;
-    vp.pixelSize = 0.5;
+    vp.pixelSize = 0.005;
     vp.maxDepth = 5;
-    vp.globalIllum = false;
-    vp.setSamples(4, 4);
+    vp.globalIllum = true;
+    vp.setSamples(25, 4);
     vp.gamma = 1.0;
 
     /* Materials */
@@ -36,7 +36,7 @@ void World::build() {
     auto plastic2P = new Phong(vec3(0.44, 0.24, 0.61), 0.4, 0.6, 0.1);
     plastic2P->setSpecularExponent(8.0f);
     auto plastic3P = new Matte(vec3(1.0), 0.4, 0.6);
-    auto emi1P = new Emissive(vec3(1.0, 0.82, 0.59), 200000.0);
+    auto emi1P = new Emissive(vec3(1.0, 0.82, 0.59), 25.0);
     auto plastic4P = new Phong(vec3(0.14, 0.47, 0.8), 0.3, 0.6, 0.1);
     auto bronzeP = new GlossyReflector(vec3(0.89, 0.36, 0.14), 0.2, 0.2, 0.1, 0.6);
     auto silver1P = new Reflective(vec3(1.0), 0.1, 0.2, 0.1, 0.8);
@@ -49,32 +49,31 @@ void World::build() {
 
     /* Geometry Objects */
     auto sphere1P = new Sphere(plastic1P);
-    sphere1P->setParams(dvec3(-100, 80, 0), 80.0);
+    sphere1P->setParams(dvec3(-1.00, 0.80, 0), .80);
     auto sphere2P = new Sphere(glass1P);
-    sphere2P->setParams(dvec3(0, 40, -100), 40.01);
+    sphere2P->setParams(dvec3(0, 0.40, -1.00), .4001);
     auto plane1P = new Plane(plastic3P);
     plane1P->setParams(dvec3(0, 1, 0), dvec3(0.0, 0.0, 0.0));
     auto disk1P = new Disk(emi1P);
-    disk1P->setParams(dvec3(0, 199.9, -100), dvec3(0, -1, 0), 30);
+    disk1P->setParams(dvec3(0, 1.99, -1.00), dvec3(0, -1, 0), 0.30);
     disk1P->setSampler(new MultiJittered(256, 2));
     disk1P->toggleShadowCast(false);
     auto modelP = new Model("resources/bunny.obj", glass1P);
     auto inst1P = new Instance(modelP);
-    inst1P->scale(dvec3(50))->translate(dvec3(10, 0, -120));
+    inst1P->scale(dvec3(0.50))->translate(dvec3(0.10, 0, -1.20));
     auto rect1P = new Rectangle(silver2P); // back
-    rect1P->setParams(dvec3(-100, 200, -200), dvec3(0, -200, 0), dvec3(200, 0, 0));
+    rect1P->setParams(dvec3(-1.00, 2.00, -2.00), dvec3(0, -2.00, 0), dvec3(2.00, 0, 0));
     auto rect2P = new Rectangle(plastic3P); // up
-    rect2P->setParams(dvec3(-100, 200, -200), dvec3(200, 0, 0), dvec3(0, 0, 200));
+    rect2P->setParams(dvec3(-1.00, 2.00, -2.00), dvec3(2.00, 0, 0), dvec3(0, 0, 2.00));
     auto rect3P = new Rectangle(plastic5P); // left
-    rect3P->setParams(dvec3(-100, 200, -200), dvec3(0, 0, 200), dvec3(0, -200, 0));
+    rect3P->setParams(dvec3(-1.00, 2.00, -2.00), dvec3(0, 0, 2.00), dvec3(0, -2.00, 0));
     auto rect4P = new Rectangle(mirror1P); // bottom
-    rect4P->setParams(dvec3(-100, 0, -200), dvec3(0, 0, 200), dvec3(200, 0, 0));
+    rect4P->setParams(dvec3(-1.00, 0, -2.00), dvec3(0, 0, 2.00), dvec3(2.00, 0, 0));
     auto rect5P = new Rectangle(plastic6P); // right
-    rect5P->setParams(dvec3(100, 0, -200), dvec3(0, 0, 200), dvec3(0, 200, 0));
+    rect5P->setParams(dvec3(1.00, 0, -2.00), dvec3(0, 0, 2.00), dvec3(0, 2.00, 0));
 
-    // addObject(plane1P);
     addObject(disk1P);
-    addObject(inst1P);
+    addObject(sphere2P);
     addObject(rect1P);
     addObject(rect2P);
     addObject(rect3P);
@@ -84,18 +83,15 @@ void World::build() {
     /* Lights */
     bgColor = vec3();
     AmbientOccluder *occluderP = new AmbientOccluder(vec3(1.0, 0.82, 0.59), 1.0, 0.2);
-    occluderP->setSampler(new MultiJittered(DEFAULT_NUM_SAMPLES, DEFAULT_NUM_SETS));
-    occluderP->setOcclusionSamples(1);
     setAmbient(occluderP);
 
     auto area1P = new AreaLight(disk1P);
     area1P->toggleShadowCast(true);
-    area1P->setAttenuationType(AreaLight::SQUARE);
     addLight(area1P);
 
     /* Camera & Tracer */
     tracerP = new GlobalTracer(this);
-    PinHole *cam = new PinHole(dvec3(0, 100, 210), dvec3(0, 100, 0), 200);
+    PinHole *cam = new PinHole(dvec3(0, 1.00, 2.10), dvec3(0, 1.00, 0), 2.00);
     cameraP = cam;
     _pixels = new unsigned char[vp.horRes * vp.vertRes * vp.numChannels];
     finished = 0;
