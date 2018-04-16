@@ -10,8 +10,8 @@ class Geometry {
 public:
     Geometry() {}
     Geometry(Material *material_ptr) : materialP(material_ptr) {}
-    virtual bool intersect(Ray &ray, double &tmin, Shade &shade) { return false; }
-    virtual bool shadowIntersect(Ray &ray, double &tmin) { return false; }
+    virtual bool intersect(Ray &ray, double &tmin, Shade &shade) = 0;
+    virtual bool shadowIntersect(Ray &ray, double &tmin) = 0;
     virtual dvec3 getNormal(dvec3 &point) { return vec3(); }
     virtual dvec3 sample() { return vec3(); }
     virtual float probDenFunc(Shade &shade) { return 1.0; }

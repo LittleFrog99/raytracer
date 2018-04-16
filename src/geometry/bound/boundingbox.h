@@ -14,7 +14,6 @@ public:
 
 class BoxBounded {
 public:
-    BoxBounded() {}
     virtual BoundingBox getBoundingBox() { return bndBox; }
 
     inline void createBoundingBox(dvec3 vert1, dvec3 vert2) {

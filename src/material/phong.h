@@ -8,7 +8,6 @@ class Phong : public Material {
 public:
     static constexpr float DEFAULT_SPECULAR_EXPONENT = 16.0f;
 
-    Phong() {}
     Phong(vec3 color, float amb_int, float diff_int, float spec_int);
     virtual vec3 shade(Shade &shade);
     virtual vec3 globalShade(Shade &shade);

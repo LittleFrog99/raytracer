@@ -4,7 +4,6 @@
 
 class Compound : public Geometry {
 public:
-    Compound() {}
     virtual void setMaterial(Material *material_ptr);
     virtual bool intersect(Ray &ray, double &tmin, Shade &shade);
     virtual bool shadowIntersect(Ray &ray, double &tmin);

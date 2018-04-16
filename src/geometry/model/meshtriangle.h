@@ -5,7 +5,6 @@
 
 class MeshTriangle : public Triangle {
 public:
-    MeshTriangle() {}
     MeshTriangle(Mesh *mesh_ptr) : meshP(mesh_ptr) {}
     void setVertex(unsigned int index0, unsigned int index1, unsigned int index2);
 

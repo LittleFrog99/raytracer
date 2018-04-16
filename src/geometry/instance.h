@@ -5,7 +5,6 @@
 
 class Instance : public Geometry, public BoxBounded {
 public:
-    Instance() {}
     Instance(Geometry *obj_ptr);
     virtual bool intersect(Ray &ray, double &tmin, Shade &shade);
     virtual bool shadowIntersect(Ray &ray, double &tmin);

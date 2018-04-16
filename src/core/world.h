@@ -19,7 +19,7 @@ public:
     vector<Light*> lights;
 
     World() : bgColor(0.0) {}
-    void build();
+    void setup();
     Shade intersectObjects(Ray &ray);
     void render();
     void plotPoint(int row, int col, vec4 color);
@@ -29,11 +29,21 @@ public:
     inline void addObject(Geometry *obj_ptr) {
         objects.push_back(obj_ptr);
     }
+
     inline void addLight(Light *light_ptr) {
         lights.push_back(light_ptr);
     }
+
     inline void setAmbient(Light *ambient_ptr) {
         ambientP = ambient_ptr;
+    }
+
+    inline void setBackgroundColor(vec3 color) {
+        bgColor = color;
+    }
+
+    inline void setCamera(Camera *camera_ptr) {
+        cameraP = camera_ptr;
     }
 
   private:
@@ -41,6 +51,7 @@ public:
     atomic<unsigned long> finished;
 
     void displayStatus();
+    void build();
 };
 
 

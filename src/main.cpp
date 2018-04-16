@@ -4,7 +4,7 @@ int main() {
     clock_t start = clock();
     World w;
     cout << "Building scene... \n";
-    w.build();
+    w.setup();
     cout << "Rendering... \nComplete: \n";
     w.render();
     cout << "\nOutputing image... \n";

@@ -32,12 +32,9 @@ vec3 Reflective::globalShade(Shade &shade) {
     vec3 brdf = reflBRDF->sampleBRDF(shade, in, out, &pdf);
     Ray reflRay = Ray(shade.hitPoint, in);
 
-    if (shade.depth == 0)
-        color += brdf * shade.world.tracerP->traceRay(reflRay, shade.depth + 2) 
-                    * float(dot(shade.normal, in)) / pdf;
-    else 
-        color += brdf * shade.world.tracerP->traceRay(reflRay, shade.depth + 1) 
-                    * float(dot(shade.normal, in)) / pdf;
+    int newDepth = shade.depth == 0 ? shade.depth + 2 : shade.depth + 1;
+    color += brdf * shade.world.tracerP->traceRay(reflRay, newDepth) 
+             * float(dot(shade.normal, in)) / pdf;
     
     return color;
 }

@@ -1,7 +1,7 @@
 #include "world.h"
-#include "core/tracer.h"
 #include "core/shade.h"
 #include "core/material.h"
+#include "tracer/globaltracer.h"
 #include "utilities.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
@@ -32,6 +32,14 @@ Shade World::intersectObjects(Ray &ray) {
     }
 
     return shade;
+}
+
+void World::setup() {
+    build();
+    
+    tracerP = new GlobalTracer(this);
+    _pixels = new unsigned char[vp.horRes * vp.vertRes * vp.numChannels];
+    finished = 0;
 }
 
 void World::displayStatus() {
@@ -75,9 +83,9 @@ World::~World() {
     delete tracerP;
     delete cameraP;
     delete ambientP;
-    for (Geometry *objP : objects)
+    for (auto objP : objects)
         delete objP;
-    for (Light *lightP : lights)
+    for (auto lightP : lights)
         delete lightP;
     delete _pixels;
 }

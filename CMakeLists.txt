@@ -27,10 +27,12 @@ set(SOURCES_TRACER src/tracer/globaltracer.cpp)
 set(SOURCES_SAMPLER src/sampler/regular.cpp src/sampler/multijittered.cpp)
 set(SOURCES_CAMERA src/camera/thinlens.cpp src/camera/pinhole.cpp)
 set(SOURCES_BSDF src/bsdf/lambertian.cpp src/bsdf/specular.cpp
-    src/bsdf/perfectspecular.cpp src/bsdf/perfecttransmitter.cpp)
+    src/bsdf/perfectspecular.cpp src/bsdf/perfecttransmitter.cpp
+    src/bsdf/fresnelreflector.cpp src/bsdf/fresneltransmitter.cpp)
 set(SOURCES_MATERIAL src/material/matte.cpp src/material/phong.cpp 
     src/material/emissive.cpp src/material/reflective.cpp
-    src/material/glossyreflector.cpp src/material/transparent.cpp)
+    src/material/glossyreflector.cpp src/material/transparent.cpp
+    src/material/dielectric.cpp)
 set(SOURCES_LIGHT src/light/ambientoccluder.cpp src/light/arealight.cpp)
 set(SOURCES_UTILITIES src/utilities/equations.cpp)
 

@@ -5,7 +5,6 @@
 
 class Light {
 public:
-    Light() {}
     virtual dvec3 getDirection(Shade &shade) = 0;
     virtual vec3 incidRadiosity(Shade &shade) { return vec3(); }
     virtual bool inShadow(Ray &shadow_ray, Shade &shade) = 0;

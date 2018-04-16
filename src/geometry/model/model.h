@@ -9,7 +9,7 @@
 class Model : public Grid {
 public:
     enum TriangleMode { SMOOTH, FLAT};
-    Model() {}
+    
     Model(string path, Material *mat_ptr, TriangleMode mode = SMOOTH);
     ~Model();
 

@@ -1,21 +1,5 @@
 {
-    "files.associations": {
-        "__bit_reference": "cpp",
-        "algorithm": "cpp",
-        "bitset": "cpp",
-        "chrono": "cpp",
-        "__config": "cpp",
-        "__nullptr": "cpp",
-        "exception": "cpp",
-        "initializer_list": "cpp",
-        "new": "cpp",
-        "stdexcept": "cpp",
-        "typeinfo": "cpp",
-        "vector": "cpp",
-        "limits": "cpp",
-        "__locale": "cpp"
-    },
     "C_Cpp.errorSquiggles": "Enabled",
     "editor.minimap.enabled": false,
-    "editor.autoIndent": false
+    "editor.autoIndent": true
 }

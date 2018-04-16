@@ -13,7 +13,10 @@ public:
         this->color = color;
     }
 
-private:
-    float intensity, ior;
+protected:
+    float intensity;
     vec3 color = vec3(1.0);
+
+private:
+    float ior;
 };

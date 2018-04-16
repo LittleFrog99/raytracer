@@ -16,7 +16,7 @@ public:
         color = value;
     }
 
-private:
+protected:
     float intensity;
     vec3 color;
 };

@@ -4,7 +4,6 @@
 
 class SmoothMeshTriangle : public MeshTriangle {
 public:
-    SmoothMeshTriangle() {}
     SmoothMeshTriangle(Mesh *mesh_ptr) : MeshTriangle(mesh_ptr) {}
     virtual bool intersect(Ray &ray, double &tmin, Shade &shade);
 

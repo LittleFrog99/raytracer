@@ -1,7 +1,7 @@
 #include "globaltracer.h"
 #include "core/world.h"
 
-vec3 GlobalTracer::traceRay(Ray &ray, int depth) {
+vec3 GlobalTracer::traceRay(Ray &ray, int depth, double *tmin) {
     if (depth > worldP->vp.maxDepth)
         return vec3();
     else {
@@ -9,9 +9,13 @@ vec3 GlobalTracer::traceRay(Ray &ray, int depth) {
         if (shade.hasHit) {
             shade.depth = depth;
             shade.ray = ray;
+            if (tmin) *tmin = shade.t;
             return worldP->vp.globalIllum ? shade.materialP->globalShade(shade)
                                           : shade.materialP->shade(shade);
         }
-        else return worldP->bgColor;
+        else  {
+            if (tmin) *tmin = numeric_limits<double>::max();
+            return worldP->bgColor;
+        }
     }
 }
