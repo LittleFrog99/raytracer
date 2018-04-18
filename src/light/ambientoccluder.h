@@ -6,8 +6,8 @@
 class AmbientOccluder : public Light {
 public:
     AmbientOccluder(vec3 color, float intensity, float min_amount);
-    virtual dvec3 getDirection(Shade &shade);
-    virtual vec3 incidRadiosity(Shade &shade);
+    virtual dvec3 calcDirection(Shade &shade);
+    virtual vec3 incidRadiance(Shade &shade);
     virtual bool inShadow(Ray &shadow_ray, Shade &shade);
     void setSampler(Sampler *sampler_ptr);
     virtual ~AmbientOccluder() {

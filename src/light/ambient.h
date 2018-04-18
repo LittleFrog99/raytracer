@@ -10,10 +10,10 @@ public:
     virtual bool inShadow(Ray &shadow_ray, Shade &shade)  {
         return false;
     }
-    virtual dvec3 getDirection(Shade &shade) {
+    virtual dvec3 calcDirection(Shade &shade) {
         return dvec3(0.0);
     }
-    virtual vec3 incidRadiosity(Shade &shade) {
+    virtual vec3 incidRadiance(Shade &shade) {
         return intensity * color;
     }
 

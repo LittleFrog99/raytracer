@@ -14,4 +14,6 @@ public:
 private:
     PerfectSpecular *reflBRDF;
     PerfectTransmitter *specBTDF;
+
+    vec3 commonShade(Shade &shade, int depth);
 };

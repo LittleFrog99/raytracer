@@ -8,6 +8,7 @@ public:
     PerfectTransmitter(float intensity, float ior);
     virtual vec3 sampleBTDF(Shade &shade, dvec3 &trans, dvec3 &out);
     virtual bool isTIR(Shade &shade);
+    virtual vec3 getColor(Shade &shade) { return color; }
 
     inline void setColor(vec3 color) {
         this->color = color;

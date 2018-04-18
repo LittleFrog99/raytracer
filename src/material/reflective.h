@@ -24,4 +24,7 @@ public:
 
 protected:
     PerfectSpecular *reflBRDF;
+
+private:
+    vec3 commonShade(Shade &shade, int depth);
 };

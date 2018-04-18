@@ -20,11 +20,11 @@ public:
         return false;
     }
 
-    virtual dvec3 getDirection(Shade &shade) {
+    virtual dvec3 calcDirection(Shade &shade) {
         return normalize(location - shade.hitPoint);
     }
 
-    virtual vec3 incidRadiosity(Shade &shade) {
+    virtual vec3 incidRadiance(Shade &shade) {
         return scale * color;
     }
 

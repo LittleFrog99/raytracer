@@ -12,23 +12,22 @@ Matte::Matte(vec3 color, float ambient_intensity, float diffuse_intensity) : Mat
 vec3 Matte::shade(Shade &shade) {
     dvec3 out = -shade.ray.direction;
     vec3 color = ambBRDF->calcReflectance(shade, out) * 
-        shade.world.ambientP->incidRadiosity(shade);
+        shade.world.ambientP->incidRadiance(shade);
 
-    for (int i = 0; i < shade.world.lights.size(); i++) {
-        Light *light = shade.world.lights[i];
-        dvec3 in = light->getDirection(shade);
+    for (Light *lightP : shade.world.lights) {
+        dvec3 in = lightP->calcDirection(shade);
         float nDotIn = dot(shade.normal, in);
 
         if (nDotIn > 0.0) {
             bool inShadow = false;
-            if (shade.world.lights[i]->castShadow()) {
+            if (lightP->castShadow()) {
                 Ray shadowRay(shade.hitPoint, in);
-                inShadow = light->inShadow(shadowRay, shade);
+                inShadow = lightP->inShadow(shadowRay, shade);
             }
 
             if (!inShadow)
-                color += diffBRDF->calcBRDF(shade, in, out) * light->incidRadiosity(shade)
-                    * float(light->geoTerm(shade) * nDotIn / light->probDenFunc(shade));
+                color += diffBRDF->calcBRDF(shade, in, out) * lightP->incidRadiance(shade)
+                    * float(lightP->geoTerm(shade) * nDotIn / lightP->probDenFunc(shade));
         }
     }
 

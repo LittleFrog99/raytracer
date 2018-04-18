@@ -17,11 +17,11 @@ Phong::Phong(vec3 color, float amb_int, float diff_int, float spec_int) {
 vec3 Phong::shade(Shade &shade) {
     dvec3 out = -shade.ray.direction;
     vec3 color = ambBRDF->calcReflectance(shade, out) *
-                 shade.world.ambientP->incidRadiosity(shade);
+                 shade.world.ambientP->incidRadiance(shade);
 
     for (int i = 0; i < shade.world.lights.size(); i++) {
         Light *light = shade.world.lights[i];
-        dvec3 in = light->getDirection(shade);
+        dvec3 in = light->calcDirection(shade);
         float nDotIn = dot(shade.normal, in);
 
         if (nDotIn > 0.0) {
@@ -33,7 +33,7 @@ vec3 Phong::shade(Shade &shade) {
 
             if (!inShadow)
                 color += (diffBRDF->calcBRDF(shade, in, out) 
-                + specBRDF->calcBRDF(shade, in, out)) * light->incidRadiosity(shade) 
+                + specBRDF->calcBRDF(shade, in, out)) * light->incidRadiance(shade) 
                 * light->geoTerm(shade) * nDotIn / light->probDenFunc(shade);
         }
     }

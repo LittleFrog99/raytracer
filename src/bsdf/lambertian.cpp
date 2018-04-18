@@ -1,19 +1,23 @@
 #include "lambertian.h"
 #include "sampler/multijittered.h"
 
+Lambertian::Lambertian() {
+    setSampler(new MultiJittered(DEFAULT_NUM_SAMPLES, DEFAULT_NUM_SETS));
+}
+
 Lambertian::Lambertian(float intensity, vec3 color) : 
     intensity(intensity), color(color)
 {
-    setSampler(new MultiJittered(DEFAULT_NUM_SAMPLES, DEFAULT_NUM_SETS));
+    Lambertian();
 }
 
 
 vec3 Lambertian::calcBRDF(Shade &shade, dvec3 &wi, dvec3 &wo) {
-    return float(intensity * INV_PI) * color;
+    return float(intensity * INV_PI) * getColor(shade);
 }
 
 vec3 Lambertian::calcReflectance(Shade &shade, dvec3 &wo) {
-    return intensity * color;
+    return intensity * getColor(shade);
 }
 
 vec3 Lambertian::sampleBRDF(Shade &shade, dvec3 &in, dvec3 &out, float *pdf) {
@@ -25,5 +29,5 @@ vec3 Lambertian::sampleBRDF(Shade &shade, dvec3 &in, dvec3 &out, float *pdf) {
     in = normalize(samplePt.x * u + samplePt.y * v + samplePt.z * w);
 
     if (pdf) *pdf = INV_PI * dot(shade.normal, in);
-    return float(INV_PI * intensity) * color;
+    return float(INV_PI * intensity) * getColor(shade);
 }

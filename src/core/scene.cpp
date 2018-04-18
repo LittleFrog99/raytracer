@@ -27,8 +27,8 @@ void World::build() {
     vp.vertRes = 400;
     vp.pixelSize = 0.005;
     vp.maxDepth = 5;
-    vp.globalIllum = false;
-    vp.setSamples(25, DEFAULT_NUM_SETS);
+    vp.globalIllum = true;
+    vp.setSamples(4, DEFAULT_NUM_SETS);
     vp.gamma = 1.0;
 
     /* Materials */
@@ -46,7 +46,7 @@ void World::build() {
     auto plastic6P = new Matte(vec3(0.33, 0.78, 0.25), 0.3, 0.7);
     auto mirror1P = new Reflective(vec3(1.0), 0.2, 0.2, 0.3, 0.6);
     auto glass1P = new Transparent(vec3(1.0), 0.2, 0.1, 0.1, 0.3, 0.5, 1.5);
-    auto glass2P = new Dielectric(vec3(1.0), 0.2, 0.1, 0.1, 1.33, 1.0, vec3(0.6, 0.7, 0.9));
+    auto glass2P = new Dielectric(vec3(0.28, 0.64, 0.93), 0.2, 0.1, 0.1, 1.33, 1.0, vec3(1.0));
 
     /* Geometry Objects */
     auto sphere1P = new Sphere(plastic1P);
@@ -59,9 +59,11 @@ void World::build() {
     disk1P->setParams(dvec3(0, 1.99, -1.00), dvec3(0, -1, 0), 0.30);
     disk1P->setSampler(new MultiJittered(256, 2));
     disk1P->toggleShadowCast(false);
-    auto 🐰 = new Model("resources/bunny.obj", glass1P);
+    auto 🐰 = new Model("resources/bunny.obj", glass2P);
     auto inst1P = new Instance(🐰);
-    inst1P->scale(dvec3(0.50))->translate(dvec3(0.10, 0, -1.20));
+    inst1P->scale(dvec3(0.50))->translate(dvec3(0.10, 0, -1.00));
+    auto inst2P = new Instance(sphere2P);
+    inst2P->scale(dvec3(1.3, 1, 1));
     auto rect1P = new Rectangle(silver2P); // back
     rect1P->setParams(dvec3(-1.00, 2.00, -2.00), dvec3(0, -2.00, 0), dvec3(2.00, 0, 0));
     auto rect2P = new Rectangle(plastic3P); // up

@@ -17,5 +17,5 @@ vec3 PerfectSpecular::sampleBRDF(Shade &shade, glm::dvec3 &in,
     float nDotOut = dot(shade.normal, out);
     in = reflect(-out, shade.normal);
     if (pdf) *pdf = dot(shade.normal, in);
-    return intensity * color;
+    return intensity * getColor(shade);
 }

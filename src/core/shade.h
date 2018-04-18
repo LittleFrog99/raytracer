@@ -12,6 +12,7 @@ public:
     dvec3 hitPoint;
     dvec3 localHitPoint;
     dvec3 normal;
+    vec2 texCoords;
     vec3 color;
     Ray ray;
     double t;

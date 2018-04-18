@@ -11,7 +11,7 @@ vec3 Specular::calcBRDF(Shade &shade, dvec3 &in, dvec3 &out) {
     double nDotWi = dot(shade.normal, in);
     dvec3 ref = -in + 2.0 * nDotWi * shade.normal;
     float rDotWo = dot(ref, out);
-    return rDotWo > 0.0 ? (intensity * powf(rDotWo, exponent) * color) : vec3();
+    return rDotWo > 0.0 ? (intensity * powf(rDotWo, exponent) * getColor(shade)) : vec3();
 }
 
 vec3 Specular::calcReflectance(Shade &shade, dvec3 &out) {
@@ -30,5 +30,5 @@ vec3 Specular::sampleBRDF(Shade &shade, dvec3 &in, dvec3 &out, float *pdf) {
 
     float phongLobe = pow(dot(refl, in), exponent);
     *pdf = phongLobe * dot(shade.normal, in);
-    return intensity * phongLobe * color;
+    return intensity * phongLobe * getColor(shade);
 }

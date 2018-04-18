@@ -12,32 +12,26 @@ Reflective::Reflective(vec3 color, float amb_int, float diff_int,
 }
 
 vec3 Reflective::shade(Shade &shade) {
-    vec3 color = Phong::shade(shade);
-    dvec3 out = -shade.ray.direction;
-    dvec3 in;
-    vec3 reflFactor = reflBRDF->sampleBRDF(shade, in, out);
-
-    Ray refRay = Ray(shade.hitPoint, in);
-    color += reflFactor * shade.world.tracerP->traceRay(refRay, shade.depth + 1);
-
-    return color;
+    return commonShade(shade, shade.depth + 1);
 }
 
 vec3 Reflective::globalShade(Shade &shade) {
+    return commonShade(shade, shade.depth == 0 ? shade.depth + 2 : shade.depth + 1);
+}
+
+vec3 Reflective::commonShade(Shade &shade, int depth) {
     vec3 color = Phong::shade(shade);
-    
+
     dvec3 in;
     dvec3 out = -shade.ray.direction;
-    float pdf;
-    vec3 brdf = reflBRDF->sampleBRDF(shade, in, out, &pdf);
+    vec3 brdf = reflBRDF->sampleBRDF(shade, in, out);
     Ray reflRay = Ray(shade.hitPoint, in);
 
-    int newDepth = shade.depth == 0 ? shade.depth + 2 : shade.depth + 1;
-    color += brdf * shade.world.tracerP->traceRay(reflRay, newDepth) 
-             * float(dot(shade.normal, in)) / pdf;
-    
+    color += brdf * shade.world.tracerP->traceRay(reflRay, depth);
+
     return color;
 }
+
 
 Reflective::~Reflective() {
     Phong::~Phong();

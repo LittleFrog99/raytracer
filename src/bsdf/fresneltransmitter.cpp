@@ -27,7 +27,7 @@ vec3 FresnelTransmitter::sampleBTDF(Shade &shade, dvec3 &trans, dvec3 &out) {
 
     double cosThetaT = sqrt(1.0 - (1.0 - cosThetaI * cosThetaI) / (eta * eta));
     trans = -out / eta - (cosThetaT - cosThetaI / eta) * normal;
-    return float(fresnelTransFactor(shade) / fabs(dot(normal, trans)) / (eta * eta)) * color;
+    return float(fresnelTransFactor(shade) / (eta * eta)) * getColor(shade);
 }
 
 float FresnelTransmitter::fresnelTransFactor(Shade &shade) {

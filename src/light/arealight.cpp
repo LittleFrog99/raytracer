@@ -1,14 +1,14 @@
 #include "arealight.h"
 #include "core/world.h"
 
-dvec3 AreaLight::getDirection(Shade &shade) {
+dvec3 AreaLight::calcDirection(Shade &shade) {
     samplePt = objectP->sample();
     normal = objectP->getNormal(samplePt);
     out = normalize(samplePt - shade.hitPoint);
     return out;
 }
 
-vec3 AreaLight::incidRadiosity(Shade &shade) {
+vec3 AreaLight::incidRadiance(Shade &shade) {
     float nDotD = dot(-normal, out);
     return (nDotD > 0.0) ? objectP->getMaterial()->getEmissiveLight(shade) : vec3();
 }

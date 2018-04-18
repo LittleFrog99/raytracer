@@ -11,6 +11,14 @@ Dielectric::Dielectric(vec3 color, float amb_int, float diff_int, float spec_int
 }
 
 vec3 Dielectric::shade(Shade &shade) {
+    return commonShade(shade, shade.depth + 1);
+}
+
+vec3 Dielectric::globalShade(Shade &shade) {
+    return commonShade(shade, shade.depth == 0 ? shade.depth + 2 : shade.depth + 1);
+}
+
+vec3 Dielectric::commonShade(Shade &shade, int depth) {
     vec3 color = Phong::shade(shade);
 
     dvec3 in, out = -shade.ray.direction;
@@ -20,7 +28,7 @@ vec3 Dielectric::shade(Shade &shade) {
 
     double t;
     vec3 reflColor, transColor;
-    reflColor = shade.world.tracerP->traceRay(reflRay, shade.depth + 1, &t);
+    reflColor = shade.world.tracerP->traceRay(reflRay, depth, &t);
 
     if (fresnelBTDF->isTIR(shade))
         color += reflColor * pow(nDotIn < 0.0 ? filterIn : filterOut, vec3(t)); // reflection factor = 1
@@ -30,10 +38,10 @@ vec3 Dielectric::shade(Shade &shade) {
         Ray transRay = Ray(shade.hitPoint, trans);
         float nDotT = dot(shade.normal, trans);
 
-        color += brdf * reflColor * float(fabs(nDotIn)) * pow(nDotIn < 0.0 ? filterIn : filterOut, vec3(t));
+        color += brdf * reflColor * pow(nDotIn < 0.0 ? filterIn : filterOut, vec3(t));
         
-        transColor = shade.world.tracerP->traceRay(transRay, shade.depth + 1, &t);
-        color += btdf * transColor * float(fabs(nDotT)) * pow(nDotT > 0.0 ? filterIn : filterOut, vec3(t));
+        transColor = shade.world.tracerP->traceRay(transRay, depth, &t);
+        color += btdf * transColor * pow(nDotT > 0.0 ? filterIn : filterOut, vec3(t));
     }
 
     return color;
