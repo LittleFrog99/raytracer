@@ -3,7 +3,7 @@
 
 vec3 GlobalTracer::traceRay(Ray &ray, int depth, double *tmin) {
     if (depth > worldP->vp.maxDepth)
-        return vec3();
+        return Color::BLACK;
     else {
         Shade shade(worldP->intersectObjects(ray));
         if (shade.hasHit) {

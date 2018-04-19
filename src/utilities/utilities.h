@@ -33,6 +33,11 @@ static const dmat3 IDENTITY_MATRIX_THREE = dmat3(dvec3(1, 0, 0),
 
 static mutex mut;
 
+namespace Color {
+    const vec3 WHITE = vec3(1.0f);
+    const vec3 BLACK = vec3(0.0f);
+};
+
 class Random {
 public:
     Random(unsigned int seed = time(nullptr)) {

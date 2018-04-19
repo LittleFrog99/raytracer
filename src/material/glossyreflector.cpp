@@ -5,8 +5,7 @@
 GlossyReflector::GlossyReflector(vec3 color, float amb_int, float diff_int, 
     float spec_int, float refl_int) : Phong(color, amb_int, diff_int, spec_int) 
 {
-    glossySpecularBRDF = new Specular();
-    setGlossyReflectionIntensity(refl_int);
+    glossySpecularBRDF = new Specular(refl_int);
     setGlossyReflectionColor(color);
     setGlossyReflectionExponent(DEFAULT_GLOSSY_REFLECTION_EXPONENT);
 }

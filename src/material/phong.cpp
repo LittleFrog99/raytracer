@@ -3,15 +3,9 @@
 #include "sampler/multijittered.h"
 
 Phong::Phong(vec3 color, float amb_int, float diff_int, float spec_int) {
-    ambBRDF = new Lambertian();
-    diffBRDF = new Lambertian();
-    specBRDF = new Specular();
-    setAmbientIntensity(amb_int);
-    setDiffuseColor(color);
-    setDiffuseIntensity(diff_int);
-    setSpecularColor(vec3(1.0));
-    setSpecularIntensity(spec_int);
-    setSpecularExponent(DEFAULT_SPECULAR_EXPONENT);
+    ambBRDF = new Lambertian(amb_int, color);
+    diffBRDF = new Lambertian(diff_int, color);
+    specBRDF = new Specular(spec_int);
 }
 
 vec3 Phong::shade(Shade &shade) {

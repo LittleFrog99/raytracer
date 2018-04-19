@@ -22,7 +22,7 @@ public:
         diffBRDF->setColor(color);
     }
 
-private:
+protected:
     Lambertian *ambBRDF;
     Lambertian *diffBRDF;
 };

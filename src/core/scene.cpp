@@ -14,6 +14,8 @@
 #include "material/glossyreflector.h"
 #include "material/transparent.h"
 #include "material/dielectric.h"
+#include "material/svmaterial.h"
+#include "material/texture/imagetexture.h"
 #include "light/ambientoccluder.h"
 #include "light/arealight.h"
 #include "camera/pinhole.h"
@@ -28,7 +30,7 @@ void World::build() {
     vp.pixelSize = 0.005;
     vp.maxDepth = 5;
     vp.globalIllum = true;
-    vp.setSamples(4, DEFAULT_NUM_SETS);
+    vp.setSamples(36, DEFAULT_NUM_SETS);
     vp.gamma = 1.0;
 
     /* Materials */
@@ -47,6 +49,8 @@ void World::build() {
     auto mirror1P = new Reflective(vec3(1.0), 0.2, 0.2, 0.3, 0.6);
     auto glass1P = new Transparent(vec3(1.0), 0.2, 0.1, 0.1, 0.3, 0.5, 1.5);
     auto glass2P = new Dielectric(vec3(0.28, 0.64, 0.93), 0.2, 0.1, 0.1, 1.33, 1.0, vec3(1.0));
+    auto 🐸 = new ImageTexture("resources/frog.jpg", Rectangular);
+    auto frogP = new SVPhong(🐸, 0.2, 0.5, 0.3);
 
     /* Geometry Objects */
     auto sphere1P = new Sphere(plastic1P);
@@ -74,9 +78,12 @@ void World::build() {
     rect4P->setParams(dvec3(-1.00, 0, -2.00), dvec3(0, 0, 2.00), dvec3(2.00, 0, 0));
     auto rect5P = new Rectangle(plastic6P); // right
     rect5P->setParams(dvec3(1.00, 0, -2.00), dvec3(0, 0, 2.00), dvec3(0, 2.00, 0));
+    auto rect6P = new Rectangle(frogP);
+    auto inst3P = new Instance(rect6P);
+    inst3P->scale(dvec3(0.5, 1, 0.5))->rotate(dvec3(1, 0, 0), radians(60.0f))->translate(dvec3(0, 0.6, -0.8));
 
     addObject(disk1P);
-    addObject(sphere2P);
+    addObject(inst3P);
     addObject(rect1P);
     addObject(rect2P);
     addObject(rect3P);

@@ -1,16 +1,11 @@
 #include "lambertian.h"
 #include "sampler/multijittered.h"
 
-Lambertian::Lambertian() {
-    setSampler(new MultiJittered(DEFAULT_NUM_SAMPLES, DEFAULT_NUM_SETS));
-}
-
 Lambertian::Lambertian(float intensity, vec3 color) : 
     intensity(intensity), color(color)
 {
-    Lambertian();
+    setSampler(new MultiJittered(DEFAULT_NUM_SAMPLES, DEFAULT_NUM_SETS));
 }
-
 
 vec3 Lambertian::calcBRDF(Shade &shade, dvec3 &wi, dvec3 &wo) {
     return float(intensity * INV_PI) * getColor(shade);

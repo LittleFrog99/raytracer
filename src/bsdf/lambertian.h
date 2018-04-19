@@ -4,7 +4,6 @@
 
 class Lambertian : public BRDF {
 public:
-    Lambertian();
     Lambertian(float intensity, vec3 color = vec3());
     virtual vec3 calcBRDF(Shade &shade, dvec3 &in, dvec3 &out);
     virtual vec3 sampleBRDF(Shade &shade, dvec3 &in, dvec3 &out, float *pdf = nullptr);

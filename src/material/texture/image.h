@@ -5,11 +5,11 @@
 class Image {
 public:
     Image(string path);
-    virtual vec3 getColor(int row, int column);
+    vec3 getColor(vec2 texCoord);
+    ivec2 getResolution() { return resolution; }
 
 private:
-    int vertRes, horRes;
+    ivec2 resolution;
+    int numChannels;
     unsigned char *data;
-
-    void processImage(string path);
 };

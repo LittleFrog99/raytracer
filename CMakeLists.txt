@@ -32,7 +32,9 @@ set(SOURCES_BSDF src/bsdf/lambertian.cpp src/bsdf/specular.cpp
 set(SOURCES_MATERIAL src/material/matte.cpp src/material/phong.cpp 
     src/material/emissive.cpp src/material/reflective.cpp
     src/material/glossyreflector.cpp src/material/transparent.cpp
-    src/material/dielectric.cpp)
+    src/material/dielectric.cpp src/material/texture/image.cpp
+    src/material/texture/texture.cpp src/material/svmaterial.cpp
+    src/material/texture/imagetexture.cpp)
 set(SOURCES_LIGHT src/light/ambientoccluder.cpp src/light/arealight.cpp)
 set(SOURCES_UTILITIES src/utilities/equations.cpp)
 

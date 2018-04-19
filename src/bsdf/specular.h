@@ -4,7 +4,9 @@
 
 class Specular : public BRDF {
 public:
-    Specular(float intensity = 0.0, vec3 color = vec3(), float exponent = 16.0f);
+    static constexpr float DEFAULT_SPECULAR_EXPONENT = 16.0f;
+
+    Specular(float intensity, vec3 color = Color::WHITE, float exponent = DEFAULT_SPECULAR_EXPONENT);
     virtual vec3 calcBRDF(Shade &shade, dvec3 &in, dvec3 &out);
     virtual vec3 calcReflectance(Shade &shade, dvec3 &out);
     virtual vec3 sampleBRDF(Shade &shade, dvec3 &in, dvec3 &out, float *pdf = (float *)nullptr);

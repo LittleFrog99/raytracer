@@ -2,11 +2,8 @@
 #include "core/world.h"
 
 Matte::Matte(vec3 color, float ambient_intensity, float diffuse_intensity) : Material() {
-    ambBRDF = new Lambertian();
-    diffBRDF = new Lambertian();
-    setDiffuseColor(color);
-    setAmbientIntensity(ambient_intensity);
-    setDiffuseIntensity(diffuse_intensity);
+    ambBRDF = new Lambertian(ambient_intensity, color);
+    diffBRDF = new Lambertian(diffuse_intensity, color);
 }
 
 vec3 Matte::shade(Shade &shade) {
