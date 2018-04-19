@@ -10,6 +10,7 @@ bool SmoothMeshTriangle::intersect(Ray &ray, double &tmin, Shade &shade) {
     shade.localHitPoint = ray.origin + t * ray.direction;
     shade.hitPoint = shade.localHitPoint;
     shade.normal = interpolateNormal(beta, gamma);
+    shade.texCoord = interpolateUV(beta, gamma);
     return true;
 }
 

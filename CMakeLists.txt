@@ -22,7 +22,8 @@ set(SOURCES_GEOMETRY src/geometry/primitive/plane.cpp
     src/geometry/compound/compound.cpp src/geometry/compound/solidcylinder.cpp
     src/geometry/instance.cpp src/geometry/compound/beveledcylinder.cpp
     src/geometry/compound/grid.cpp src/geometry/model/meshtriangle.cpp
-    src/geometry/model/smoothmeshtriangle.cpp src/geometry/model/model.cpp)
+    src/geometry/model/smoothmeshtriangle.cpp src/geometry/model/model.cpp
+    src/geometry/model/svmodel.cpp)
 set(SOURCES_TRACER src/tracer/globaltracer.cpp)
 set(SOURCES_SAMPLER src/sampler/regular.cpp src/sampler/multijittered.cpp)
 set(SOURCES_CAMERA src/camera/thinlens.cpp src/camera/pinhole.cpp)

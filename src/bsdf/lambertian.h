@@ -11,13 +11,8 @@ public:
     virtual vec3 getColor(Shade &shade) { return color; }
     virtual ~Lambertian() { if (samplerP) delete samplerP; }
 
-    inline void setIntensity(float factor) {
-        intensity = factor;
-    }
-
-    inline void setColor(vec3 color) {
-        this->color = color;
-    }
+    inline void setIntensity(float factor) { intensity = factor; }
+    inline void setColor(vec3 color) { this->color = color; }
 
 private:
     float intensity;

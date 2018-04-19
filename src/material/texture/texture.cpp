@@ -2,11 +2,11 @@
 
 vec2 Texture::mapTextureCoord(Shade &shade) {
     switch (texMap) {
-        case Rectangular: return rectangularMap(shade.localHitPoint);
-        case MeshUV: return shade.texCoord;
-        case Cylindrical : return cylindricalMap(shade.localHitPoint);
-        case Spherical: return sphericalMap(shade.localHitPoint);
-        case LightProbe: return lightProbeMap(shade.localHitPoint);
+        case RECTANGULAR: return rectangularMap(shade.localHitPoint);
+        case MESHUV: return shade.texCoord;
+        case CYLINDRICAL : return cylindricalMap(shade.localHitPoint);
+        case SPHERICAL: return sphericalMap(shade.localHitPoint);
+        case LIGHTPROBE: return lightProbeMap(shade.localHitPoint);
     }
 }
 

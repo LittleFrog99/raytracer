@@ -9,6 +9,7 @@ bool Compound::intersect(Ray &ray, double &tmin, Shade &shade) {
     tmin = numeric_limits<double>::max();
     double t;
     dvec3 normal, hitPt, localHitPt;
+    Material *matP;
     bool hit = false;
 
     for (Geometry *objP : objects) {

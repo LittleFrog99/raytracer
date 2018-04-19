@@ -17,25 +17,12 @@ public:
     virtual float probDenFunc(Shade &shade) { return 1.0; }
     virtual void setSampler(Sampler *sampler_ptr);
     BoundingBox getBoundingBox();
-
-    virtual void setMaterial(Material *material_ptr) {
-        materialP = material_ptr;
-    }
-
+    virtual void setMaterial(Material *material_ptr) { materialP = material_ptr;}
     virtual ~Geometry() {}
 
-    inline Material *getMaterial() {
-        return materialP;
-    }
-
-    inline void toggleShadowCast(bool shadow) {
-        _castShadow = shadow;
-    }
-    
-    inline bool castShadow() {
-        return _castShadow;
-    }
-    
+    inline Material *getMaterial() { return materialP;}
+    inline void toggleShadowCast(bool shadow) { _castShadow = shadow; }
+    inline bool castShadow() { return _castShadow; }
 
 protected:
     Material *materialP = nullptr;

@@ -2,12 +2,23 @@
 
 #include "core/shade.h"
 
+enum TextureType {
+    DIFFUSE,
+    SPECULAR,
+    AMBIENT,
+    EMISSIVE,
+    NORMAL,
+    HEIGHT,
+    REFLECTION,
+    DISPLACEMENT
+};
+
 enum TextureMap {
-    Rectangular,
-    Cylindrical,
-    Spherical,
-    LightProbe,
-    MeshUV
+    RECTANGULAR,
+    CYLINDRICAL,
+    SPHERICAL,
+    LIGHTPROBE,
+    MESHUV
 };
 
 class Texture {
@@ -30,9 +41,9 @@ protected:
 
 class PureColor : public Texture {
 public:
-    PureColor(vec3 color) : Texture(Rectangular), color(color) {}
+    PureColor(vec3 color) : Texture(RECTANGULAR), color(color) {}
     PureColor(float red, float green, float blue) 
-        : Texture(Rectangular), color(red, green, blue) {}
+        : Texture(RECTANGULAR), color(red, green, blue) {}
     virtual vec3 getColor(Shade &shade) { return color; }
     operator vec3() { return color; }
 

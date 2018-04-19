@@ -7,6 +7,7 @@
 #include "geometry/instance.h"
 #include "geometry/compound/grid.h"
 #include "geometry/model/model.h"
+#include "geometry/model/svmodel.h"
 #include "material/matte.h"
 #include "material/phong.h"
 #include "material/emissive.h"
@@ -29,8 +30,8 @@ void World::build() {
     vp.vertRes = 400;
     vp.pixelSize = 0.005;
     vp.maxDepth = 5;
-    vp.globalIllum = true;
-    vp.setSamples(36, DEFAULT_NUM_SETS);
+    vp.globalIllum = false;
+    vp.setSamples(4, DEFAULT_NUM_SETS);
     vp.gamma = 1.0;
 
     /* Materials */
@@ -49,7 +50,7 @@ void World::build() {
     auto mirror1P = new Reflective(vec3(1.0), 0.2, 0.2, 0.3, 0.6);
     auto glass1P = new Transparent(vec3(1.0), 0.2, 0.1, 0.1, 0.3, 0.5, 1.5);
     auto glass2P = new Dielectric(vec3(0.28, 0.64, 0.93), 0.2, 0.1, 0.1, 1.33, 1.0, vec3(1.0));
-    auto 🐸 = new ImageTexture("resources/frog.jpg", Rectangular);
+    auto 🐸 = new ImageTexture("resources/frog.jpg", RECTANGULAR);
     auto frogP = new SVPhong(🐸, 0.2, 0.5, 0.3);
 
     /* Geometry Objects */
@@ -81,9 +82,11 @@ void World::build() {
     auto rect6P = new Rectangle(frogP);
     auto inst3P = new Instance(rect6P);
     inst3P->scale(dvec3(0.5, 1, 0.5))->rotate(dvec3(1, 0, 0), radians(60.0f))->translate(dvec3(0, 0.6, -0.8));
+    auto cubeP = new SVModel("resources/cube/cube.obj");
+    auto inst4P = new Instance(cubeP);
 
     addObject(disk1P);
-    addObject(inst3P);
+    addObject(inst1P);
     addObject(rect1P);
     addObject(rect2P);
     addObject(rect3P);

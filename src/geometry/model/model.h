@@ -2,6 +2,7 @@
 
 #include "geometry/model/mesh.h"
 #include "geometry/compound/grid.h"
+#include "material/texture/imagetexture.h"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -13,14 +14,14 @@ public:
     Model(string path, Material *mat_ptr, TriangleMode mode = SMOOTH);
     ~Model();
 
-private:
+protected:
     vector<Mesh *> meshes;
     string directory;
 
     void loadModel(string path);
     void processNode(aiNode *node, const aiScene *scene);
-    Mesh * processMesh(aiMesh *mesh, const aiScene *scene);
+    virtual Mesh * processMesh(aiMesh *mesh, const aiScene *scene);
+    virtual void setupGrids(TriangleMode mode);
     dvec3 convertVector(aiVector3D &vec);
     vec2 convertVector(aiVector2D &vec);
-    void setupGrids(TriangleMode mode);
 };
