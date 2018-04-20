@@ -14,9 +14,9 @@ bool MeshTriangle::intersect(Ray &ray, double &tmin, Shade &shade) {
 
     tmin = t;
     shade.localHitPoint = ray.origin + t * ray.direction;
-    shade.hitPoint = shade.localHitPoint;
     shade.normal = normal;
     shade.texCoord = interpolateUV(beta, gamma);
+    shade.materialP = getMaterial();
     return true;
 }
 
@@ -24,5 +24,5 @@ vec2 MeshTriangle::interpolateUV(float beta, float gamma) {
     vec2 uv1 = (1 - beta - gamma) * meshP->vertices[index[0]].texCoords;
     vec2 uv2 = beta * meshP->vertices[index[1]].texCoords;
     vec2 uv3 = gamma * meshP->vertices[index[2]].texCoords;
-    return normalize(uv1 + uv2 + uv3);
+    return uv1 + uv2 + uv3;
 }

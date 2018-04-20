@@ -9,6 +9,7 @@ bool Compound::intersect(Ray &ray, double &tmin, Shade &shade) {
     tmin = numeric_limits<double>::max();
     double t;
     dvec3 normal, hitPt, localHitPt;
+    vec2 texCoord;
     Material *matP;
     bool hit = false;
 
@@ -16,10 +17,11 @@ bool Compound::intersect(Ray &ray, double &tmin, Shade &shade) {
         if (objP->intersect(ray, t, shade) && (t < tmin)) {
             hit = true;
             tmin = t;
-            materialP = objP->getMaterial();
+            matP = shade.materialP;
             normal = shade.normal;
             hitPt = shade.hitPoint;
             localHitPt = shade.localHitPoint;
+            texCoord = shade.texCoord;
         }
     }
 
@@ -27,6 +29,8 @@ bool Compound::intersect(Ray &ray, double &tmin, Shade &shade) {
         shade.normal = normal;
         shade.hitPoint = hitPt;
         shade.localHitPoint = localHitPt;
+        shade.materialP = matP;
+        shade.texCoord = texCoord;
     }
     return hit;
 }

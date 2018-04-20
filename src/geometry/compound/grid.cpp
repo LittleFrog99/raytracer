@@ -133,10 +133,8 @@ bool Grid::intersect(Ray &ray, double &tmin, Shade &shade) {
 
         for (int i = 0; i < 3; i++) 
             if (Math::minComponent(tNext) == tNext[i]) {
-                if (objP && objP->intersect(ray, tmin, shade) && tmin < tNext[i]) {
-                    materialP = objP->getMaterial();
+                if (objP && objP->intersect(ray, tmin, shade) && tmin < tNext[i]) 
                     return true;
-                }
                 tNext[i] += deltaT[i];
                 index[i] += indexStep[i];
                 if (index[i] == indexStop[i]) return false;
@@ -195,10 +193,8 @@ bool Grid::shadowIntersect(Ray &ray, double &tmin) {
 
         for (int i = 0; i < 3; i++) 
             if (Math::minComponent(tNext) == tNext[i]) {
-                if (objP && objP->shadowIntersect(ray, tmin) && tmin < tNext[i]) {
-                    materialP = objP->getMaterial();
+                if (objP && objP->shadowIntersect(ray, tmin) && tmin < tNext[i]) 
                     return true;
-                }
                 tNext[i] += deltaT[i];
                 index[i] += indexStep[i];
                 if (index[i] == indexStop[i]) return false;

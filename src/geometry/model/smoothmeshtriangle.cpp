@@ -1,5 +1,4 @@
 #include "smoothmeshtriangle.h"
-#include "debug.h"
 
 bool SmoothMeshTriangle::intersect(Ray &ray, double &tmin, Shade &shade) {
     double t, beta, gamma;
@@ -8,9 +7,9 @@ bool SmoothMeshTriangle::intersect(Ray &ray, double &tmin, Shade &shade) {
     
     tmin = t;
     shade.localHitPoint = ray.origin + t * ray.direction;
-    shade.hitPoint = shade.localHitPoint;
     shade.normal = interpolateNormal(beta, gamma);
     shade.texCoord = interpolateUV(beta, gamma);
+    shade.materialP = getMaterial();
     return true;
 }
 

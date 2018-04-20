@@ -7,7 +7,10 @@ float SVModel::kAmbient = 0.3;
 float SVModel::kDiffuse = 0.5;
 float SVModel::kSpecular = 0.3;
 
-SVModel::SVModel(string path, TriangleMode mode) : Model(path, nullptr, mode) {}
+SVModel::SVModel(string path, TriangleMode mode) {
+    loadModel(path);
+    setupGrids(mode);
+}
 
 void SVModel::setMaterialParams(float amb_int, float diff_int, float spec_int) {
     kAmbient = amb_int;
@@ -46,20 +49,20 @@ Mesh * SVModel::processMesh(aiMesh *mesh, const aiScene *scene) {
 ImageTexture * SVModel::loadTexture(aiMaterial *mat, aiTextureType type) {
     aiString path;
     mat->GetTexture(type, 0, &path);
-    return new ImageTexture(directory + path.data, MESHUV);
+    return new ImageTexture(directory + '/' + path.data, MESHUV);
 }
 
 void SVModel::setupGrids(Model::TriangleMode mode) {
     for (Mesh *mesh : meshes) {
+        Material *matP = new SVPhong(mesh->textures[DIFFUSE], kAmbient, kDiffuse, kSpecular);
         for (int i = 0; i < mesh->numFaces; i++) {
             MeshTriangle *triangle;
             if (mode == SMOOTH)
-                triangle = new SmoothMeshTriangle(mesh);
+                triangle = new SmoothMeshTriangle(mesh, matP);
             else 
-                triangle = new MeshTriangle(mesh);
+                triangle = new MeshTriangle(mesh, matP);
 
             triangle->setVertex(mesh->indices[3*i], mesh->indices[3*i+1], mesh->indices[3*i+2]);
-            triangle->setMaterial(new SVPhong(mesh->textures[DIFFUSE], kAmbient, kDiffuse, kSpecular));
             objects.push_back(triangle);
         }
     }

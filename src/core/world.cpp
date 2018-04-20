@@ -10,17 +10,19 @@ Shade World::intersectObjects(Ray &ray) {
     Shade shade(*this);
     double t;
     double tmin = numeric_limits<double>::max();
+    Material *matP;
     dvec3 normal, hitPoint, localHitPoint;
+    vec2 texCoord;
 
     for (Geometry *objP : objects) {
         if (objP->intersect(ray, t, shade) && (t < tmin)) {
             shade.hasHit = true;
             tmin = t;
-            shade.materialP = objP->getMaterial();
-            shade.hitPoint = ray.origin + t * ray.direction;
+            matP = shade.materialP;
+            hitPoint = ray.origin + t * ray.direction;
             normal = shade.normal;
-            hitPoint = shade.hitPoint;
             localHitPoint = shade.localHitPoint;
+            texCoord = shade.texCoord;
         }
     }
 
@@ -29,6 +31,8 @@ Shade World::intersectObjects(Ray &ray) {
         shade.normal = normal;
         shade.hitPoint = hitPoint;
         shade.localHitPoint = localHitPoint;
+        shade.materialP = matP;
+        shade.texCoord = texCoord;
     }
 
     return shade;

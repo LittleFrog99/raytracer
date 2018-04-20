@@ -16,7 +16,7 @@ bool Disk::intersect(Ray &ray, double &tmin, Shade &shade) {
         tmin = t;
         shade.normal = normal;
         shade.localHitPoint = hitPt;
-        shade.hitPoint = shade.localHitPoint;
+        shade.materialP = getMaterial();
         return true;
     }
     else return false;

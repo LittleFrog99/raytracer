@@ -11,7 +11,7 @@ bool Plane::intersect(Ray &ray, double &tmin, Shade &shade) {
         tmin = t;
         shade.normal = vec3(param);
         shade.localHitPoint = ray.origin + t * ray.direction;
-        shade.hitPoint = shade.localHitPoint;
+        shade.materialP = getMaterial();
         return true;
     }
     else return false;

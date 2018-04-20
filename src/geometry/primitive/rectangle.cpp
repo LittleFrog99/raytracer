@@ -33,6 +33,7 @@ bool Rectangle::intersect(Ray &ray, double &tmin, Shade &shade) {
     shade.normal = normal;
     shade.localHitPoint = hitPt;
     shade.hitPoint = shade.localHitPoint;
+    shade.materialP = getMaterial();
     return true;
 }
 
