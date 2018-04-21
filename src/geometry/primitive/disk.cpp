@@ -5,6 +5,7 @@ void Disk::setParams(dvec3 center, dvec3 normal, double radius) {
     this->normal = normalize(normal);
     this->radius = radius;
     this->radiusSquared = radius * radius;
+    this->area = PI * radiusSquared;
 }
 
 bool Disk::intersect(Ray &ray, double &tmin, Shade &shade) {

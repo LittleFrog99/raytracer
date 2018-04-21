@@ -52,7 +52,7 @@ bool PartTorus::intersect(Ray &ray, double &tmin, Shade &shade) {
     if (hit) {
         tmin = t;
         shade.localHitPoint = ray.origin + t * ray.direction;
-        shade.hitPoint = shade.localHitPoint;
+        shade.materialP = getMaterial();
         shade.normal = getNormal(shade.localHitPoint);
         if (dot(-ray.direction, shade.normal) < 0.0)
             shade.normal = -shade.normal;

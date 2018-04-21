@@ -33,7 +33,7 @@ bool Box::intersect(Ray &ray, double &t_min, Shade &shade) {
             shade.normal = getNormal(faceOut);
         }
         shade.localHitPoint = ray.origin + t_min * ray.direction;
-        shade.hitPoint = shade.localHitPoint;
+        shade.materialP = getMaterial();
         return true;
     }
     else return false;

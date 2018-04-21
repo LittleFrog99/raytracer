@@ -9,7 +9,6 @@ void Rectangle::setParams(dvec3 origin, dvec3 side_a, dvec3 side_b) {
     lenBSqrd = Math::lengthSquared(sideB);
     normal = normalize(cross(sideA, sideB));
     area = length(sideA) * length(sideB);
-    invArea = 1 / area;
 }
 
 dvec3 Rectangle::sample() {
@@ -32,7 +31,6 @@ bool Rectangle::intersect(Ray &ray, double &tmin, Shade &shade) {
     tmin = t;
     shade.normal = normal;
     shade.localHitPoint = hitPt;
-    shade.hitPoint = shade.localHitPoint;
     shade.materialP = getMaterial();
     return true;
 }

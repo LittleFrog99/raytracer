@@ -6,6 +6,7 @@ void PinHole::renderPixel(int row, int col) {
     dvec2 samplePt, pixelPt;
     Ray ray;
     ray.origin = eye;
+    int skipped = 0;
 
     for (int i = 0; i < vp.numSamples; i++) {
         samplePt = vp.samplerP->sampleUnitSquare();
@@ -20,6 +21,6 @@ void PinHole::renderPixel(int row, int col) {
     world->plotPoint(row, col, vec4(color, 1.0));
 }
 
-dvec3 PinHole::rayDirection(const dvec2 &pt) const {
+inline dvec3 PinHole::rayDirection(const dvec2 &pt) const {
     return normalize(pt.x * u + pt.y * v - distance * w);
 }

@@ -22,7 +22,7 @@ void Camera::computeUVW() {
 }
 
 void Camera::setRollAngles(double radians) {
-    dmat4 rotMat = rotate(dmat4(), -radians, w);
+    dmat4 rotMat = rotate(IDENTITY_MATRIX_FOUR, -radians, w);
     u = dmat3(rotMat) * u;
     v = dmat3(rotMat) * v;
 }

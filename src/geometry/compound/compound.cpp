@@ -19,7 +19,6 @@ bool Compound::intersect(Ray &ray, double &tmin, Shade &shade) {
             tmin = t;
             matP = shade.materialP;
             normal = shade.normal;
-            hitPt = shade.hitPoint;
             localHitPt = shade.localHitPoint;
             texCoord = shade.texCoord;
         }
@@ -27,7 +26,6 @@ bool Compound::intersect(Ray &ray, double &tmin, Shade &shade) {
 
     if (hit) {
         shade.normal = normal;
-        shade.hitPoint = hitPt;
         shade.localHitPoint = localHitPt;
         shade.materialP = matP;
         shade.texCoord = texCoord;
@@ -50,7 +48,8 @@ bool Compound::shadowIntersect(Ray &ray, double &tmin) {
 }
 
 BoundingBox Compound::calcBoundingBox() {
-    dvec3 min = dvec3(numeric_limits<double>::max()), max = dvec3(numeric_limits<double>::min());
+    dvec3 min = dvec3(numeric_limits<double>::max());
+    dvec3 max = dvec3(numeric_limits<double>::min());
     for (Geometry *objP : objects) {
         BoundingBox bnd = objP->getBoundingBox();
         for (int t = 0; t < 3; t++) {

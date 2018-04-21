@@ -20,7 +20,7 @@ public:
     virtual void setMaterial(Material *material_ptr) { materialP = material_ptr;}
     virtual ~Geometry() {}
 
-    inline Material *getMaterial() { return materialP;}
+    inline Material *getMaterial() { return materialP; }
     inline void toggleShadowCast(bool shadow) { _castShadow = shadow; }
     inline bool castShadow() { return _castShadow; }
 

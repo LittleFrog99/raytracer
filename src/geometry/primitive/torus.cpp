@@ -37,7 +37,7 @@ bool Torus::intersect(Ray &ray, double &tmin, Shade &shade) {
 
     tmin = t;
     shade.localHitPoint = ray.origin + t * ray.direction;
-    shade.hitPoint = shade.localHitPoint;
+    shade.materialP = getMaterial();
     shade.normal = getNormal(shade.localHitPoint);
     return true;
 }

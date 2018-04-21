@@ -31,7 +31,7 @@ void World::build() {
     vp.pixelSize = 0.005;
     vp.maxDepth = 5;
     vp.globalIllum = true;
-    vp.setSamples(25, DEFAULT_NUM_SETS);
+    vp.setSamples(36, DEFAULT_NUM_SETS);
     vp.gamma = 1.0;
 
     /* Materials */
@@ -39,7 +39,7 @@ void World::build() {
     auto plastic2P = new Phong(vec3(0.44, 0.24, 0.61), 0.4, 0.6, 0.1);
     plastic2P->setSpecularExponent(8.0f);
     auto plastic3P = new Matte(vec3(1.0), 0.4, 0.6);
-    auto emi1P = new Emissive(vec3(1.0), 25.0);
+    auto emi1P = new Emissive(vec3(1.0), 100.0);
     auto plastic4P = new Phong(vec3(0.14, 0.47, 0.8), 0.3, 0.6, 0.1);
     auto bronzeP = new GlossyReflector(vec3(0.89, 0.36, 0.14), 0.2, 0.2, 0.1, 0.6);
     auto silver1P = new Reflective(vec3(1.0), 0.1, 0.2, 0.1, 0.8);
@@ -64,9 +64,6 @@ void World::build() {
     disk1P->setParams(dvec3(0, 1.99, -1.00), dvec3(0, -1, 0), 0.30);
     disk1P->setSampler(new MultiJittered(256, 2));
     disk1P->toggleShadowCast(false);
-    auto 🐰 = new Model("resources/bunny.obj", glass2P);
-    auto inst1P = new Instance(🐰);
-    inst1P->scale(dvec3(0.50))->translate(dvec3(0.10, 0, -1.00));
     auto inst2P = new Instance(sphere2P);
     inst2P->scale(dvec3(1.3, 1, 1));
     auto rect1P = new Rectangle(silver2P); // back

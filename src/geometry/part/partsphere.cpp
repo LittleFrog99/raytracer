@@ -40,7 +40,7 @@ bool PartSphere::intersect(Ray &ray, double &tmin, Shade &shade) {
             tmin = t;
             shade.normal = normalize(hitDir);
             shade.localHitPoint = hitPt;
-            shade.hitPoint = shade.localHitPoint;
+            shade.materialP = getMaterial();
             return true;
         }
     }
@@ -56,7 +56,7 @@ bool PartSphere::intersect(Ray &ray, double &tmin, Shade &shade) {
             if (dot(-ray.direction, shade.normal) < 0.0)
                 shade.normal = -shade.normal;
             shade.localHitPoint = hitPt;
-            shade.hitPoint = shade.localHitPoint;
+            shade.materialP = getMaterial();
             return true;
         }
     }
