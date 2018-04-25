@@ -5,23 +5,16 @@
 #include "geometry/primitive/disk.h"
 #include "geometry/primitive/rectangle.h"
 #include "geometry/instance.h"
-#include "geometry/compound/grid.h"
-#include "geometry/model/model.h"
 #include "geometry/model/svmodel.h"
-#include "material/matte.h"
-#include "material/phong.h"
 #include "material/emissive.h"
 #include "material/reflective.h"
 #include "material/glossyreflector.h"
 #include "material/transparent.h"
 #include "material/dielectric.h"
 #include "material/svmaterial.h"
-#include "material/texture/imagetexture.h"
 #include "light/ambientoccluder.h"
 #include "light/arealight.h"
 #include "camera/pinhole.h"
-#include "camera/thinlens.h"
-#include "sampler/regular.h"
 #include "sampler/multijittered.h"
 
 void World::build() {
@@ -30,7 +23,7 @@ void World::build() {
     vp.vertRes = 400;
     vp.pixelSize = 0.005;
     vp.maxDepth = 5;
-    vp.globalIllum = true;
+    vp.illum = PATHTRACING;
     vp.setSamples(36, DEFAULT_NUM_SETS);
     vp.gamma = 1.0;
 
@@ -62,7 +55,7 @@ void World::build() {
     plane1P->setParams(dvec3(0, 1, 0), dvec3(0.0, 0.0, 0.0));
     auto disk1P = new Disk(emi1P);
     disk1P->setParams(dvec3(0, 1.99, -1.00), dvec3(0, -1, 0), 0.30);
-    disk1P->setSampler(new MultiJittered(256, 2));
+    disk1P->setSampler(new MultiJittered(DEFAULT_NUM_SAMPLES, DEFAULT_NUM_SETS));
     disk1P->toggleShadowCast(false);
     auto inst2P = new Instance(sphere2P);
     inst2P->scale(dvec3(1.3, 1, 1));

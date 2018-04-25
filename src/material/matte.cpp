@@ -31,7 +31,7 @@ vec3 Matte::shade(Shade &shade) {
     return color;
 }
 
-vec3 Matte::globalShade(Shade &shade) {
+vec3 Matte::pathShade(Shade &shade) {
     vec3 color = Matte::shade(shade);
     
     dvec3 in, out = -shade.ray.direction;

@@ -14,7 +14,7 @@ vec3 Transparent::shade(Shade &shade) {
     return commonShade(shade, shade.depth + 1);
 }
 
-vec3 Transparent::globalShade(Shade &shade) {
+vec3 Transparent::pathShade(Shade &shade) {
     return commonShade(shade, shade.depth == 0 ? shade.depth + 2 : shade.depth + 1);
 }
 

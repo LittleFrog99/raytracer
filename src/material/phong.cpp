@@ -35,7 +35,7 @@ vec3 Phong::shade(Shade &shade) {
     return color;
 }
 
-vec3 Phong::globalShade(Shade &shade) {
+vec3 Phong::pathShade(Shade &shade) {
     vec3 color = Phong::shade(shade);
     
     dvec3 in, out = -shade.ray.direction;

@@ -29,6 +29,6 @@ vec3 Specular::sampleBRDF(Shade &shade, dvec3 &in, dvec3 &out, float *pdf) {
                                       : (-samplePt.x * u - samplePt.y * v + samplePt.z * w);
 
     float phongLobe = pow(dot(refl, in), exponent);
-    *pdf = phongLobe * dot(shade.normal, in);
+    if (pdf) *pdf = phongLobe * dot(shade.normal, in);
     return intensity * phongLobe * getColor(shade);
 }

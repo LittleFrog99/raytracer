@@ -10,7 +10,7 @@ vec3 Emissive::getEmissiveLight(Shade &shade) {
     return intensity * color;
 }
 
-vec3 Emissive::globalShade(Shade &shade) {
+vec3 Emissive::pathShade(Shade &shade) {
     if (shade.depth == 1)
         return vec3();
 

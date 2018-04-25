@@ -7,7 +7,7 @@ class AreaLight : public Light {
 public:
     enum Attenuation { LINEAR, SQUARE };
 
-    AreaLight(Geometry *object_ptr) : objectP(object_ptr) {}
+    AreaLight(Geometry *object_ptr);
     virtual dvec3 calcDirection(Shade &shade);
     virtual vec3 incidRadiance(Shade &shade);
     virtual bool inShadow(Ray &shadow_ray, Shade &shade);

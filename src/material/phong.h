@@ -11,7 +11,7 @@ public:
     Phong() {}
     Phong(vec3 color, float amb_int, float diff_int, float spec_int);
     virtual vec3 shade(Shade &shade);
-    virtual vec3 globalShade(Shade &shade);
+    virtual vec3 pathShade(Shade &shade);
     virtual ~Phong();
 
     inline void setAmbientIntensity(float intensity) {

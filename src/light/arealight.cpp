@@ -1,5 +1,11 @@
 #include "arealight.h"
 #include "core/world.h"
+#include "sampler/multijittered.h"
+
+AreaLight::AreaLight(Geometry *object_ptr) : objectP(object_ptr)
+{
+    samplerP = new MultiJittered(DEFAULT_NUM_SAMPLES, DEFAULT_NUM_SETS);
+}
 
 dvec3 AreaLight::calcDirection(Shade &shade) {
     samplePt = objectP->sample();
@@ -10,7 +16,7 @@ dvec3 AreaLight::calcDirection(Shade &shade) {
 
 vec3 AreaLight::incidRadiance(Shade &shade) {
     float nDotD = dot(-normal, out);
-    return (nDotD > 0.0) ? objectP->getMaterial()->getEmissiveLight(shade) : vec3();
+    return (nDotD > 0.0) ? objectP->getMaterial()->getEmissiveLight(shade) : Color::BLACK;
 }
 
 bool AreaLight::inShadow(Ray &ray, Shade &shade) {

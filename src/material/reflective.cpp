@@ -15,7 +15,7 @@ vec3 Reflective::shade(Shade &shade) {
     return commonShade(shade, shade.depth + 1);
 }
 
-vec3 Reflective::globalShade(Shade &shade) {
+vec3 Reflective::pathShade(Shade &shade) {
     return commonShade(shade, shade.depth == 0 ? shade.depth + 2 : shade.depth + 1);
 }
 

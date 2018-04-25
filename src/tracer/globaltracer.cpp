@@ -10,8 +10,11 @@ vec3 GlobalTracer::traceRay(Ray &ray, int depth, double *tmin) {
             shade.depth = depth;
             shade.ray = ray;
             if (tmin) *tmin = shade.t;
-            return worldP->vp.globalIllum ? shade.materialP->globalShade(shade)
-                                          : shade.materialP->shade(shade);
+            switch (worldP->vp.illum) {
+                case NONE: return shade.materialP->shade(shade);
+                case PATHTRACING: return shade.materialP->pathShade(shade);
+                case PHOTONMAPPING: return shade.materialP->photonShade(shade);
+            }
         }
         else  {
             if (tmin) *tmin = numeric_limits<double>::max();

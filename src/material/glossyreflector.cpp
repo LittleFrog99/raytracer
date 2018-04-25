@@ -25,7 +25,7 @@ vec3 GlossyReflector::shade(Shade &shade) {
     return color;
 }
 
-vec3 GlossyReflector::globalShade(Shade &shade) {
+vec3 GlossyReflector::pathShade(Shade &shade) {
     vec3 color = Phong::shade(shade);
     
     dvec3 in, out = -shade.ray.direction;

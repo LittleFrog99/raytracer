@@ -36,11 +36,13 @@ set(SOURCES_MATERIAL src/material/matte.cpp src/material/phong.cpp
     src/material/dielectric.cpp src/material/texture/image.cpp
     src/material/texture/texture.cpp src/material/svmaterial.cpp
     src/material/texture/imagetexture.cpp)
-set(SOURCES_LIGHT src/light/ambientoccluder.cpp src/light/arealight.cpp)
+set(SOURCES_LIGHT src/light/ambientoccluder.cpp src/light/arealight.cpp
+    src/light/pointlight.h)
 set(SOURCES_UTILITIES src/utilities/equations.cpp)
+set(SOURCES_PHOTONMAP src/photon/photonmap.cpp)
 
 set(SOURCES ${SOURCES_CORE} ${SOURCES_GEOMETRY} ${SOURCES_TRACER} ${SOURCES_SAMPLER} 
     ${SOURCES_CAMERA} ${SOURCES_LIGHT} ${SOURCES_BSDF} ${SOURCES_MATERIAL} ${SOURCES_LIGHT}
-    ${SOURCES_UTILITIES})
+    ${SOURCES_UTILITIES} ${SOURCES_PHOTONMAP})
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(${PROJECT_NAME} ${ASSIMP})

@@ -3,6 +3,12 @@
 #include "core/sampler.h"
 #include "utilities.h"
 
+enum GlobalIllumination {
+    NONE,
+    PATHTRACING,
+    PHOTONMAPPING
+};
+
 struct ViewPlane {
     int horRes;
     int vertRes;
@@ -12,7 +18,7 @@ struct ViewPlane {
     double pixelSize;
     float gamma;
     float invGamma; // 1/gamma
-    bool globalIllum;
+    GlobalIllumination illum;
     Sampler *samplerP = nullptr;
 
     void setSampler(Sampler *sampler_ptr);
