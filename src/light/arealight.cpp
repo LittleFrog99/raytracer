@@ -1,10 +1,12 @@
 #include "arealight.h"
 #include "core/world.h"
 #include "sampler/multijittered.h"
+#include "photon/photontracer.h"
 
 AreaLight::AreaLight(Geometry *object_ptr) : objectP(object_ptr)
 {
     samplerP = new MultiJittered(DEFAULT_NUM_SAMPLES, DEFAULT_NUM_SETS);
+    samplerP->mapSamplesToHemisphere();
 }
 
 dvec3 AreaLight::calcDirection(Shade &shade) {
@@ -36,6 +38,29 @@ float AreaLight::probDenFunc(Shade &shade) {
 
 float AreaLight::geoTerm(Shade &shade) {
     float nDotD = dot(-normal, out);
-    float dSquared = Math::distanceSquared(samplePt, shade.hitPoint);
+    float dSquared = Math::distSq(samplePt, shade.hitPoint);
     return nDotD / dSquared;
+}
+
+void AreaLight::emitPhotons(PhotonMap *map, int num) {
+    int count = 0;
+    while (count < num) {
+        dvec3 position = objectP->sample();
+        dvec3 normal = objectP->getNormal(position);
+
+        dvec3 w = normal;
+        dvec3 v = normalize(cross(UP_VECTOR, w));
+        dvec3 u = cross(v, w);
+        dvec3 samplePt = samplerP->sampleUnitHemisphere();
+        dvec3 direction = normalize(samplePt.x * u + samplePt.y * v + samplePt.z * w);
+
+        Shade shade(map->world);
+        vec3 irradiance = objectP->getMaterial()->getEmissiveLight(shade) * float(dot(normal, direction));
+
+        auto photon = new Photon(position, direction, irradiance);
+        PhotonTracer::tracePhoton(map, photon);
+        count++;
+    }
+
+    map->scalePhotonPower(1.0 / count);
 }

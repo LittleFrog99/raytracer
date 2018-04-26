@@ -1,5 +1,6 @@
 #include "photonmap.h"
 #include "debug.h"
+#include "core/world.h"
 
 Photon::Photon(dvec3 position, dvec3 direction, vec3 power) :
     position(position), power(power)
@@ -16,7 +17,17 @@ dvec3 Photon::getDirection() {
     return dvec3(x, y, z);
 }
 
-PhotonMap::PhotonMap() {}
+void Photon::output() {
+    cout << "position: ";
+    Debug::log(position);
+    cout << "direction: ";
+    dvec3 dir = getDirection();
+    Debug::log(dir);
+    cout << "power: ";
+    Debug::log(power);
+}
+
+PhotonMap::PhotonMap(World &world) : world(world) {}
 
 void PhotonMap::build() {
     createBoundingBox(calcBoundingBox(photonVec));
@@ -26,6 +37,12 @@ void PhotonMap::build() {
 
 void PhotonMap::addPhoton(dvec3 position, dvec3 direction, vec3 power) {
     photonVec.push_back(new Photon(position, direction, power));
+}
+
+void PhotonMap::scalePhotonPower(float scale) {
+    for (int i = lastIndex; i < photonVec.size(); i++) 
+        photonVec[i]->power *= scale;
+    lastIndex = photonVec.size();
 }
 
 BoundingBox PhotonMap::calcBoundingBox(vector<Photon *> &photons) {
@@ -98,6 +115,57 @@ int PhotonMap::getPartition(vector<Photon *> &photons, int dim, int low, int hig
     return low;
 }
 
+void PhotonMap::locatePhotons(NearestPhotons *np, PhotonMap::TreeNode *node) {
+    if (node == nullptr) return;
+
+    double dist = np->position[node->dim] - node->data->position[node->dim]; // signed distance to splitting plane
+    double distSq = dist * dist;
+    if (dist < 0)  { // on the left side of node
+        locatePhotons(np, node->left); // search left subtree
+        if (distSq < np->maxDistSq) // can search right subtree
+            locatePhotons(np, node->right);
+    } else {
+        locatePhotons(np, node->right);
+        if (distSq < np->maxDistSq)
+            locatePhotons(np, node->left);
+    }
+
+    dist = Math::distSq(node->data->position, np->position); // true squared distance to photon
+    distSq = dist * dist;
+    if (distSq < np->maxDistSq) {
+        np->photons.push(node->data);
+        if (np->photons.size() >= MIN_PHOTONS_REQUIRED) 
+            np->maxDistSq = Math::distSq(np->position, np->photons.top()->position);
+    }
+}
+
+vec3 PhotonMap::estimateIrradiance(dvec3 position, dvec3 normal)
+{
+    auto np = new NearestPhotons();
+    np->maxDistSq = Math::lengthSquared(bndBox.vertMax - bndBox.vertMin) / DISTANCE_SCALE_FACTOR;
+    np->position = position;
+    function<bool(Photon *, Photon *)> compare = 
+        [&] (Photon *a, Photon *b) -> 
+        bool { return Math::distSq(a->position, np->position) > Math::distSq(b->position, np->position); };
+    np->photons = priority_queue<Photon *, vector<Photon *>, decltype(compare)> (compare);
+    locatePhotons(np, root);
+
+    if (np->photons.size() < MIN_PHOTONS_REQUIRED) return Color::BLACK;
+    vec3 irradiance;
+    while (np->photons.size() > 0) {
+        auto photon = np->photons.top();
+        photon->output();
+        dvec3 dir = photon->getDirection();
+        if (dot(dir, normal) < 0.0) 
+            irradiance += photon->power;
+        np->photons.pop();
+    }
+    delete np;
+
+    irradiance /= (PI * np->maxDistSq);
+    return irradiance;
+}
+
 void PhotonMap::clear(PhotonMap::TreeNode *node) {
     if (node->data) delete node->data;
     if (node->left) clear(node->left);
@@ -115,15 +183,7 @@ void PhotonMap::output() {
 
 void PhotonMap::output(PhotonMap::TreeNode *node, int depth) {
     cout << "depth: " << depth << " dim: " << node->dim << endl;
-    cout << "position: ";
-    Debug::log(node->data->position);
-    cout << "direction: ";
-    dvec3 dir = node->data->getDirection();
-    Debug::log(dir);
-    cout << "power: ";
-    Debug::log(node->data->power);
+    node->data->output();
     if (node->left) output(node->left, depth + 1);
     if (node->right) output(node->right, depth + 1);
 }
-
-

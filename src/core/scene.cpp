@@ -23,7 +23,7 @@ void World::build() {
     vp.vertRes = 400;
     vp.pixelSize = 0.005;
     vp.maxDepth = 5;
-    vp.illum = PATHTRACING;
+    vp.illum = PHOTONMAPPING;
     vp.setSamples(36, DEFAULT_NUM_SETS);
     vp.gamma = 1.0;
 
@@ -31,7 +31,7 @@ void World::build() {
     auto plastic1P = new Phong(vec3(0.25, 0.72, 0.96), 0.2, 0.4, 0.3);
     auto plastic2P = new Phong(vec3(0.44, 0.24, 0.61), 0.4, 0.6, 0.1);
     plastic2P->setSpecularExponent(8.0f);
-    auto plastic3P = new Matte(vec3(1.0), 0.4, 0.6);
+    auto plastic3P = new Matte(vec3(1.0), 0.0, 0.8);
     auto emi1P = new Emissive(vec3(1.0), 100.0);
     auto plastic4P = new Phong(vec3(0.14, 0.47, 0.8), 0.3, 0.6, 0.1);
     auto bronzeP = new GlossyReflector(vec3(0.89, 0.36, 0.14), 0.2, 0.2, 0.1, 0.6);

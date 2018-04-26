@@ -2,9 +2,12 @@
 #include "core/shade.h"
 #include "core/material.h"
 #include "tracer/globaltracer.h"
+#include "photon/photontracer.h"
 #include "utilities.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
+
+int World::NUM_PHOTONS_PER_LIGHT = 1e2;
 
 Shade World::intersectObjects(Ray &ray) {
     Shade shade(*this);
@@ -14,7 +17,7 @@ Shade World::intersectObjects(Ray &ray) {
     dvec3 normal, hitPoint, localHitPoint;
     vec2 texCoord;
 
-    for (Geometry *objP : objects) {
+    for (auto objP : objects) {
         if (objP->intersect(ray, t, shade) && (t < tmin)) {
             shade.hasHit = true;
             tmin = t;
@@ -44,6 +47,14 @@ void World::setup() {
     tracerP = new GlobalTracer(this);
     _pixels = new unsigned char[vp.horRes * vp.vertRes * vp.numChannels];
     finished = 0;
+
+    if (vp.illum == PHOTONMAPPING) { // photon mapping setup
+        PhotonTracer::setWorld(this);
+        photonMap = new PhotonMap(*this);
+        for (auto lightP : lights) 
+            lightP->emitPhotons(photonMap, NUM_PHOTONS_PER_LIGHT);
+        photonMap->build();
+    }
 }
 
 void World::displayStatus() {

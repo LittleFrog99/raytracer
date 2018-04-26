@@ -39,7 +39,7 @@ set(SOURCES_MATERIAL src/material/matte.cpp src/material/phong.cpp
 set(SOURCES_LIGHT src/light/ambientoccluder.cpp src/light/arealight.cpp
     src/light/pointlight.h)
 set(SOURCES_UTILITIES src/utilities/equations.cpp)
-set(SOURCES_PHOTONMAP src/photon/photonmap.cpp)
+set(SOURCES_PHOTONMAP src/photon/photonmap.cpp src/photon/photontracer.cpp)
 
 set(SOURCES ${SOURCES_CORE} ${SOURCES_GEOMETRY} ${SOURCES_TRACER} ${SOURCES_SAMPLER} 
     ${SOURCES_CAMERA} ${SOURCES_LIGHT} ${SOURCES_BSDF} ${SOURCES_MATERIAL} ${SOURCES_LIGHT}

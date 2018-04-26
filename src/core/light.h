@@ -12,7 +12,7 @@ public:
     virtual bool inShadow(Ray &shadow_ray, Shade &shade) = 0;
     virtual float probDenFunc(Shade &shade) { return 1.0; }
     virtual float geoTerm(Shade &shade) { return 1.0; }
-    virtual Photon * emitPhoton() { return nullptr; }
+    virtual void emitPhotons(PhotonMap *map, int num) {}
 
     inline void toggleShadowCast(bool cast) {
         _castShadow = cast;

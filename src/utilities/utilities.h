@@ -49,7 +49,7 @@ public:
         return rand();
     }
 
-    inline double randomFloat() {
+    inline float randomFloat() {
         return float(rand()) / RAND_MAX;
     }
 
@@ -74,7 +74,7 @@ static Random rnd;
 
 namespace Math {
     template <class T>
-    inline T distanceSquared(tvec3<T, highp> a, tvec3<T, highp> b) {
+    inline T distSq(tvec3<T, highp> a, tvec3<T, highp> b) {
         return dot(a - b, a - b);
     }
 

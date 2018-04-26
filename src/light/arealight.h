@@ -13,6 +13,7 @@ public:
     virtual bool inShadow(Ray &shadow_ray, Shade &shade);
     virtual float probDenFunc(Shade &shade);
     virtual float geoTerm(Shade &shade);
+    virtual void emitPhotons(PhotonMap *map, int num);
 
 private:
     Geometry *objectP = nullptr;

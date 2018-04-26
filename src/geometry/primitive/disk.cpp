@@ -13,7 +13,7 @@ bool Disk::intersect(Ray &ray, double &tmin, Shade &shade) {
     if (t <= EPSILON) return false;
 
     dvec3 hitPt = ray.origin + t * ray.direction;
-    if (Math::distanceSquared(center, hitPt) < radiusSquared) {
+    if (Math::distSq(center, hitPt) < radiusSquared) {
         tmin = t;
         shade.normal = normal;
         shade.localHitPoint = hitPt;
@@ -28,7 +28,7 @@ bool Disk::shadowIntersect(Ray &ray, double &tmin) {
     if (t <= EPSILON) return false;
     
     dvec3 hitPt = ray.origin + t * ray.direction;
-    if (Math::distanceSquared(center, hitPt) < radiusSquared) {
+    if (Math::distSq(center, hitPt) < radiusSquared) {
         tmin = t;
         return true;
     }

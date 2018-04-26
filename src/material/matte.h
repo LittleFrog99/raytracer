@@ -9,6 +9,8 @@ public:
     Matte(vec3 color = vec3(), float ambient_factor = 0.0, float diffuse_factor = 0.0);
     virtual vec3 shade(Shade &shade);
     virtual vec3 pathShade(Shade &shade);
+    virtual vec3 photonShade(Shade &shade);
+    virtual void photonInteract(Shade &shade, PhotonMap *map, Photon *photon);
     virtual ~Matte();
 
     inline void setAmbientIntensity(float factor) {

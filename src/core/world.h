@@ -6,10 +6,13 @@
 #include "core/geometry.h"
 #include "core/camera.h"
 #include "core/light.h"
+#include "photon/photonmap.h"
 
 class World {
     friend class Camera;
 public: 
+    static int NUM_PHOTONS_PER_LIGHT;
+
     ViewPlane vp;
     Tracer *tracerP;
     Camera *cameraP;
@@ -17,6 +20,7 @@ public:
     vector<Geometry*> objects;
     Light *ambientP;
     vector<Light*> lights;
+    PhotonMap *photonMap;
 
     World() : bgColor(0.0) {}
     void setup();

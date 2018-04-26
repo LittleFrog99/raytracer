@@ -9,4 +9,5 @@ struct Photon {
 
     Photon(dvec3 position, dvec3 direction, vec3 power);
     dvec3 getDirection();
+    void output();
 };

@@ -14,7 +14,6 @@ public:
     inline void setIntensity(float factor) { intensity = factor; }
     inline void setColor(vec3 color) { this->color = color; }
 
-private:
     float intensity;
     vec3 color;
 };
