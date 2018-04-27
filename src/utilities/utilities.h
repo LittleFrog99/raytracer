@@ -41,11 +41,11 @@ namespace Color {
 
 class Random {
 public:
-    Random(unsigned int seed = time(nullptr)) {
-        srand(seed);
+    Random() {
+        srand((unsigned) time(nullptr));
     }
 
-    inline int randomInteger() {
+    int randomInteger() {
         return rand();
     }
 

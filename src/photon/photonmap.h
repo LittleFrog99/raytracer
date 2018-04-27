@@ -15,11 +15,10 @@ class World;
 
 class PhotonMap : public BoxBounded {
 public:
-    static constexpr int MIN_PHOTONS_REQUIRED = 8;
-    static constexpr float DISTANCE_SCALE_FACTOR = 1e6;
+    static int MIN_PHOTONS_REQUIRED;
+    static float DISTANCE_SCALE_FACTOR;
 
     PhotonMap(World &world);
-    void addPhoton(Photon *photon) { photonVec.push_back(photon); }
     void addPhoton(dvec3 position, dvec3 direction, vec3 power);
     void scalePhotonPower(float scale);
     void build(); // call this method before use

@@ -59,13 +59,13 @@ void World::build() {
     disk1P->toggleShadowCast(false);
     auto inst2P = new Instance(sphere2P);
     inst2P->scale(dvec3(1.3, 1, 1));
-    auto rect1P = new Rectangle(silver2P); // back
+    auto rect1P = new Rectangle(plastic3P); // back
     rect1P->setParams(dvec3(-1.00, 2.00, -2.00), dvec3(0, -2.00, 0), dvec3(2.00, 0, 0));
     auto rect2P = new Rectangle(plastic3P); // up
     rect2P->setParams(dvec3(-1.00, 2.00, -2.00), dvec3(2.00, 0, 0), dvec3(0, 0, 2.00));
     auto rect3P = new Rectangle(plastic5P); // left
     rect3P->setParams(dvec3(-1.00, 2.00, -2.00), dvec3(0, 0, 2.00), dvec3(0, -2.00, 0));
-    auto rect4P = new Rectangle(mirror1P); // bottom
+    auto rect4P = new Rectangle(plastic3P); // bottom
     rect4P->setParams(dvec3(-1.00, 0, -2.00), dvec3(0, 0, 2.00), dvec3(2.00, 0, 0));
     auto rect5P = new Rectangle(plastic6P); // right
     rect5P->setParams(dvec3(1.00, 0, -2.00), dvec3(0, 0, 2.00), dvec3(0, 2.00, 0));
@@ -77,9 +77,14 @@ void World::build() {
     auto inst4P = new Instance(cubeP);
     inst4P->rotate(dvec3(1, 0, 0), radians(45.0f))->rotate(dvec3(0, 1, 0), radians(30.0f))->translate(dvec3(0, 0.8, -0.8));
 
-    addObject(disk1P);
-    addObject(inst4P);
-    addObject(plane1P);
+    // addObject(disk1P);
+    // addObject(inst4P);
+    // addObject(plane1P);
+    addObject(rect1P);
+    addObject(rect2P);
+    addObject(rect3P);
+    addObject(rect4P);
+    addObject(rect5P);
 
     /* Lights */
     setBackgroundColor(vec3(0.28, 0.64, 0.93));

@@ -7,7 +7,7 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
-int World::NUM_PHOTONS_PER_LIGHT = 1e2;
+int World::NUM_PHOTONS_PER_LIGHT = 1e4;
 
 Shade World::intersectObjects(Ray &ray) {
     Shade shade(*this);
@@ -18,7 +18,7 @@ Shade World::intersectObjects(Ray &ray) {
     vec2 texCoord;
 
     for (auto objP : objects) {
-        if (objP->intersect(ray, t, shade) && (t < tmin)) {
+        if (objP->intersect(ray, t, shade) && (t < tmin) && (t > EPSILON)) {
             shade.hasHit = true;
             tmin = t;
             matP = shade.materialP;

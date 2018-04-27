@@ -2,6 +2,7 @@
 #include "core/world.h"
 #include "sampler/multijittered.h"
 #include "photon/photontracer.h"
+#include "debug.h"
 
 AreaLight::AreaLight(Geometry *object_ptr) : objectP(object_ptr)
 {
@@ -61,6 +62,6 @@ void AreaLight::emitPhotons(PhotonMap *map, int num) {
         PhotonTracer::tracePhoton(map, photon);
         count++;
     }
-
-    map->scalePhotonPower(1.0 / count);
+    
+    map->scalePhotonPower(1.0 / num);
 }

@@ -1,6 +1,16 @@
 #include "matte.h"
 #include "core/world.h"
 #include "photon/photontracer.h"
+#include "debug.h"
+
+static int lcg() {
+    static int x = (unsigned) time(nullptr);
+    static const int a = pow(7, 5);
+    static const int c = 1;
+    static const int m = RAND_MAX;
+    x = (x * a + c) % m;
+    return x;
+}
 
 Matte::Matte(vec3 color, float ambient_intensity, float diffuse_intensity) : Material() {
     ambBRDF = new Lambertian(ambient_intensity, color);
@@ -48,16 +58,16 @@ vec3 Matte::pathShade(Shade &shade) {
 }
 
 void Matte::photonInteract(Shade &shade, PhotonMap *map, Photon *photon) {
-    if (rnd.randomFloat() < diffBRDF->intensity) {
-        map->addPhoton(photon);
-
+    if (photon == nullptr) return;
+    if (float(lcg()) / RAND_MAX < diffBRDF->intensity) {
+        map->addPhoton(photon->position, photon->getDirection(), photon->power);
+        // photon->output();
         dvec3 in = -photon->getDirection(), out;
         vec3 brdf = diffBRDF->sampleBRDF(shade, out, in);
-        auto newPhoton = new Photon(photon->position, out, float(PI) * brdf * photon->power);
-        PhotonTracer::tracePhoton(map, photon);
+        auto newPhoton = new Photon(photon->position, out, float(PI) * brdf * photon->power, photon->bounce + 1);
+        PhotonTracer::tracePhoton(map, newPhoton);
     }
-    else 
-        delete photon;
+    delete photon;
 }
 
 vec3 Matte::photonShade(Shade &shade) {
@@ -65,9 +75,8 @@ vec3 Matte::photonShade(Shade &shade) {
     vec3 color = ambBRDF->calcReflectance(shade, out) *
                  shade.world.ambientP->incidRadiance(shade);
     
-    color += diffBRDF->calcBRDF(shade, in, out) 
-        * shade.world.photonMap->estimateIrradiance(shade.hitPoint, shade.normal);
-    
+    color += diffBRDF->calcBRDF(shade, in, out) * shade.world.photonMap->estimateIrradiance(shade.hitPoint, shade.normal);
+
     return color;
 }
 

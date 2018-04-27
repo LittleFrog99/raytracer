@@ -2,8 +2,11 @@
 #include "debug.h"
 #include "core/world.h"
 
-Photon::Photon(dvec3 position, dvec3 direction, vec3 power) :
-    position(position), power(power)
+int PhotonMap::MIN_PHOTONS_REQUIRED = 8;
+float PhotonMap::DISTANCE_SCALE_FACTOR = 1e11;
+
+Photon::Photon(dvec3 position, dvec3 direction, vec3 power, short bounce) :
+    position(position), power(power), bounce(bounce)
 {
     direction = normalize(direction);
     azim = atan2(direction.x, direction.z);
@@ -18,6 +21,7 @@ dvec3 Photon::getDirection() {
 }
 
 void Photon::output() {
+    cout << "address: " << this << endl;
     cout << "position: ";
     Debug::log(position);
     cout << "direction: ";
@@ -25,13 +29,16 @@ void Photon::output() {
     Debug::log(dir);
     cout << "power: ";
     Debug::log(power);
+    cout << "bounce: " << bounce << endl;
 }
 
-PhotonMap::PhotonMap(World &world) : world(world) {}
+PhotonMap::PhotonMap(World &world) : world(world) {
+    root = nullptr;
+}
 
 void PhotonMap::build() {
     createBoundingBox(calcBoundingBox(photonVec));
-    root = buildTree(photonVec);
+    this->root = buildTree(photonVec);
     photonVec.clear();
 }
 
@@ -41,7 +48,7 @@ void PhotonMap::addPhoton(dvec3 position, dvec3 direction, vec3 power) {
 
 void PhotonMap::scalePhotonPower(float scale) {
     for (int i = lastIndex; i < photonVec.size(); i++) 
-        photonVec[i]->power *= scale;
+        photonVec[i]->power *= vec3(scale);
     lastIndex = photonVec.size();
 }
 
@@ -150,11 +157,10 @@ vec3 PhotonMap::estimateIrradiance(dvec3 position, dvec3 normal)
     np->photons = priority_queue<Photon *, vector<Photon *>, decltype(compare)> (compare);
     locatePhotons(np, root);
 
-    if (np->photons.size() < MIN_PHOTONS_REQUIRED) return Color::BLACK;
+    // if (np->photons.size() < MIN_PHOTONS_REQUIRED) return Color::BLACK;
     vec3 irradiance;
     while (np->photons.size() > 0) {
         auto photon = np->photons.top();
-        photon->output();
         dvec3 dir = photon->getDirection();
         if (dot(dir, normal) < 0.0) 
             irradiance += photon->power;
