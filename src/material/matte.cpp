@@ -3,15 +3,6 @@
 #include "photon/photontracer.h"
 #include "debug.h"
 
-static int lcg() {
-    static int x = (unsigned) time(nullptr);
-    static const int a = pow(7, 5);
-    static const int c = 1;
-    static const int m = RAND_MAX;
-    x = (x * a + c) % m;
-    return x;
-}
-
 Matte::Matte(vec3 color, float ambient_intensity, float diffuse_intensity) : Material() {
     ambBRDF = new Lambertian(ambient_intensity, color);
     diffBRDF = new Lambertian(diffuse_intensity, color);
@@ -59,7 +50,7 @@ vec3 Matte::pathShade(Shade &shade) {
 
 void Matte::photonInteract(Shade &shade, PhotonMap *map, Photon *photon) {
     if (photon == nullptr) return;
-    if (float(lcg()) / RAND_MAX < diffBRDF->intensity) {
+    if (roulette() < diffBRDF->intensity) {
         map->addPhoton(photon->position, photon->getDirection(), photon->power);
         // photon->output();
         dvec3 in = -photon->getDirection(), out;
@@ -75,7 +66,7 @@ vec3 Matte::photonShade(Shade &shade) {
     vec3 color = ambBRDF->calcReflectance(shade, out) *
                  shade.world.ambientP->incidRadiance(shade);
     
-    color += diffBRDF->calcBRDF(shade, in, out) * shade.world.photonMap->estimateIrradiance(shade.hitPoint, shade.normal);
+    color += shade.world.photonMap->estimateIrradiance(shade, diffBRDF);
 
     return color;
 }

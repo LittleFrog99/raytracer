@@ -12,6 +12,8 @@ struct NearestPhotons {
 };
 
 class World;
+class Lambertian;
+class Shade;
 
 class PhotonMap : public BoxBounded {
 public:
@@ -22,7 +24,7 @@ public:
     void addPhoton(dvec3 position, dvec3 direction, vec3 power);
     void scalePhotonPower(float scale);
     void build(); // call this method before use
-    vec3 estimateIrradiance(dvec3 position, dvec3 normal);
+    vec3 estimateIrradiance(Shade &shade, Lambertian *brdf);
     void output();
     ~PhotonMap();
 

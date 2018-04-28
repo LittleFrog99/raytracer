@@ -72,6 +72,15 @@ public:
 };
 static Random rnd;
 
+static float roulette() {
+    static int x = (unsigned)time(nullptr);
+    static const int a = pow(7, 5);
+    static const int c = 1;
+    static const int m = RAND_MAX;
+    x = (x * a + c) % m;
+    return float(x) / RAND_MAX;
+}
+
 namespace Math {
     template <class T>
     inline T distSq(tvec3<T, highp> a, tvec3<T, highp> b) {

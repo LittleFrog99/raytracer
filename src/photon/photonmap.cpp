@@ -1,9 +1,10 @@
 #include "photonmap.h"
 #include "debug.h"
 #include "core/world.h"
+#include "bsdf/lambertian.h"
 
 int PhotonMap::MIN_PHOTONS_REQUIRED = 8;
-float PhotonMap::DISTANCE_SCALE_FACTOR = 1e11;
+float PhotonMap::DISTANCE_SCALE_FACTOR = 1e7;
 
 Photon::Photon(dvec3 position, dvec3 direction, vec3 power, short bounce) :
     position(position), power(power), bounce(bounce)
@@ -146,11 +147,11 @@ void PhotonMap::locatePhotons(NearestPhotons *np, PhotonMap::TreeNode *node) {
     }
 }
 
-vec3 PhotonMap::estimateIrradiance(dvec3 position, dvec3 normal)
+vec3 PhotonMap::estimateIrradiance(Shade &shade, Lambertian *brdf)
 {
     auto np = new NearestPhotons();
     np->maxDistSq = Math::lengthSquared(bndBox.vertMax - bndBox.vertMin) / DISTANCE_SCALE_FACTOR;
-    np->position = position;
+    np->position = shade.hitPoint;
     function<bool(Photon *, Photon *)> compare = 
         [&] (Photon *a, Photon *b) -> 
         bool { return Math::distSq(a->position, np->position) > Math::distSq(b->position, np->position); };
@@ -161,9 +162,10 @@ vec3 PhotonMap::estimateIrradiance(dvec3 position, dvec3 normal)
     vec3 irradiance;
     while (np->photons.size() > 0) {
         auto photon = np->photons.top();
-        dvec3 dir = photon->getDirection();
-        if (dot(dir, normal) < 0.0) 
-            irradiance += photon->power;
+        dvec3 dir = -photon->getDirection();
+        dvec3 in;
+        if (dot(dir, shade.normal) > 0.0) 
+            irradiance += brdf->calcBRDF(shade, in, dir) * photon->power;
         np->photons.pop();
     }
     delete np;
