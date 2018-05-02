@@ -4,7 +4,7 @@
 #include "bsdf/lambertian.h"
 
 int PhotonMap::MIN_PHOTONS_REQUIRED = 8;
-float PhotonMap::DISTANCE_SCALE_FACTOR = 1e7;
+float PhotonMap::SAMPLE_DISTANCE = 1e-2;
 
 Photon::Photon(dvec3 position, dvec3 direction, vec3 power, short bounce) :
     position(position), power(power), bounce(bounce)
@@ -30,15 +30,14 @@ void Photon::output() {
     Debug::log(dir);
     cout << "power: ";
     Debug::log(power);
-    cout << "bounce: " << bounce << endl;
 }
 
 PhotonMap::PhotonMap(World &world) : world(world) {
     root = nullptr;
+    photonVec.reserve(world.lights.size() * World::NUM_PHOTONS_PER_LIGHT);
 }
 
 void PhotonMap::build() {
-    createBoundingBox(calcBoundingBox(photonVec));
     this->root = buildTree(photonVec);
     photonVec.clear();
 }
@@ -126,31 +125,34 @@ int PhotonMap::getPartition(vector<Photon *> &photons, int dim, int low, int hig
 void PhotonMap::locatePhotons(NearestPhotons *np, PhotonMap::TreeNode *node) {
     if (node == nullptr) return;
 
-    double dist = np->position[node->dim] - node->data->position[node->dim]; // signed distance to splitting plane
-    double distSq = dist * dist;
-    if (dist < 0)  { // on the left side of node
+    double splitDist = np->position[node->dim] - node->data->position[node->dim]; // signed distance to splitting plane
+    double splitDistSq = splitDist * splitDist;
+    if (splitDist < 0)  { // on the left side of node
         locatePhotons(np, node->left); // search left subtree
-        if (distSq < np->maxDistSq) // can search right subtree
+        if (splitDistSq < np->maxDistSq) // can search right subtree
             locatePhotons(np, node->right);
     } else {
         locatePhotons(np, node->right);
-        if (distSq < np->maxDistSq)
+        if (splitDistSq < np->maxDistSq)
             locatePhotons(np, node->left);
     }
 
-    dist = Math::distSq(node->data->position, np->position); // true squared distance to photon
-    distSq = dist * dist;
+    double dist = Math::distSq(node->data->position, np->position); // real squared distance to photon
+    double distSq = dist * dist;
     if (distSq < np->maxDistSq) {
         np->photons.push(node->data);
-        if (np->photons.size() >= MIN_PHOTONS_REQUIRED) 
+        if (np->photons.size() > MIN_PHOTONS_REQUIRED) {
+            np->photons.pop();
             np->maxDistSq = Math::distSq(np->position, np->photons.top()->position);
+        }
     }
+
 }
 
 vec3 PhotonMap::estimateIrradiance(Shade &shade, Lambertian *brdf)
 {
     auto np = new NearestPhotons();
-    np->maxDistSq = Math::lengthSquared(bndBox.vertMax - bndBox.vertMin) / DISTANCE_SCALE_FACTOR;
+    np->maxDistSq = SAMPLE_DISTANCE * SAMPLE_DISTANCE;
     np->position = shade.hitPoint;
     function<bool(Photon *, Photon *)> compare = 
         [&] (Photon *a, Photon *b) -> 
@@ -158,14 +160,15 @@ vec3 PhotonMap::estimateIrradiance(Shade &shade, Lambertian *brdf)
     np->photons = priority_queue<Photon *, vector<Photon *>, decltype(compare)> (compare);
     locatePhotons(np, root);
 
-    // if (np->photons.size() < MIN_PHOTONS_REQUIRED) return Color::BLACK;
+    if (np->photons.size() < MIN_PHOTONS_REQUIRED) return Color::BLACK;
     vec3 irradiance;
     while (np->photons.size() > 0) {
         auto photon = np->photons.top();
         dvec3 dir = -photon->getDirection();
         dvec3 in;
-        if (dot(dir, shade.normal) > 0.0) 
-            irradiance += brdf->calcBRDF(shade, in, dir) * photon->power;
+        float nDotIn = dot(shade.normal, dir);
+        if (nDotIn > 0.0) 
+            irradiance += brdf->calcBRDF(shade, in, dir) * photon->power * nDotIn;
         np->photons.pop();
     }
     delete np;

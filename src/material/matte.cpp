@@ -51,8 +51,9 @@ vec3 Matte::pathShade(Shade &shade) {
 void Matte::photonInteract(Shade &shade, PhotonMap *map, Photon *photon) {
     if (photon == nullptr) return;
     if (roulette() < diffBRDF->intensity) {
-        map->addPhoton(photon->position, photon->getDirection(), photon->power);
-        // photon->output();
+        if (photon->bounce > 0)
+            map->addPhoton(photon->position, photon->getDirection(), photon->power);
+
         dvec3 in = -photon->getDirection(), out;
         vec3 brdf = diffBRDF->sampleBRDF(shade, out, in);
         auto newPhoton = new Photon(photon->position, out, float(PI) * brdf * photon->power, photon->bounce + 1);
@@ -62,12 +63,9 @@ void Matte::photonInteract(Shade &shade, PhotonMap *map, Photon *photon) {
 }
 
 vec3 Matte::photonShade(Shade &shade) {
-    dvec3 in, out = -shade.ray.direction;
-    vec3 color = ambBRDF->calcReflectance(shade, out) *
-                 shade.world.ambientP->incidRadiance(shade);
-    
+    vec3 color;
+    // color = Matte::shade(shade);
     color += shade.world.photonMap->estimateIrradiance(shade, diffBRDF);
-
     return color;
 }
 

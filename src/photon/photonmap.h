@@ -9,16 +9,17 @@ struct NearestPhotons {
     dvec3 position;
     double maxDistSq;
     priority_queue<Photon *, vector<Photon *>, function<bool(Photon *, Photon *)>> photons;
+    priority_queue<int, vector<int>, function<bool(int a, int b)>> indexes;
 };
 
 class World;
 class Lambertian;
-class Shade;
+struct Shade;
 
-class PhotonMap : public BoxBounded {
+class PhotonMap {
 public:
     static int MIN_PHOTONS_REQUIRED;
-    static float DISTANCE_SCALE_FACTOR;
+    static float SAMPLE_DISTANCE;
 
     PhotonMap(World &world);
     void addPhoton(dvec3 position, dvec3 direction, vec3 power);
@@ -39,6 +40,8 @@ private:
 
     vector<Photon *> photonVec;
     int lastIndex = 0;
+
+    // Version 1: Tree node
     TreeNode *root;
 
     TreeNode * buildTree(vector<Photon *> &photons);
@@ -52,5 +55,8 @@ private:
 
     void clear(TreeNode *node);
     void output(TreeNode *node, int depth);
+
+    // Version 2: Indexes
+    vector<int> indexes;
 };
 
