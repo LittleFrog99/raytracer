@@ -19,6 +19,8 @@ struct ViewPlane {
     float gamma;
     float invGamma; // 1/gamma
     GlobalIllumination illum;
+    int samplePhotons;
+    double sampleDist;
     Sampler *samplerP = nullptr;
 
     void setSampler(Sampler *sampler_ptr);

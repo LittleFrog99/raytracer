@@ -52,11 +52,17 @@ void Matte::photonInteract(Shade &shade, PhotonMap *map, Photon *photon) {
     if (photon == nullptr) return;
     if (roulette() < diffBRDF->intensity) {
         if (photon->bounce > 0)
-            map->addPhoton(photon->position, photon->getDirection(), photon->power);
+            map->store(photon);
 
         dvec3 in = -photon->getDirection(), out;
         vec3 brdf = diffBRDF->sampleBRDF(shade, out, in);
-        auto newPhoton = new Photon(photon->position, out, float(PI) * brdf * photon->power, photon->bounce + 1);
+
+        auto newPhoton = new Photon;
+        newPhoton->position = photon->position;
+        newPhoton->setDirection(out);
+        newPhoton->power = float(PI) * brdf * photon->power;
+        newPhoton->bounce = photon->bounce + 1;
+
         PhotonTracer::tracePhoton(map, newPhoton);
     }
     delete photon;
@@ -64,8 +70,8 @@ void Matte::photonInteract(Shade &shade, PhotonMap *map, Photon *photon) {
 
 vec3 Matte::photonShade(Shade &shade) {
     vec3 color;
-    // color = Matte::shade(shade);
-    color += shade.world.photonMap->estimateIrradiance(shade, diffBRDF);
+    color = Matte::shade(shade);
+    color += shade.world.photonMap->estimateIrradiance(shade);
     return color;
 }
 

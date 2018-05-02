@@ -7,7 +7,7 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
-int World::NUM_PHOTONS_PER_LIGHT = 1e4;
+int World::NUM_PHOTONS_PER_LIGHT = 1e6;
 
 Shade World::intersectObjects(Ray &ray) {
     Shade shade(*this);
@@ -50,10 +50,10 @@ void World::setup() {
 
     if (vp.illum == PHOTONMAPPING) { // photon mapping setup
         PhotonTracer::setWorld(this);
-        photonMap = new PhotonMap(*this);
+        photonMap = new PhotonMap(this);
         for (auto lightP : lights) 
             lightP->emitPhotons(photonMap, NUM_PHOTONS_PER_LIGHT);
-        photonMap->build();
+        photonMap->balance();
     }
 }
 

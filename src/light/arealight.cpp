@@ -55,10 +55,15 @@ void AreaLight::emitPhotons(PhotonMap *map, int num) {
         dvec3 samplePt = samplerP->sampleUnitHemisphere();
         dvec3 direction = normalize(samplePt.x * u + samplePt.y * v + samplePt.z * w);
 
-        Shade shade(map->world);
+        Shade shade(*map->world);
         vec3 irradiance = objectP->getMaterial()->getEmissiveLight(shade) * float(dot(normal, direction));
 
-        auto photon = new Photon(position, direction, irradiance);
+        auto photon = new Photon;
+        photon->position = position;
+        photon->setDirection(direction);
+        photon->power = irradiance;
+        photon->bounce = 0;
+        
         PhotonTracer::tracePhoton(map, photon);
         count++;
     }

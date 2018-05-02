@@ -23,7 +23,9 @@ void World::build() {
     vp.vertRes = 400;
     vp.pixelSize = 0.005;
     vp.maxDepth = 5;
-    vp.illum = PATHTRACING;
+    vp.illum = PHOTONMAPPING;
+    vp.sampleDist = 1;
+    vp.samplePhotons = 100;
     vp.setSamples(36, DEFAULT_NUM_SETS);
     vp.gamma = 1.0;
 
@@ -50,7 +52,7 @@ void World::build() {
     /* Geometry Objects */
     auto sphere1P = new Sphere(plastic1P);
     sphere1P->setParams(dvec3(-1.00, 0.80, 0), .80);
-    auto sphere2P = new Sphere(glass2P);
+    auto sphere2P = new Sphere(glass1P);
     sphere2P->setParams(dvec3(0, 0.40, -1.00), .40);
     auto plane1P = new Plane(plastic3P);
     plane1P->setParams(dvec3(0, 1, 0), dvec3(0.0, 0.0, 0.0));
@@ -78,9 +80,8 @@ void World::build() {
     auto inst4P = new Instance(cubeP);
     inst4P->rotate(dvec3(1, 0, 0), radians(45.0f))->rotate(dvec3(0, 1, 0), radians(30.0f))->translate(dvec3(0, 0.8, -0.8));
 
-    addObject(disk1P);
-    // addObject(inst4P);
-    // addObject(plane1P);
+    // addObject(sphere2P);
+    // addObject(disk1P);
     addObject(rect1P);
     addObject(rect2P);
     addObject(rect3P);
@@ -88,7 +89,7 @@ void World::build() {
     addObject(rect5P);
 
     /* Lights */
-    setBackgroundColor(vec3(0.28, 0.64, 0.93));
+    setBackgroundColor(vec3(0));
     AmbientOccluder *occluderP = new AmbientOccluder(vec3(1.0), 1.0, 0.2);
     setAmbient(occluderP);
 

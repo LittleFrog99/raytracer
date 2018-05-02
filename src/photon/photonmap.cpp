@@ -3,7 +3,200 @@
 #include "core/world.h"
 #include "bsdf/lambertian.h"
 
-int PhotonMap::MIN_PHOTONS_REQUIRED = 8;
+dvec3 Photon::getDirection() {
+    double x = sin(polar) * sin(azim);
+    double y = cos(polar);
+    double z = sin(polar) * cos(azim);
+    return dvec3(x, y, z);
+}
+
+void Photon::setDirection(glm::dvec3 dir) {
+    dir = normalize(dir);
+    azim = atan2(dir.x, dir.z);
+    polar = acos(dir.y);
+}
+
+NearestPhotons::~NearestPhotons() {
+    delete[] distSq;
+    delete[] photons;
+}
+
+PhotonMap::PhotonMap(World *world) : world(world)
+{
+    max = world->NUM_PHOTONS_PER_LIGHT * world->lights.size() * world->vp.maxDepth;
+    photons = new Photon[max];
+}
+
+PhotonMap::~PhotonMap() {
+    delete[] photons;
+}
+
+void PhotonMap::scalePhotonPower(float scale) {
+    for (int i = last; i <= stored; i++)
+        photons[i].power *= scale;
+    last = stored + 1;
+}
+
+void PhotonMap::store(Photon *photon) {
+    if (stored > max) return;
+    photons[++stored] = Photon(*photon);
+    bndBox.vertMax = glm::max(bndBox.vertMax, photon->position);
+    bndBox.vertMin = glm::min(bndBox.vertMin, photon->position);
+}
+
+void PhotonMap::balance() {
+    Photon *pOrg = new Photon[stored + 1];
+    for (int i = 1; i <= stored; i++)
+        pOrg[i] = photons[i];
+    balanceSegment(pOrg, 1, 1, stored);
+    delete[] pOrg;
+}
+
+void PhotonMap::balanceSegment(Photon *pOrg, int index, int start, int end)
+{
+    if (start == end) {
+        photons[index] = pOrg[start];
+        return;
+    }
+
+    int median = 1;
+    while (4 * median <= end - start + 1) median <<= 1;
+    if (3 * median <= end - start + 1)
+        median = median * 2 + start - 1;
+    else 
+        median = end - median + 1;
+
+    int dim;
+    Math::maxComponent(bndBox.vertMax - bndBox.vertMin, dim);
+    medianSplit(pOrg, start, end, median, dim);
+    photons[index] = pOrg[median];
+    photons[index].dim = dim;
+
+    if (start < median) {
+        double temp = bndBox.vertMax[dim];
+        bndBox.vertMax[dim] = photons[index].position[dim];
+        balanceSegment(pOrg, index * 2, start, median - 1);
+        bndBox.vertMax[dim] = temp;
+    }
+    if (median < end) {
+        double temp = bndBox.vertMin[dim];
+        bndBox.vertMin[dim] = photons[index].position[dim];
+        balanceSegment(pOrg, index * 2 + 1, median + 1, end);
+        bndBox.vertMin[dim] = temp;
+    }
+}
+
+void PhotonMap::medianSplit(Photon *pOrg, int start, int end, int median, int dim)
+{
+    int left = start, right = end;
+
+    while (left < right) {
+        double key = pOrg[right].position[dim];
+        int i = left - 1, j = right;
+        while (true) {
+            while (pOrg[++i].position[dim] < key);
+            while (pOrg[--j].position[dim] > key && j > left);
+            if (i >= j) break;
+            swap(pOrg[i], pOrg[j]);
+        }
+
+        swap(pOrg[i], pOrg[right]);
+        if (i >= median) right = i - 1;
+        if (i <= median) left = i + 1;
+    }
+}
+
+void PhotonMap::locatePhotons(NearestPhotons *np, int index)
+{
+    if (index > stored) return;
+    Photon *photon = &photons[index];
+
+    if (index * 2 <= stored) {
+        double dist = np->position[photon->dim] - photon->position[photon->dim];
+        if (dist < 0) {
+            locatePhotons(np, index * 2);
+            if (dist * dist < np->distSq[0])
+                locatePhotons(np, index * 2 + 1);
+        } else {
+            locatePhotons(np, index * 2 + 1);
+            if (dist * dist < np->distSq[0])
+                locatePhotons(np, index * 2);
+        }
+    }
+
+    double distSq = Math::distSq(photon->position, np->position);
+    if (distSq > np->distSq[0]) return;
+
+    if (np->found < np->max) {
+        np->found++;
+        np->distSq[np->found] = distSq;
+        np->photons[np->found] = photon;
+    } else {
+        if (!np->gotHeap) {
+            for (int i = np->found >> 1; i >= 1; i--) {
+                int parent = i;
+                Photon *tmpPhoton = np->photons[i];
+                double tmpDistSq = np->distSq[i];
+                while ((parent << 1) <= np->found) {
+                    int j = parent << 1;
+                    if (j + 1 <= np->found && np->distSq[j] < np->distSq[j + 1]) j++;
+                    if (tmpDistSq >= np->distSq[j]) break;
+
+                    np->photons[parent] = np->photons[j];
+                    np->distSq[parent] = np->distSq[j];
+                    parent = j;
+                }
+                np->photons[parent] = tmpPhoton;
+                np->distSq[parent] = tmpDistSq;
+            }
+            np->gotHeap = true;
+        }
+
+        int parent = 1;
+        while ((parent << 1) <= np->found) {
+            int j = parent << 1;
+            if (j + 1 <= np->found && np->distSq[j] < np->distSq[j + 1]) j++;
+            if (distSq > np->distSq[j]) break;
+
+            np->photons[parent] = np->photons[j];
+            np->distSq[parent] = np->distSq[j];
+            parent = j;
+        }
+        np->photons[parent] = photon;
+        np->distSq[parent] = distSq;
+        np->distSq[0] = np->distSq[1];
+    }
+}
+
+vec3 PhotonMap::estimateIrradiance(Shade &shade)
+{
+    vec3 color;
+    double max_dist = world->vp.sampleDist;
+    int num = world->vp.samplePhotons;
+
+    NearestPhotons np;
+    np.position = shade.hitPoint;
+    np.max = num;
+    np.distSq = new double[num + 1];
+    np.distSq[0] = max_dist * max_dist;
+    np.photons = new Photon *[num + 1];
+
+    locatePhotons(&np, 1);
+    if (np.found <= 8) return color;
+
+    for (int i = 1; i <= np.found; i++) {
+        dvec3 dir = -np.photons[i]->getDirection();
+        if (dot(shade.normal, dir) > 0) 
+            color += np.photons[i]->power;
+    }
+
+    return color / float(PI * np.distSq[0]);
+}
+
+
+// The following is a much slower implementation using standard library
+
+/* int PhotonMap::MIN_PHOTONS_REQUIRED = 8;
 float PhotonMap::SAMPLE_DISTANCE = 1e-2;
 
 Photon::Photon(dvec3 position, dvec3 direction, vec3 power, short bounce) :
@@ -12,13 +205,6 @@ Photon::Photon(dvec3 position, dvec3 direction, vec3 power, short bounce) :
     direction = normalize(direction);
     azim = atan2(direction.x, direction.z);
     polar = acos(direction.y);
-}
-
-dvec3 Photon::getDirection() {
-    double x = sin(polar) * sin(azim);
-    double y = cos(polar);
-    double z = sin(polar) * cos(azim);
-    return dvec3(x, y, z);
 }
 
 void Photon::output() {
@@ -198,3 +384,4 @@ void PhotonMap::output(PhotonMap::TreeNode *node, int depth) {
     if (node->left) output(node->left, depth + 1);
     if (node->right) output(node->right, depth + 1);
 }
+*/

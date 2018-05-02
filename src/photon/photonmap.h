@@ -7,9 +7,46 @@
 
 struct NearestPhotons {
     dvec3 position;
+    int max = 0, found = 0;
+
+    short gotHeap = false;
+    double *distSq = nullptr;
+    Photon **photons = nullptr;
+
+    ~NearestPhotons();
+};
+
+class World;
+class Lambertian;
+struct Shade;
+
+class PhotonMap : public BoxBounded {
+public:
+    World *world;
+
+    PhotonMap(World *world);
+    void store(Photon *photon);
+    void balance();
+    vec3 estimateIrradiance(Shade &shade);
+    void scalePhotonPower(float scale);
+    ~PhotonMap();
+
+    inline int getStoredPhotons() { return stored; }
+
+private:
+    int max, stored = 0, last = 1;
+    Photon *photons;
+
+    void balanceSegment(Photon *pOrg, int index, int start, int end);
+    void medianSplit(Photon *pOrg, int start, int end, int median, int dim);
+    void locatePhotons(NearestPhotons *np, int index); // called by index = 1
+};
+
+
+/* struct NearestPhotons {
+    dvec3 position;
     double maxDistSq;
     priority_queue<Photon *, vector<Photon *>, function<bool(Photon *, Photon *)>> photons;
-    priority_queue<int, vector<int>, function<bool(int a, int b)>> indexes;
 };
 
 class World;
@@ -55,8 +92,5 @@ private:
 
     void clear(TreeNode *node);
     void output(TreeNode *node, int depth);
-
-    // Version 2: Indexes
-    vector<int> indexes;
 };
-
+*/
