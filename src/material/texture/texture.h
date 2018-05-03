@@ -2,17 +2,6 @@
 
 #include "core/shade.h"
 
-enum TextureType {
-    DIFFUSE,
-    SPECULAR,
-    AMBIENT,
-    EMISSIVE,
-    NORMAL,
-    HEIGHT,
-    REFLECTION,
-    DISPLACEMENT
-};
-
 enum TextureMap {
     RECTANGULAR,
     CYLINDRICAL,
@@ -23,6 +12,17 @@ enum TextureMap {
 
 class Texture {
 public:
+    enum TextureType {
+        DIFFUSE,
+        SPECULAR,
+        AMBIENT,
+        EMISSIVE,
+        NORMAL,
+        HEIGHT,
+        REFLECTION,
+        DISPLACEMENT
+    };
+
     Texture() {}
     Texture(TextureMap tex_map) : texMap(tex_map) {}
     virtual vec3 getColor(Shade &shade) = 0;

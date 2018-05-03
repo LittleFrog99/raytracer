@@ -16,3 +16,11 @@ vec3 Emissive::pathShade(Shade &shade) {
 
     return Emissive::shade(shade);
 }
+
+vec3 Emissive::photonShade(Shade &shade) {
+    return getEmissiveLight(shade);
+}
+
+void Emissive::photonInteract(Shade &shade, PhotonMap *map, Photon *photon) {
+    delete photon;
+}

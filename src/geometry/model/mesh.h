@@ -15,13 +15,13 @@ class Mesh {
 public:
     Mesh(vector<Vertex> vertices, vector<unsigned int> indices, int num_vertices, int num_faces)
         : vertices(vertices), indices(indices), numVertices(num_vertices), numFaces(num_faces) {}
-    Mesh(vector<Vertex> vertices, vector<unsigned int> indices, map<TextureType, ImageTexture *> textures,
+    Mesh(vector<Vertex> vertices, vector<unsigned int> indices, map<Texture::TextureType, ImageTexture *> textures,
          int num_vertices, int num_faces)
         : vertices(vertices), indices(indices), textures(textures), numVertices(num_vertices),
           numFaces(num_faces) {}
     vector<Vertex> vertices;
     vector<unsigned int> indices;
-    map<TextureType, ImageTexture *> textures;
+    map<Texture::TextureType, ImageTexture *> textures;
     int numVertices;
     int numFaces;
 

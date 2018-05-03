@@ -8,6 +8,8 @@ public:
     Reflective(vec3 color, float amb_int, float diff_int, float spec_int, float refl_int);
     virtual vec3 shade(Shade &shade);
     virtual vec3 pathShade(Shade &shade);
+    virtual vec3 photonShade(Shade &shade);
+    virtual void photonInteract(Shade &shade, PhotonMap *map, Photon *photon);
     virtual ~Reflective();
 
     inline void setReflectiveIntensity(float value) {
@@ -24,6 +26,7 @@ public:
 
 protected:
     PerfectSpecular *reflBRDF;
+    map<pair<float, float>, PhotonScatter> behavior;
 
 private:
     vec3 commonShade(Shade &shade, int depth);

@@ -81,7 +81,7 @@ void World::build() {
     inst4P->rotate(dvec3(1, 0, 0), radians(45.0f))->rotate(dvec3(0, 1, 0), radians(30.0f))->translate(dvec3(0, 0.8, -0.8));
 
     // addObject(sphere2P);
-    // addObject(disk1P);
+    addObject(disk1P);
     addObject(rect1P);
     addObject(rect2P);
     addObject(rect3P);

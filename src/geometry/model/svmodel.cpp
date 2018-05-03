@@ -39,9 +39,9 @@ Mesh * SVModel::processMesh(aiMesh *mesh, const aiScene *scene) {
             indices.push_back(face.mIndices[j]);
     }
 
-    map<TextureType, ImageTexture *> textures; // load textures
+    map<Texture::TextureType, ImageTexture *> textures; // load textures
     aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
-    textures[DIFFUSE] = loadTexture(material, aiTextureType_DIFFUSE);
+    textures[Texture::DIFFUSE] = loadTexture(material, aiTextureType_DIFFUSE);
 
     return new Mesh(vertices, indices, textures, mesh->mNumVertices, mesh->mNumFaces);
 }
@@ -54,7 +54,7 @@ ImageTexture * SVModel::loadTexture(aiMaterial *mat, aiTextureType type) {
 
 void SVModel::setupGrids(Model::TriangleMode mode) {
     for (Mesh *mesh : meshes) {
-        Material *matP = new SVPhong(mesh->textures[DIFFUSE], kAmbient, kDiffuse, kSpecular);
+        Material *matP = new SVPhong(mesh->textures[Texture::DIFFUSE], kAmbient, kDiffuse, kSpecular);
         for (int i = 0; i < mesh->numFaces; i++) {
             MeshTriangle *triangle;
             if (mode == SMOOTH)
