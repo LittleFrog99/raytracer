@@ -65,10 +65,6 @@ public:
         return int(randomDouble(0, high - low + 1) + low);
     }
 
-    inline bool roulette(float prob) {
-        return randomFloat() < prob;
-    }
-
 };
 static Random rnd;
 

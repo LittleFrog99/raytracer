@@ -20,4 +20,5 @@ private:
     dvec3 samplePt;
     dvec3 normal;
     dvec3 out;
+    float intensity;
 };

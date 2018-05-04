@@ -7,7 +7,7 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
-int World::NUM_PHOTONS_PER_LIGHT = 2e4;
+int World::NUM_PHOTONS_PER_LIGHT = 1e4;
 
 Shade World::intersectObjects(Ray &ray) {
     Shade shade(*this);

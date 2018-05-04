@@ -24,8 +24,8 @@ void World::build() {
     vp.pixelSize = 0.005;
     vp.maxDepth = 5;
     vp.illum = PHOTONMAPPING;
-    vp.sampleDist = 1;
-    vp.samplePhotons = 100;
+    vp.sampleDist = 0.5;
+    vp.samplePhotons = 200;
     vp.setSamples(36, DEFAULT_NUM_SETS);
     vp.gamma = 1.0;
 
