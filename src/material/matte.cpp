@@ -57,15 +57,14 @@ void Matte::photonInteract(Shade &shade, PhotonMap *map, Photon *photon) {
         dvec3 in = -photon->getDirection(), out;
         vec3 brdf = diffBRDF->sampleBRDF(shade, out, in);
 
-        auto newPhoton = new Photon;
-        newPhoton->position = photon->position;
-        newPhoton->setDirection(out);
-        newPhoton->power = float(PI) * brdf * photon->power;
-        newPhoton->bounce = photon->bounce + 1;
+        Photon newPhoton;
+        newPhoton.position = photon->position;
+        newPhoton.setDirection(out);
+        newPhoton.power = float(PI) * brdf * photon->power;
+        newPhoton.bounce = photon->bounce + 1;
 
-        PhotonTracer::tracePhoton(map, newPhoton);
+        PhotonTracer::tracePhoton(map, &newPhoton);
     }
-    delete photon;
 }
 
 vec3 Matte::photonShade(Shade &shade) {

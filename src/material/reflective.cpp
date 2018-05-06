@@ -63,19 +63,17 @@ void Reflective::photonInteract(Shade &shade, PhotonMap *map, Photon *photon)
             break;
 
         default:
-            delete photon;
             return;
 
     }
 
-    auto newPhoton = new Photon;
-    newPhoton->position = photon->position;
-    newPhoton->setDirection(out);
-    newPhoton->power = reflectance * photon->power;
-    newPhoton->bounce = photon->bounce + 1;
+    Photon newPhoton;
+    newPhoton.position = photon->position;
+    newPhoton.setDirection(out);
+    newPhoton.power = reflectance * photon->power;
+    newPhoton.bounce = photon->bounce + 1;
 
-    PhotonTracer::tracePhoton(map, newPhoton);
-    delete photon;
+    PhotonTracer::tracePhoton(map, &newPhoton);
 }
 
 vec3 Reflective::photonShade(Shade &shade) {

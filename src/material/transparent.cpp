@@ -63,7 +63,7 @@ void Transparent::photonInteract(Shade &shade, PhotonMap *map, Photon *photon)
 
         case REFLECTION: case TRANSMISSION:
             if (specBTDF->isTIR(shade)) {
-                reflectance = vec3(1.0);
+                reflBRDF->calcBRDF(shade, out, in);
                 break;
             }
             if (scatter == REFLECTION) 
@@ -71,20 +71,18 @@ void Transparent::photonInteract(Shade &shade, PhotonMap *map, Photon *photon)
             else
                 reflectance = specBTDF->sampleBTDF(shade, out, in);
 
-        case ABSORPTION:
-            delete photon;
+        default:
             return;
 
     }
 
-    auto newPhoton = new Photon;
-    newPhoton->position = photon->position;
-    newPhoton->setDirection(out);
-    newPhoton->power = reflectance * photon->power;
-    newPhoton->bounce = photon->bounce + 1;
+    Photon newPhoton;
+    newPhoton.position = photon->position;
+    newPhoton.setDirection(out);
+    newPhoton.power = reflectance * photon->power;
+    newPhoton.bounce = photon->bounce + 1;
 
-    PhotonTracer::tracePhoton(map, newPhoton);
-    delete photon;
+    PhotonTracer::tracePhoton(map, &newPhoton);
 }
 
 vec3 Transparent::photonShade(Shade &shade) {

@@ -21,7 +21,6 @@ bool OpenCylinder::intersect(Ray &ray, double &tmin, Shade &shade) {
     double e = sqrt(discr);
     double denom = 2.0 * a;
 
-    bool hit = false;
     double t = (-b - e) / denom;
     if (t > EPSILON) {
         dvec3 hitPt = ray.origin + t * ray.direction;
@@ -61,7 +60,6 @@ bool OpenCylinder::shadowIntersect(Ray &ray, double &tmin) {
     double e = sqrt(discr);
     double denom = 2.0 * a;
 
-    bool hit = false;
     double t = (-b - e) / denom;
     if (t > EPSILON) {
         dvec3 hitPt = ray.origin + t * ray.direction;

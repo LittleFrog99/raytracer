@@ -25,7 +25,7 @@ void World::build() {
     vp.maxDepth = 5;
     vp.illum = PHOTONMAPPING;
     vp.sampleDist = 0.5;
-    vp.samplePhotons = 200;
+    vp.samplePhotons = 100;
     vp.setSamples(36, DEFAULT_NUM_SETS);
     vp.gamma = 1.0;
 
@@ -44,7 +44,7 @@ void World::build() {
     auto plastic6P = new Matte(vec3(0.33, 0.78, 0.25), 0.3, 0.7);
     auto plastic7P = new Matte(vec3(0.28, 0.64, 0.93), 0.3, 0.7);
     auto mirror1P = new Reflective(vec3(1.0), 0.2, 0.2, 0.3, 0.6);
-    auto glass1P = new Transparent(vec3(1.0), 0.2, 0.1, 0.1, 0.3, 0.5, 1.5);
+    auto glass1P = new Transparent(vec3(1.0), 0.0, 0.0, 0.0, 0.5, 0.5, 1.0);
     auto glass2P = new Dielectric(vec3(0.28, 0.64, 0.93), 0.2, 0.1, 0.1, 1.33, 1.0, vec3(1.0));
     auto 🐸 = new ImageTexture("resources/frog.jpg", RECTANGULAR);
     auto frogP = new SVPhong(🐸, 0.2, 0.5, 0.3);
@@ -52,7 +52,7 @@ void World::build() {
     /* Geometry Objects */
     auto sphere1P = new Sphere(plastic1P);
     sphere1P->setParams(dvec3(-1.00, 0.80, 0), .80);
-    auto sphere2P = new Sphere(glass1P);
+    auto sphere2P = new Sphere(mirror1P);
     sphere2P->setParams(dvec3(0, 0.40, -1.00), .40);
     auto plane1P = new Plane(plastic3P);
     plane1P->setParams(dvec3(0, 1, 0), dvec3(0.0, 0.0, 0.0));
@@ -76,12 +76,12 @@ void World::build() {
     auto inst3P = new Instance(rect6P);
     inst3P->scale(dvec3(0.5, 1, 0.5))->rotate(dvec3(1, 0, 0), radians(60.0f))->translate(dvec3(0, 0.6, -0.8));
     SVModel::setMaterialParams(0.4, 0.5, 0.2);
-    auto cubeP = new SVModel("resources/cube/cube.obj");
+    auto cubeP = new Model("resources/cube/cube.obj", glass1P);
     auto inst4P = new Instance(cubeP);
     inst4P->rotate(dvec3(1, 0, 0), radians(45.0f))->rotate(dvec3(0, 1, 0), radians(30.0f))->translate(dvec3(0, 0.8, -0.8));
 
-    // addObject(sphere2P);
-    addObject(disk1P);
+    addObject(sphere2P);
+    // addObject(disk1P);
     addObject(rect1P);
     addObject(rect2P);
     addObject(rect3P);

@@ -1,4 +1,5 @@
 {
     "C_Cpp.errorSquiggles": "Enabled",
     "editor.minimap.enabled": false,
+    "python.pythonPath": "/Library/Frameworks/Python.framework/Versions/2.7/Resources/Python.app/Contents/MacOS/Python",
 }

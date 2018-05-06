@@ -6,7 +6,6 @@ void PinHole::renderPixel(int row, int col) {
     dvec2 samplePt, pixelPt;
     Ray ray;
     ray.origin = eye;
-    int skipped = 0;
 
     for (int i = 0; i < vp.numSamples; i++) {
         samplePt = vp.samplerP->sampleUnitSquare();

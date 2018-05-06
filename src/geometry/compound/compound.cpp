@@ -8,7 +8,7 @@ void Compound::setMaterial(Material *material_ptr) {
 bool Compound::intersect(Ray &ray, double &tmin, Shade &shade) {
     tmin = numeric_limits<double>::max();
     double t;
-    dvec3 normal, hitPt, localHitPt;
+    dvec3 normal, localHitPt;
     vec2 texCoord;
     Material *matP;
     bool hit = false;

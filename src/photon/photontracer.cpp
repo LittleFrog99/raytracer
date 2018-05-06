@@ -10,10 +10,8 @@ void PhotonTracer::setWorld(World *world_ptr) {
 void PhotonTracer::tracePhoton(PhotonMap *map, Photon *photon)
 {
     if (photon == nullptr) return;
-    if (photon->bounce > worldP->vp.maxDepth) {
-        delete photon;
-        return;
-    }
+    if (photon->bounce > worldP->vp.maxDepth) return;
+    
     Ray ray = Ray(photon->position, photon->getDirection());
     auto shade = worldP->intersectObjects(ray);
     if (shade.hasHit) {
