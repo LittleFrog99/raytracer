@@ -16,6 +16,7 @@ void PhotonTracer::tracePhoton(PhotonMap *map, Photon *photon)
     auto shade = worldP->intersectObjects(ray);
     if (shade.hasHit) {
         photon->position = shade.hitPoint;
+        shade.ray = ray;
         shade.materialP->photonInteract(shade, map, photon);
     }
 }

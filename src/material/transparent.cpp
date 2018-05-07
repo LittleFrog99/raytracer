@@ -9,6 +9,13 @@ Transparent::Transparent(vec3 color, float amb_int, float diff_int, float spec_i
 {
     reflBRDF = new PerfectSpecular(refl_int);
     specBTDF = new PerfectTransmitter(trans_int, ior);
+
+    float range = 0;
+    behavior[pair<float, float>(range, range + diff_int + EPSILON)] = DIFFUSE;
+    range += diff_int + EPSILON;
+    behavior[pair<float, float>(range, range + refl_int + EPSILON)] = REFLECTION;
+    range += refl_int + EPSILON;
+    behavior[pair<float, float>(range, range + trans_int)] = TRANSMISSION;
 }
 
 vec3 Transparent::shade(Shade &shade) {
@@ -57,19 +64,17 @@ void Transparent::photonInteract(Shade &shade, PhotonMap *map, Photon *photon)
             reflectance = float(PI) * diffBRDF->sampleBRDF(shade, out, in);
             break;
 
-        case SPECULAR:
-            reflectance = specBRDF->sampleBRDF(shade, out, in);
-            break;
-
         case REFLECTION: case TRANSMISSION:
             if (specBTDF->isTIR(shade)) {
-                reflBRDF->calcBRDF(shade, out, in);
+                reflBRDF->sampleBRDF(shade, out, in);
+                reflectance = vec3(1.0);
                 break;
             }
             if (scatter == REFLECTION) 
                 reflectance = reflBRDF->sampleBRDF(shade, out, in);
             else
                 reflectance = specBTDF->sampleBTDF(shade, out, in);
+                break;
 
         default:
             return;

@@ -68,5 +68,5 @@ void AreaLight::emitPhotons(PhotonMap *map, int num) {
         count++;
     }
     
-    map->scalePhotonPower(1.0 / num / PI);
+    map->scalePhotonPower(1.0 / num);
 }

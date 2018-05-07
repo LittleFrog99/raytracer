@@ -22,5 +22,5 @@ vec3 Emissive::photonShade(Shade &shade) {
 }
 
 void Emissive::photonInteract(Shade &shade, PhotonMap *map, Photon *photon) {
-    delete photon;
+    // nothing to do
 }

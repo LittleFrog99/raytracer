@@ -71,7 +71,7 @@ vec3 Matte::photonShade(Shade &shade) {
     vec3 color;
     color = Matte::shade(shade);
     dvec3 in, out;
-    color += shade.world.photonMap->estimateIrradiance(shade) * diffBRDF->calcBRDF(shade, in, out) * float(PI);
+    color += shade.world.photonMap->estimateIrradiance(shade) * diffBRDF->calcBRDF(shade, in, out);
     return color;
 }
 
