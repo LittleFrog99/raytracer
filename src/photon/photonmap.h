@@ -22,24 +22,28 @@ struct Shade;
 
 class PhotonMap : public BoxBounded {
 public:
+    static int CAUSTICS_SAMPLE_PHOTONS;
+    static double CAUSTICS_SAMPLE_DISTANCE;
+    static const int MIN_PHOTONS_REQUIRED;
     World *world;
 
     PhotonMap(World *world);
-    void store(Photon *photon);
+    void storeGlobal(Photon *photon);
+    void storeCaustic(Photon *photon);
     void balance();
     vec3 estimateIrradiance(Shade &shade);
     void scalePhotonPower(float scale);
     ~PhotonMap();
 
-    inline int getStoredPhotons() { return stored; }
-
 private:
-    int max, stored = 0, last = 1;
-    Photon *photons;
+    int globMax, globStored = 0, globLast = 1;
+    int causMax, causStored = 0, causLast = 1;
+    Photon *global;
+    Photon *caustics;
 
-    void balanceSegment(Photon *pOrg, int index, int start, int end);
+    void balanceSegment(Photon *map, Photon *pOrg, int index, int start, int end);
     void medianSplit(Photon *pOrg, int start, int end, int median, int dim);
-    void locatePhotons(NearestPhotons *np, int index); // called by index = 1
+    void locatePhotons(Photon *map, NearestPhotons *np, int index); // called by index = 1
 };
 
 

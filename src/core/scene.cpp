@@ -25,8 +25,8 @@ void World::build() {
     vp.maxDepth = 5;
     vp.illum = PHOTONMAPPING;
     vp.sampleDist = 0.5;
-    vp.samplePhotons = 100;
-    vp.setSamples(36, DEFAULT_NUM_SETS);
+    vp.samplePhotons = 500;
+    vp.setSamples(9, DEFAULT_NUM_SETS);
     vp.gamma = 1.0;
 
     /* Materials */

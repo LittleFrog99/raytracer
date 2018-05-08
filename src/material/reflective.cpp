@@ -45,21 +45,24 @@ void Reflective::photonInteract(Shade &shade, PhotonMap *map, Photon *photon)
     PhotonScatter scatter = PhotonTracer::scatterBehavior(behavior);
     dvec3 in = -photon->getDirection(), out;
     vec3 reflectance;
+    Photon newPhoton;
 
     switch (scatter) {
         case DIFFUSE:
-            if (photon->bounce > 0)
-                map->store(photon);
+            if (photon->totalBounce() > 0) {
+                if (photon->isCaustic())
+                    map->storeCaustic(photon);
+                else
+                    map->storeGlobal(photon);
+            }
 
+            newPhoton.diffBounce = photon->diffBounce + 1;
             reflectance = float(PI) * diffBRDF->sampleBRDF(shade, out, in);
-            break;
-
-        case SPECULAR:
-            reflectance = specBRDF->sampleBRDF(shade, out, in);
             break;
 
         case REFLECTION:
             reflectance = reflBRDF->sampleBRDF(shade, out, in);
+            newPhoton.specBounce = photon->specBounce + 1;
             break;
 
         default:
@@ -67,11 +70,9 @@ void Reflective::photonInteract(Shade &shade, PhotonMap *map, Photon *photon)
 
     }
 
-    Photon newPhoton;
     newPhoton.position = photon->position;
     newPhoton.setDirection(out);
     newPhoton.power = reflectance * photon->power;
-    newPhoton.bounce = photon->bounce + 1;
 
     PhotonTracer::tracePhoton(map, &newPhoton);
 }

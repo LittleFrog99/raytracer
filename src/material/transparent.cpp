@@ -55,13 +55,19 @@ void Transparent::photonInteract(Shade &shade, PhotonMap *map, Photon *photon)
     PhotonScatter scatter = PhotonTracer::scatterBehavior(behavior);
     dvec3 in = -photon->getDirection(), out;
     vec3 reflectance;
+    Photon newPhoton;
 
     switch (scatter) {
         case DIFFUSE:
-            if (photon->bounce > 0)
-                map->store(photon);
+            if (photon->totalBounce() > 0) {
+                if (photon->isCaustic())
+                    map->storeCaustic(photon);
+                else
+                    map->storeGlobal(photon);
+            }
 
             reflectance = float(PI) * diffBRDF->sampleBRDF(shade, out, in);
+            newPhoton.diffBounce = photon->diffBounce + 1;
             break;
 
         case REFLECTION: case TRANSMISSION:
@@ -74,18 +80,17 @@ void Transparent::photonInteract(Shade &shade, PhotonMap *map, Photon *photon)
                 reflectance = reflBRDF->sampleBRDF(shade, out, in);
             else
                 reflectance = specBTDF->sampleBTDF(shade, out, in);
-                break;
+            newPhoton.specBounce = photon->specBounce + 1;
+            break;
 
         default:
             return;
 
     }
 
-    Photon newPhoton;
     newPhoton.position = photon->position;
     newPhoton.setDirection(out);
     newPhoton.power = reflectance * photon->power;
-    newPhoton.bounce = photon->bounce + 1;
 
     PhotonTracer::tracePhoton(map, &newPhoton);
 }
@@ -94,8 +99,8 @@ vec3 Transparent::photonShade(Shade &shade) {
     vec3 color;
     
     dvec3 in, out = -shade.ray.direction;
-    color += shade.world.photonMap->estimateIrradiance(shade) 
-        * diffBRDF->calcBRDF(shade, in, out) * float(PI);
+    /* color += shade.world.photonMap->estimateIrradiance(shade) 
+        * diffBRDF->calcBRDF(shade, in, out) * float(PI);*/
 
     vec3 brdf = reflBRDF->sampleBRDF(shade, in, out);
     Ray reflRay = Ray(shade.hitPoint, in);

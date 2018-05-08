@@ -62,7 +62,6 @@ void AreaLight::emitPhotons(PhotonMap *map, int num) {
         photon.position = position;
         photon.setDirection(direction);
         photon.power = irradiance;
-        photon.bounce = 0;
         
         PhotonTracer::tracePhoton(map, &photon);
         count++;

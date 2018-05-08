@@ -3,6 +3,10 @@
 #include "core/world.h"
 #include "bsdf/lambertian.h"
 
+int PhotonMap::CAUSTICS_SAMPLE_PHOTONS = 100;
+double PhotonMap::CAUSTICS_SAMPLE_DISTANCE = 0.5;
+const int PhotonMap::MIN_PHOTONS_REQUIRED = 4;
+
 dvec3 Photon::getDirection() {
     double x = sin(polar) * sin(azim);
     double y = cos(polar);
@@ -23,39 +27,61 @@ NearestPhotons::~NearestPhotons() {
 
 PhotonMap::PhotonMap(World *world) : world(world)
 {
-    max = world->NUM_PHOTONS_PER_LIGHT * world->lights.size() * world->vp.maxDepth;
-    photons = new Photon[max];
+    globMax = world->NUM_PHOTONS_PER_LIGHT * world->lights.size() * world->vp.maxDepth;
+    global = new Photon[globMax];
+    causMax = globMax;
+    caustics = new Photon[causMax];
 }
 
 PhotonMap::~PhotonMap() {
-    delete[] photons;
+    delete[] global;
+    delete[] caustics;
 }
 
 void PhotonMap::scalePhotonPower(float scale) {
-    for (int i = last; i <= stored; i++)
-        photons[i].power *= scale;
-    last = stored + 1;
+    for (int i = globLast; i <= globStored; i++)
+        global[i].power *= scale;
+    globLast = globStored + 1;
+    
+    for (int i = causLast; i <= causStored; i++)
+        caustics[i].power *= scale;
+    causLast = causStored + 1;
 }
 
-void PhotonMap::store(Photon *photon) {
-    if (stored > max) return;
-    photons[++stored] = Photon(*photon);
-    bndBox.vertMax = glm::max(bndBox.vertMax, photon->position);
-    bndBox.vertMin = glm::min(bndBox.vertMin, photon->position);
+void PhotonMap::storeGlobal(Photon *photon) {
+    if (globStored > globMax) return;
+    global[++globStored] = Photon(*photon);
+
+    bndBox.vertMax = max(bndBox.vertMax, photon->position);
+    bndBox.vertMin = min(bndBox.vertMin, photon->position);
+}
+
+void PhotonMap::storeCaustic(Photon *photon) {
+    if (causStored > causMax) return;
+    caustics[++causStored] = Photon(*photon);
+
+    bndBox.vertMax = max(bndBox.vertMax, photon->position);
+    bndBox.vertMin = min(bndBox.vertMin, photon->position);
 }
 
 void PhotonMap::balance() {
-    Photon *pOrg = new Photon[stored + 1];
-    for (int i = 1; i <= stored; i++)
-        pOrg[i] = photons[i];
-    balanceSegment(pOrg, 1, 1, stored);
-    delete[] pOrg;
+    Photon *globalOrg = new Photon[globStored + 1];
+    for (int i = 1; i <= globStored; i++)
+        globalOrg[i] = global[i];
+    balanceSegment(global, globalOrg, 1, 1, globStored);
+    delete[] globalOrg;
+
+    Photon *causOrg = new Photon[causStored + 1];
+    for (int i = 1; i <= causStored; i++)
+        causOrg[i] = caustics[i];
+    balanceSegment(caustics, causOrg, 1, 1, globStored);
+    delete[] causOrg;
 }
 
-void PhotonMap::balanceSegment(Photon *pOrg, int index, int start, int end)
+void PhotonMap::balanceSegment(Photon *map, Photon *pOrg, int index, int start, int end)
 {
     if (start == end) {
-        photons[index] = pOrg[start];
+        map[index] = pOrg[start];
         return;
     }
 
@@ -69,19 +95,19 @@ void PhotonMap::balanceSegment(Photon *pOrg, int index, int start, int end)
     int dim;
     Math::maxComponent(bndBox.vertMax - bndBox.vertMin, dim);
     medianSplit(pOrg, start, end, median, dim);
-    photons[index] = pOrg[median];
-    photons[index].dim = dim;
+    map[index] = pOrg[median];
+    map[index].dim = dim;
 
     if (start < median) {
         double temp = bndBox.vertMax[dim];
-        bndBox.vertMax[dim] = photons[index].position[dim];
-        balanceSegment(pOrg, index * 2, start, median - 1);
+        bndBox.vertMax[dim] = map[index].position[dim];
+        balanceSegment(map, pOrg, index * 2, start, median - 1);
         bndBox.vertMax[dim] = temp;
     }
     if (median < end) {
         double temp = bndBox.vertMin[dim];
-        bndBox.vertMin[dim] = photons[index].position[dim];
-        balanceSegment(pOrg, index * 2 + 1, median + 1, end);
+        bndBox.vertMin[dim] = map[index].position[dim];
+        balanceSegment(map, pOrg, index * 2 + 1, median + 1, end);
         bndBox.vertMin[dim] = temp;
     }
 }
@@ -106,21 +132,21 @@ void PhotonMap::medianSplit(Photon *pOrg, int start, int end, int median, int di
     }
 }
 
-void PhotonMap::locatePhotons(NearestPhotons *np, int index)
+void PhotonMap::locatePhotons(Photon *map, NearestPhotons *np, int index)
 {
-    if (index > stored) return;
-    Photon *photon = &photons[index];
+    if (index > globStored) return;
+    Photon *photon = &map[index];
 
-    if (index * 2 <= stored) {
+    if (index * 2 <= globStored) {
         double dist = np->position[photon->dim] - photon->position[photon->dim];
         if (dist < 0) {
-            locatePhotons(np, index * 2);
+            locatePhotons(map, np, index * 2);
             if (dist * dist < np->distSq[0])
-                locatePhotons(np, index * 2 + 1);
+                locatePhotons(map, np, index * 2 + 1);
         } else {
-            locatePhotons(np, index * 2 + 1);
+            locatePhotons(map, np, index * 2 + 1);
             if (dist * dist < np->distSq[0])
-                locatePhotons(np, index * 2);
+                locatePhotons(map, np, index * 2);
         }
     }
 
@@ -168,29 +194,44 @@ void PhotonMap::locatePhotons(NearestPhotons *np, int index)
     }
 }
 
-vec3 PhotonMap::estimateIrradiance(Shade &shade)
-{
-    vec3 color;
-    double max_dist = world->vp.sampleDist;
-    int num = world->vp.samplePhotons;
+vec3 PhotonMap::estimateIrradiance(Shade &shade) {
+    vec3 color, globIrr, causIrr;
 
-    NearestPhotons np;
-    np.position = shade.hitPoint;
-    np.max = num;
-    np.distSq = new double[num + 1];
-    np.distSq[0] = max_dist * max_dist;
-    np.photons = new Photon *[num + 1];
+    NearestPhotons globNP; 
+    globNP.position = shade.hitPoint;
+    globNP.max = world->vp.samplePhotons;
+    globNP.distSq = new double[globNP.max + 1];
+    globNP.distSq[0] = pow(world->vp.sampleDist, 2);
+    globNP.photons = new Photon *[globNP.max + 1];
 
-    locatePhotons(&np, 1);
-    if (np.found <= 8) return color;
-
-    for (int i = 1; i <= np.found; i++) {
-        dvec3 dir = -np.photons[i]->getDirection();
-        if (dot(shade.normal, dir) > 0) 
-            color += np.photons[i]->power;
+    locatePhotons(global, &globNP, 1);
+    if (globNP.found > MIN_PHOTONS_REQUIRED) {
+        for (int i = 1; i <= globNP.found; i++) {
+            dvec3 dir = -globNP.photons[i]->getDirection();
+            if (dot(shade.normal, dir) > 0)
+                globIrr += globNP.photons[i]->power;
+        }
+        color += globIrr / float(PI * globNP.distSq[0]);
     }
 
-    return color / float(PI * np.distSq[0]);
+    NearestPhotons causNP;
+    causNP.position = shade.hitPoint;
+    causNP.max = CAUSTICS_SAMPLE_PHOTONS;
+    causNP.distSq = new double[causNP.max + 1];
+    causNP.distSq[0] = pow(CAUSTICS_SAMPLE_DISTANCE, 2);
+    causNP.photons = new Photon *[causNP.max + 1];
+
+    locatePhotons(caustics, &causNP, 1);
+    if (causNP.found > MIN_PHOTONS_REQUIRED) {
+        for (int i = 1; i <= causNP.found; i++) {
+            dvec3 dir = -causNP.photons[i]->getDirection();
+            if (dot(shade.normal, dir) > 0)
+                causIrr += causNP.photons[i]->power;
+        }
+        color += causIrr / float(PI * causNP.distSq[0]);
+    }
+
+    return color;
 }
 
 

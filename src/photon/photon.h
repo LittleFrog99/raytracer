@@ -7,10 +7,13 @@ struct Photon {
     double azim, polar;
     vec3 power;
     short dim = 0;
-    short bounce = 0;
+    short specBounce = 0, diffBounce = 0;
 
     dvec3 getDirection();
     void setDirection(dvec3 dir);
+
+    bool isCaustic() { return specBounce > 0 && diffBounce == 0; }
+    inline short totalBounce() { return specBounce + diffBounce; }
 };
 
 /* struct Photon {

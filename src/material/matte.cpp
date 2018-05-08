@@ -51,9 +51,13 @@ vec3 Matte::pathShade(Shade &shade) {
 void Matte::photonInteract(Shade &shade, PhotonMap *map, Photon *photon) {
     if (photon == nullptr) return;
     if (roulette() < diffBRDF->intensity) {
-        if (photon->bounce > 0)
-            map->store(photon);
-
+        if (photon->totalBounce() > 0) { // exclude direct illumination
+            if (photon->isCaustic()) 
+                map->storeCaustic(photon);
+            else
+                map->storeGlobal(photon);
+        }
+        
         dvec3 in = -photon->getDirection(), out;
         vec3 brdf = diffBRDF->sampleBRDF(shade, out, in);
 
@@ -61,7 +65,7 @@ void Matte::photonInteract(Shade &shade, PhotonMap *map, Photon *photon) {
         newPhoton.position = photon->position;
         newPhoton.setDirection(out);
         newPhoton.power = float(PI) * brdf * photon->power;
-        newPhoton.bounce = photon->bounce + 1;
+        newPhoton.diffBounce = photon->diffBounce + 1;
 
         PhotonTracer::tracePhoton(map, &newPhoton);
     }
