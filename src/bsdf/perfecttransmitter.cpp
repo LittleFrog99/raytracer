@@ -15,7 +15,7 @@ bool PerfectTransmitter::isTIR(Shade &shade) {
     return 1.0 - (1.0 - cosThetaI * cosThetaI) / (eta * eta) < 0.0;
 }
 
-vec3 PerfectTransmitter::sampleBTDF(Shade &shade, dvec3 &trans, dvec3 &out) {
+vec3 PerfectTransmitter::sampleBTDF(Shade &shade, dvec3 &trans, const dvec3 &out) {
     dvec3 normal = shade.normal;
     double cosThetaI = dot(normal, out);
     double eta = ior;

@@ -5,7 +5,7 @@
 class FresnelTransmitter : public PerfectTransmitter {
 public:
     FresnelTransmitter(vec3 color, float eta_in, float eta_out);
-    virtual vec3 sampleBTDF(Shade &shade, dvec3 &trans, dvec3 &out);
+    virtual vec3 sampleBTDF(Shade &shade, dvec3 &trans, const dvec3 &out);
     virtual bool isTIR(Shade &shade);
     float fresnelTransFactor(Shade &shade);
 

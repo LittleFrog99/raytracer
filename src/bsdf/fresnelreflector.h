@@ -5,7 +5,7 @@
 class FresnelReflector : public PerfectSpecular {
 public:
     FresnelReflector(vec3 color, float eta_in, float eta_out);
-    virtual vec3 sampleBRDF(Shade &shade, dvec3 &in, dvec3 &out, float *pdf = nullptr);
+    virtual vec3 sampleBRDF(Shade &shade, dvec3 &in, const dvec3 &out, float *pdf = nullptr);
     float fresnelReflFactor(Shade &shade);
 
     inline void setEta(float eta_in, float eta_out) {

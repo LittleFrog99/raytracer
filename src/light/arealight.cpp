@@ -56,7 +56,7 @@ void AreaLight::emitPhotons(PhotonMap *map, int num) {
         dvec3 direction = normalize(samplePt.x * u + samplePt.y * v + samplePt.z * w);
 
         Shade shade(*map->world);
-        vec3 irradiance = objectP->getMaterial()->getEmissiveLight(shade) * float(dot(normal, direction));
+        vec3 irradiance = objectP->getMaterial()->getEmissiveLight(shade);
 
         Photon photon;
         photon.position = position;

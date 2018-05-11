@@ -23,10 +23,10 @@ void World::build() {
     vp.vertRes = 400;
     vp.pixelSize = 0.005;
     vp.maxDepth = 5;
-    vp.illum = PHOTONMAPPING;
+    vp.illum = PATHTRACING;
     vp.sampleDist = 0.5;
-    vp.samplePhotons = 500;
-    vp.setSamples(9, DEFAULT_NUM_SETS);
+    vp.samplePhotons = 100;
+    vp.setSamples(36, DEFAULT_NUM_SETS);
     vp.gamma = 1.0;
 
     /* Materials */

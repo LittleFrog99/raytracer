@@ -3,8 +3,8 @@
 #include "core/world.h"
 #include "bsdf/lambertian.h"
 
-int PhotonMap::CAUSTICS_SAMPLE_PHOTONS = 100;
-double PhotonMap::CAUSTICS_SAMPLE_DISTANCE = 0.5;
+int PhotonMap::CAUSTICS_SAMPLE_PHOTONS = 50;
+double PhotonMap::CAUSTICS_SAMPLE_DISTANCE = 0.3;
 const int PhotonMap::MIN_PHOTONS_REQUIRED = 4;
 
 dvec3 Photon::getDirection() {

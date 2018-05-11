@@ -7,7 +7,7 @@ FresnelReflector::FresnelReflector(vec3 color, float eta_in, float eta_out)
     setEta(eta_in, eta_out);
 }
 
-vec3 FresnelReflector::sampleBRDF(Shade &shade, dvec3 &in, dvec3 &out, float *pdf) {
+vec3 FresnelReflector::sampleBRDF(Shade &shade, dvec3 &in, const dvec3 &out, float *pdf) {
     PerfectSpecular::sampleBRDF(shade, in, out);
     return fresnelReflFactor(shade) * getColor(shade); 
 }

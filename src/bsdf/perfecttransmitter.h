@@ -6,7 +6,7 @@ class PerfectTransmitter : public BTDF {
 public:
     PerfectTransmitter() {}
     PerfectTransmitter(float intensity, float ior);
-    virtual vec3 sampleBTDF(Shade &shade, dvec3 &trans, dvec3 &out);
+    virtual vec3 sampleBTDF(Shade &shade, dvec3 &trans, const dvec3 &out);
     virtual bool isTIR(Shade &shade);
     virtual vec3 getColor(Shade &shade) { return color; }
 
