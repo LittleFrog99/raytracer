@@ -13,7 +13,6 @@ struct ViewPlane {
     int horRes;
     int vertRes;
     int numSamples;
-    int numChannels = 4;
     int maxDepth;
     double pixelSize;
     float gamma;

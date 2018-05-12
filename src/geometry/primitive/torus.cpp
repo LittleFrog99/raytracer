@@ -10,8 +10,8 @@ void Torus::setParams(double swept_r, double tube_r) {
 bool Torus::intersect(Ray &ray, double &tmin, Shade &shade) {
     if (!bndBox.intersect(ray)) return false;
 
-    double dSqrd = Math::lengthSquared(ray.direction);
-    double e = Math::lengthSquared(ray.origin) - sweptR * sweptR - tubeR * tubeR;
+    double dSqrd = Math::lengSqd(ray.direction);
+    double e = Math::lengSqd(ray.origin) - sweptR * sweptR - tubeR * tubeR;
     double f = dot(ray.origin, ray.direction);
     double fourASqrd = 4.0 * sweptR * sweptR;
 
@@ -45,8 +45,8 @@ bool Torus::intersect(Ray &ray, double &tmin, Shade &shade) {
 bool Torus::shadowIntersect(Ray &ray, double &tmin) {
     if (!bndBox.intersect(ray)) return false;
 
-    double dSqrd = Math::lengthSquared(ray.direction);
-    double e = Math::lengthSquared(ray.origin) - sweptR * sweptR - tubeR * tubeR;
+    double dSqrd = Math::lengSqd(ray.direction);
+    double e = Math::lengSqd(ray.origin) - sweptR * sweptR - tubeR * tubeR;
     double f = dot(ray.origin, ray.direction);
     double fourASqrd = 4.0 * sweptR * sweptR;
 
@@ -74,7 +74,7 @@ bool Torus::shadowIntersect(Ray &ray, double &tmin) {
 }
 
 dvec3 Torus::getNormal(dvec3 &point) {
-    double ptSqrd = Math::lengthSquared(point);
+    double ptSqrd = Math::lengSqd(point);
     double rSqrd = sweptR * sweptR + tubeR * tubeR;
     return normalize(dvec3(point.x * (ptSqrd - rSqrd),
                            point.y * (ptSqrd - rSqrd + 2 * sweptR * sweptR),

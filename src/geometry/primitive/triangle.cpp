@@ -31,8 +31,8 @@ bool Triangle::shadowIntersect(Ray &ray, double &tmin) {
 BoundingBox Triangle::calcBoundingBox() {
     using namespace Math;
     dmat3 trans = transpose(dmat3(vertA, vertB, vertC));
-    dvec3 minBnd = dvec3(minComponent(trans[0]), minComponent(trans[1]), minComponent(trans[2]));
-    dvec3 maxBnd = dvec3(maxComponent(trans[0]), maxComponent(trans[1]), maxComponent(trans[2]));
+    dvec3 minBnd = dvec3(minComp(trans[0]), minComp(trans[1]), minComp(trans[2]));
+    dvec3 maxBnd = dvec3(maxComp(trans[0]), maxComp(trans[1]), maxComp(trans[2]));
     return BoundingBox(minBnd - dvec3(EPSILON), maxBnd + dvec3(EPSILON));
 }
 

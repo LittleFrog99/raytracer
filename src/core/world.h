@@ -26,7 +26,7 @@ public:
     void setup();
     Shade intersectObjects(Ray &ray);
     void render();
-    void plotPoint(int row, int col, vec4 color);
+    void plotPoint(int row, int col, vec3 color);
     void output(string path);
     ~World();
 

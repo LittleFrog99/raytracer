@@ -16,8 +16,8 @@ bool BoundingBox::intersect(Ray &ray) {
                                   : (vertMin[i] - ray.origin[i])) / component;
     }
 
-   double in = Math::maxComponent(tMin);
-   double out = Math::minComponent(tMax);
+   double in = Math::maxComp(tMin);
+   double out = Math::minComp(tMax);
 
    return in < out && out > EPSILON;
 }

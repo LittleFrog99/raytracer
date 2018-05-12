@@ -93,7 +93,7 @@ void PhotonMap::balanceSegment(Photon *map, Photon *pOrg, int index, int start, 
         median = end - median + 1;
 
     int dim;
-    Math::maxComponent(bndBox.vertMax - bndBox.vertMin, dim);
+    Math::maxComp(bndBox.vertMax - bndBox.vertMin, dim);
     medianSplit(pOrg, start, end, median, dim);
     map[index] = pOrg[median];
     map[index].dim = dim;
@@ -313,7 +313,7 @@ PhotonMap::TreeNode * PhotonMap::buildTree(vector<Photon *> &photons) {
 int PhotonMap::selectDimension(BoundingBox bounding_box) {
     dvec3 range = bounding_box.vertMax - bounding_box.vertMin;
     int dim;
-    Math::maxComponent(range, dim);
+    Math::maxComp(range, dim);
     return dim;
 }
 

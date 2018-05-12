@@ -12,7 +12,7 @@ find_library(ASSIMP assimp)
 set(SOURCES_CORE src/main.cpp 
     src/core/world.cpp src/core/viewplane.cpp
     src/core/sampler.cpp src/core/camera.cpp 
-    src/core/scene.cpp src/core/geometry.cpp)
+    src/core/scene.cpp src/core/geometry.cpp src/core/bssrdf.cpp)
 set(SOURCES_GEOMETRY src/geometry/primitive/plane.cpp 
     src/geometry/primitive/sphere.cpp src/geometry/primitive/rectangle.cpp
     src/geometry/primitive/box.cpp src/geometry/primitive/triangle.cpp 
@@ -29,16 +29,17 @@ set(SOURCES_SAMPLER src/sampler/regular.cpp src/sampler/multijittered.cpp)
 set(SOURCES_CAMERA src/camera/thinlens.cpp src/camera/pinhole.cpp)
 set(SOURCES_BSDF src/bsdf/lambertian.cpp src/bsdf/specular.cpp
     src/bsdf/perfectspecular.cpp src/bsdf/perfecttransmitter.cpp
-    src/bsdf/fresnelreflector.cpp src/bsdf/fresneltransmitter.cpp)
+    src/bsdf/fresnelreflector.cpp src/bsdf/fresneltransmitter.cpp
+    src/bsdf/separable.cpp src/bsdf/tabulated.cpp)
 set(SOURCES_MATERIAL src/material/matte.cpp src/material/phong.cpp 
     src/material/emissive.cpp src/material/reflective.cpp
     src/material/glossyreflector.cpp src/material/transparent.cpp
     src/material/dielectric.cpp src/material/texture/image.cpp
     src/material/texture/texture.cpp src/material/svmaterial.cpp
-    src/material/texture/imagetexture.cpp)
+    src/material/texture/imagetexture.cpp src/material/subsurface.cpp)
 set(SOURCES_LIGHT src/light/ambientoccluder.cpp src/light/arealight.cpp
     src/light/pointlight.h)
-set(SOURCES_UTILITIES src/utilities/equations.cpp)
+set(SOURCES_UTILITIES src/utilities/equations.cpp src/utilities/interpolation.cpp)
 set(SOURCES_PHOTONMAP src/photon/photonmap.cpp src/photon/photontracer.cpp)
 
 set(SOURCES ${SOURCES_CORE} ${SOURCES_GEOMETRY} ${SOURCES_TRACER} ${SOURCES_SAMPLER} 

@@ -17,7 +17,7 @@ void PinHole::renderPixel(int row, int col) {
 
     color /= vp.numSamples;
     color *= exposureTime;
-    world->plotPoint(row, col, vec4(color, 1.0));
+    world->plotPoint(row, col, color);
 }
 
 inline dvec3 PinHole::rayDirection(const dvec2 &pt) const {

@@ -11,9 +11,6 @@ vec3 Emissive::getEmissiveLight(Shade &shade) {
 }
 
 vec3 Emissive::pathShade(Shade &shade) {
-    if (shade.depth == 1)
-        return vec3();
-
     return Emissive::shade(shade);
 }
 

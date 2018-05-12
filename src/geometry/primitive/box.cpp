@@ -19,8 +19,8 @@ bool Box::intersect(Ray &ray, double &t_min, Shade &shade) {
 
     Face faceIn, faceOut;
     int inIndex, outIndex;
-    double tIn = Math::maxComponent(tMin, inIndex), 
-           tOut = Math::minComponent(tMax, outIndex);
+    double tIn = Math::maxComp(tMin, inIndex), 
+           tOut = Math::minComp(tMax, outIndex);
     faceIn = Face(inIndex + 3 * (ray.direction[inIndex] < 0));
     faceOut = Face(outIndex + 3 * (ray.direction[outIndex] >= 0));
 
@@ -52,7 +52,7 @@ dvec3 Box::getNormal(Face face) {
 
 dvec3 Box::getNormal(dvec3 &point) {
     int maxIndex; 
-    bool positive = Math::maxComponent(abs(point), maxIndex) > 0;
+    bool positive = Math::maxComp(abs(point), maxIndex) > 0;
     return getNormal(Face(maxIndex + 3 * positive));
 }
 
@@ -68,8 +68,8 @@ bool Box::shadowIntersect(Ray &ray, double &t_min) {
 
     Face faceIn, faceOut;
     int inIndex, outIndex;
-    double tIn = Math::maxComponent(tMin, inIndex), 
-           tOut = Math::minComponent(tMax, outIndex);
+    double tIn = Math::maxComp(tMin, inIndex), 
+           tOut = Math::minComp(tMax, outIndex);
     faceIn = Face(inIndex + 3 * (ray.direction[inIndex] < 0));
     faceOut = Face(outIndex + 3 * (ray.direction[outIndex] > 0));
 

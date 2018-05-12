@@ -21,7 +21,7 @@ using namespace glm;
 static const double PI = 3.14159265358979323846;
 static const double INV_PI = 1.0 / PI;
 static const double EPSILON = 1e-6;
-static const unsigned int DEFAULT_NUM_SAMPLES = 83;
+static const unsigned int DEFAULT_NUM_SAMPLES = 100;
 static const unsigned int DEFAULT_NUM_SETS = 4;
 static const dvec3 UP_VECTOR = dvec3(0.0034, 1, 0.0071);
 static const dmat4 IDENTITY_MATRIX_FOUR = dmat4(dvec4(1, 0, 0, 0),
@@ -45,7 +45,7 @@ public:
         srand((unsigned) time(nullptr));
     }
 
-    int randomInteger() {
+    inline int randomInteger() {
         return rand();
     }
 
@@ -84,29 +84,29 @@ namespace Math {
     }
 
     template <class T>
-    inline T lengthSquared(tvec3<T, highp> vec) {
+    inline T lengSqd(tvec3<T, highp> vec) {
         return dot(vec, vec);
     }
 
     template <class T>
-    inline T maxComponent(tvec3<T, highp> vector) {
+    inline T maxComp(tvec3<T, highp> vector) {
         return glm::max(glm::max(vector[0], vector[1]), vector[2]);
     }
 
     template <class T>
-    inline T maxComponent(tvec3<T, highp> vector, int &index) {
+    inline T maxComp(tvec3<T, highp> vector, int &index) {
         index = vector[0] > vector[1] ? 0 : 1;
         index = vector[2] > vector[index] ? 2 : index;
         return vector[index];
     }
 
     template <class T>
-    inline T minComponent(tvec3<T, highp> vector) {
+    inline T minComp(tvec3<T, highp> vector) {
         return glm::min(glm::min(vector[0], vector[1]), vector[2]);
     }
 
     template <class T>
-    inline T minComponent(tvec3<T, highp> vector, int &index) {
+    inline T minComp(tvec3<T, highp> vector, int &index) {
         index = vector[0] < vector[1] ? 0 : 1;
         index = vector[2] < vector[index] ? 2 : index;
         return vector[index];
@@ -117,11 +117,27 @@ namespace Math {
         return value > min && value < max;
     }
 
+    inline int findInterval(int size, function<bool(int)> compare) {
+        int first = 0, len = size;
+        while (len > 0) {
+            int half = len >> 1, middle = first + half;
+            if (compare(middle)) {
+                first = middle + 1;
+                len -= half + 1;
+            } else 
+                len = half;
+        }
+        return clamp(first - 1, 0, size - 2);
+    }
+
     int solveQuadric(double *coeff, double *solution);
     
     int solveCubic(double *coeff, double *solution);
 
     int solveQuartic(double *coeff, double *solution);
+
+    bool catmullRomWeights(int size, float *nodes, float x, int *offset, float *weights);
+
 };
 
 namespace Collections {
@@ -130,12 +146,5 @@ namespace Collections {
         vec.reserve(num);
         for (int i = 0; i < num; i++) 
             vec[i] = obj;
-    }
-}
-
-namespace PostProc {
-    inline vec3 maxToOne(vec3 color) {
-        float maxValue = Math::maxComponent(color);
-        return maxValue > 1 ? (color / maxValue) : color;
     }
 }

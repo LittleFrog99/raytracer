@@ -28,3 +28,10 @@ protected:
     void computeUVW();
     void renderThread(int index, int step);
 };
+
+namespace PostProc {
+    inline vec3 maxToOne(vec3 color) {
+        float maxValue = Math::maxComp(color);
+        return maxValue > 1 ? (color / maxValue) : color;
+    }
+}

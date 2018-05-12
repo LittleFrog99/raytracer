@@ -93,8 +93,8 @@ bool Grid::intersect(Ray &ray, double &tmin, Shade &shade) {
                                 : (bndBox.vertMin[i] - ray.origin[i])) * invComp;
     }
 
-    double tIn = Math::maxComponent(tMin);
-    double tOut = Math::minComponent(tMax);
+    double tIn = Math::maxComp(tMin);
+    double tOut = Math::minComp(tMax);
     if (tIn > tOut) return false;
 
     ivec3 index;
@@ -132,7 +132,7 @@ bool Grid::intersect(Ray &ray, double &tmin, Shade &shade) {
         auto objP = cells[gridCoordsToIndex(index)];
 
         for (int i = 0; i < 3; i++) 
-            if (Math::minComponent(tNext) == tNext[i]) {
+            if (Math::minComp(tNext) == tNext[i]) {
                 if (objP && objP->intersect(ray, tmin, shade) && tmin < tNext[i]) 
                     return true;
                 tNext[i] += deltaT[i];
@@ -153,8 +153,8 @@ bool Grid::shadowIntersect(Ray &ray, double &tmin) {
                                 : (bndBox.vertMin[i] - ray.origin[i])) * invComp;
     }
 
-    double tIn = Math::maxComponent(tMin);
-    double tOut = Math::minComponent(tMax);
+    double tIn = Math::maxComp(tMin);
+    double tOut = Math::minComp(tMax);
     if (tIn > tOut) return false;
 
     ivec3 index;
@@ -192,7 +192,7 @@ bool Grid::shadowIntersect(Ray &ray, double &tmin) {
         auto objP = cells[gridCoordsToIndex(index)];
 
         for (int i = 0; i < 3; i++) 
-            if (Math::minComponent(tNext) == tNext[i]) {
+            if (Math::minComp(tNext) == tNext[i]) {
                 if (objP && objP->shadowIntersect(ray, tmin) && tmin < tNext[i]) 
                     return true;
                 tNext[i] += deltaT[i];

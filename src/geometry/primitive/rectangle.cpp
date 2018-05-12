@@ -4,9 +4,9 @@
 void Rectangle::setParams(dvec3 origin, dvec3 side_a, dvec3 side_b) {
     this->origin = origin;
     sideA = side_a;
-    lenASqrd = Math::lengthSquared(sideA);
+    lenASqrd = Math::lengSqd(sideA);
     sideB = side_b;
-    lenBSqrd = Math::lengthSquared(sideB);
+    lenBSqrd = Math::lengSqd(sideB);
     normal = normalize(cross(sideA, sideB));
     area = length(sideA) * length(sideB);
 }

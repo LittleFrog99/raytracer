@@ -22,8 +22,8 @@ bool PartTorus::inRange(dvec3 &point) {
 bool PartTorus::intersect(Ray &ray, double &tmin, Shade &shade) {
     if (!bndBox.intersect(ray)) return false;
 
-    double dSqrd = Math::lengthSquared(ray.direction);
-    double e = Math::lengthSquared(ray.origin) - sweptR * sweptR - tubeR * tubeR;
+    double dSqrd = Math::lengSqd(ray.direction);
+    double e = Math::lengSqd(ray.origin) - sweptR * sweptR - tubeR * tubeR;
     double f = dot(ray.origin, ray.direction);
     double fourASqrd = 4.0 * sweptR * sweptR;
 
@@ -63,8 +63,8 @@ bool PartTorus::intersect(Ray &ray, double &tmin, Shade &shade) {
 bool PartTorus::shadowIntersect(Ray &ray, double &tmin) {
     if (!bndBox.intersect(ray)) return false;
 
-    double dSqrd = Math::lengthSquared(ray.direction);
-    double e = Math::lengthSquared(ray.origin) - sweptR * sweptR - tubeR * tubeR;
+    double dSqrd = Math::lengSqd(ray.direction);
+    double e = Math::lengSqd(ray.origin) - sweptR * sweptR - tubeR * tubeR;
     double f = dot(ray.origin, ray.direction);
     double fourASqrd = 4.0 * sweptR * sweptR;
 
