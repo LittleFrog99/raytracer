@@ -20,5 +20,19 @@ public:
     World &world;
 
     Shade(World &wrd) : world(wrd) {}
+    Shade & operator = (Shade &shade) {
+        hasHit = shade.hasHit;
+        materialP = shade.materialP;
+        hitPoint = shade.hitPoint;
+        localHitPoint = shade.localHitPoint;
+        normal = shade.normal;
+        texCoord = shade.texCoord;
+        color = shade.color;
+        ray = shade.ray;
+        t = shade.t;
+        depth = shade.depth;
+        // world reference initialized cannot be assigned
+        return *this;
+    }
 };
 

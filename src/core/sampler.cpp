@@ -16,9 +16,8 @@ void Sampler::setupShuffledIndices() {
 }
 
 dvec2 Sampler::sampleUnitSquare() {
-    Random rand;
     if (count % numSamples == 0) // start of a new pixel
-        jump = (rand.randomInteger() % numSets) * numSamples;
+        jump = (rndm.randomInteger() % numSets) * numSamples;
     return samples[jump + shuffledIndices[jump + count++ % numSamples]];
 }
 
@@ -59,9 +58,8 @@ void Sampler::mapSamplesToUnitDisk() {
 }
 
 dvec2 Sampler::sampleUnitDisk() {
-    Random rand;
     if (count % numSamples == 0) // start of a new pixel
-        jump = (rand.randomInteger() % numSets) * numSamples;
+        jump = (rndm.randomInteger() % numSets) * numSamples;
     return diskSamples[jump + shuffledIndices[jump + count++ % numSamples]];
 }
 
@@ -82,8 +80,7 @@ void Sampler::mapSamplesToHemisphere(double exponent) {
 }
 
 dvec3 Sampler::sampleUnitHemisphere() {
-    Random rand;
     if (count % numSamples == 0) // start of a new pixel
-        jump = (rand.randomInteger() % numSets) * numSamples;
+        jump = (rndm.randomInteger() % numSets) * numSamples;
     return hemisphereSamples[jump + shuffledIndices[jump + count++ % numSamples]];
 }

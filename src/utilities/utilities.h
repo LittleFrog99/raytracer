@@ -66,7 +66,7 @@ public:
     }
 
 };
-static Random rnd;
+static Random rndm;
 
 static float roulette() {
     static unsigned int x = (unsigned) time(nullptr);
@@ -137,6 +137,9 @@ namespace Math {
     int solveQuartic(double *coeff, double *solution);
 
     bool catmullRomWeights(int size, float *nodes, float x, int *offset, float *weights);
+
+    float sampleCatmullRom2D(int size1, int size2, float *nodes1, float *nodes2, float *values,
+        float *cdf, float alpha, float u, float *fval = nullptr, float *pdf = nullptr);
 
 };
 

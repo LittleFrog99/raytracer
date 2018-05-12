@@ -22,3 +22,8 @@ float BSSRDF::fresnelMoment2(float eta) {
                54.9327f * eta3 - 9.00603f * eta4 + 0.63942f * eta5;
     }
 }
+
+void BSSRDF::tangentSpace(const dvec3 &w, dvec3 &u, dvec3 &v) {
+    v = normalize(cross(UP_VECTOR, w));
+    u = cross(v, w);
+}
