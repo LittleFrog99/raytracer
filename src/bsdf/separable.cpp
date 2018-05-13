@@ -10,14 +10,14 @@ Separable::Separable(Material *mat_ptr, float eta) : materialP(mat_ptr), eta(eta
 
 vec3 Separable::calcS(Shade &po, Shade &pi, dvec3 &wi) {
     float cosTheta = fabs(dot(po.hitPoint, -po.ray.direction));
-    float ft = 1 - fresnelReflFactor(cosTheta);
+    float ft = 1 - fresnelReflFactor(cosTheta, eta);
     return ft * calcSw(pi, wi) * calcSp(po, pi);
 }
 
 float Separable::calcSw(Shade &pi, dvec3 &wi) {
     float c = 1.0 - 2.0 * fresnelMoment1(1.0 / eta);
     float cosTheta = fabs(dot(pi.hitPoint, wi));
-    return (1 - fresnelReflFactor(cosTheta)) / (c * PI);
+    return (1 - fresnelReflFactor(cosTheta, eta)) / (c * PI);
 }
 
 float Separable::sampleSw(Shade &pi, dvec3 &wi, float *pdf) {
@@ -31,15 +31,6 @@ float Separable::sampleSw(Shade &pi, dvec3 &wi, float *pdf) {
 
 vec3 Separable::calcSp(Shade &po, Shade &pi) {
     return calcSr(distance(po.hitPoint, pi.hitPoint));
-}
-
-float Separable::fresnelReflFactor(float cos_theta) {
-    float cosThetaI = cos_theta; 
-    float cosThetaT = sqrt(1.0 - (1.0 - cosThetaI * cosThetaI) / (eta * eta));
-    float rPara = (eta * cosThetaI - cosThetaT) / (eta * cosThetaI + cosThetaT);
-    float rPerp = (cosThetaI - eta * cosThetaT) / (cosThetaI + eta * cosThetaT);
-
-    return 0.5 * (rPara * rPara + rPerp * rPerp);
 }
 
 vec3 Separable::sampleS(Shade &po, double u1, const dvec2 &u2, Shade &pi, float *pdf)
@@ -97,7 +88,7 @@ vec3 Separable::sampleSp(Shade &po, double u1, const dvec2 &u2, Shade &pi, float
     };
 
     auto chain = new IntersectionChain(po.world);
-    auto ptr = chain;
+    auto ptr = chain, start = chain;
     int numFound = 0;
 
     while (true) {
@@ -119,6 +110,7 @@ vec3 Separable::sampleSp(Shade &po, double u1, const dvec2 &u2, Shade &pi, float
     int selected = clamp(int(u1 * numFound), 0, numFound - 1);
     while (selected-- > 0) chain = chain->next;
     pi = chain->shade;
+    delete start;
 
     // Compute sample PDF and return the spatial term
     // Express pi - po and ni with respect to local coordinate at po

@@ -5,7 +5,7 @@
 
 class Subsurface : public Material {
 public:
-    Subsurface(float eta, vec3 albedo, vec3 scatter);
+    Subsurface(float eta, float g, vec3 absorp, vec3 scatter);
     virtual vec3 pathShade(Shade &po);
 
 private:

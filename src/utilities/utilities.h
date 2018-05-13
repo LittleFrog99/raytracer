@@ -117,6 +117,25 @@ namespace Math {
         return value > min && value < max;
     }
 
+    int solveQuadric(double *coeff, double *solution);
+    
+    int solveCubic(double *coeff, double *solution);
+
+    int solveQuartic(double *coeff, double *solution);
+
+};
+
+namespace Interpolation {
+
+    bool catmullRomWeights(int size, float *nodes, float x, int *offset, float *weights);
+
+    float sampleCatmullRom2D(int size1, int size2, float *nodes1, float *nodes2, float *values,
+        float *cdf, float alpha, float u, float *fval = nullptr, float *pdf = nullptr);
+
+    float integrateCatmullRom(int n, const float *x, const float *values, float *cdf);
+
+    float invertCatmullRom(int n, const float *x, const float *values, float u);
+
     inline int findInterval(int size, function<bool(int)> compare) {
         int first = 0, len = size;
         while (len > 0) {
@@ -129,19 +148,7 @@ namespace Math {
         }
         return clamp(first - 1, 0, size - 2);
     }
-
-    int solveQuadric(double *coeff, double *solution);
-    
-    int solveCubic(double *coeff, double *solution);
-
-    int solveQuartic(double *coeff, double *solution);
-
-    bool catmullRomWeights(int size, float *nodes, float x, int *offset, float *weights);
-
-    float sampleCatmullRom2D(int size1, int size2, float *nodes1, float *nodes2, float *values,
-        float *cdf, float alpha, float u, float *fval = nullptr, float *pdf = nullptr);
-
-};
+}
 
 namespace Collections {
     template <class T>

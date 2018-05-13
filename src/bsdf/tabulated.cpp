@@ -1,11 +1,12 @@
 #include "tabulated.h"
 
-Tabulated::Tabulated(Material *mat_ptr, float eta, vec3 absorp, vec3 scatter, BSSRDFTable *table)
+Tabulated::Tabulated(Material *mat_ptr, float eta, float g, vec3 absorp, vec3 scatter, BSSRDFTable *table)
     : Separable(mat_ptr, eta), table(table)
 {
     extinc = absorp + scatter;
     for (int i = 0; i < 3; i++) 
         albedo[i] = extinc[i] == 0 ? 0 : (scatter[i] / extinc[i]);
+    calcBeamDiffusion(g, eta, table);
 }
 
 vec3 Tabulated::calcSr(float distance) {
@@ -16,9 +17,9 @@ vec3 Tabulated::calcSr(float distance) {
         // Compute spline weights to interpolate BSSRDF on channel ch
         int albedoOff, radiusOff;
         float albedoWeights[4], radiusWeights[4];
-        if (!Math::catmullRomWeights(table->albedo.size(), &table->albedo[0], albedo[ch], 
+        if (!Interpolation::catmullRomWeights(table->nAlbedo, &table->albedo[0], albedo[ch], 
             &albedoOff, albedoWeights) ||
-            !Math::catmullRomWeights(table->radius.size(), &table->radius[0], rOpt, 
+            !Interpolation::catmullRomWeights(table->nRadius, &table->radius[0], rOpt, 
             &radiusOff, radiusWeights))
             continue;
         // Set BSSRDF distance term sr[ch] using tensor spline interpolation
@@ -40,7 +41,7 @@ vec3 Tabulated::calcSr(float distance) {
 
 float Tabulated::sampleSr(int channel, double u) {
     if (extinc[channel] == 0) return -1;
-    return Math::sampleCatmullRom2D(table->albedo.size(), table->radius.size(), 
+    return Interpolation::sampleCatmullRom2D(table->nAlbedo, table->nRadius, 
         &table->albedo[0], &table->radius[0], &table->profile[0], &table->profileCDF[0],
         albedo[channel], u);
 }
@@ -51,9 +52,9 @@ float Tabulated::pdfSr(int channel, double radius) {
     // Compute spline weights to interpolate BSSRDF density on channel
     int albedoOff, radiusOff;
     float albedoWeights[4], radiusWeights[4];
-    if (!Math::catmullRomWeights(table->albedo.size(), &table->albedo[0], albedo[channel],
+    if (!Interpolation::catmullRomWeights(table->nAlbedo, &table->albedo[0], albedo[channel],
                                  &albedoOff, albedoWeights) ||
-        !Math::catmullRomWeights(table->radius.size(), &table->radius[0], rOpt,
+        !Interpolation::catmullRomWeights(table->nRadius, &table->radius[0], rOpt,
                                  &radiusOff, radiusWeights))
         return 0.0f;
     
@@ -64,7 +65,8 @@ float Tabulated::pdfSr(int channel, double radius) {
         effAlbedo += table->effAlbedo[albedoOff + i] * albedoWeights[i];
         for (int j = 0; j < 4; j++) {
             if (radiusWeights[j] == 0) continue;
-            srCh += albedoWeights[i] * radiusWeights[j] * table->evaluateProfile(albedoOff + i, radiusOff + j);
+            srCh += albedoWeights[i] * radiusWeights[j] 
+                * table->evaluateProfile(albedoOff + i, radiusOff + j);
         }
     }
     // Cancel marginal PDF factor from tabulated BSSRDF profile

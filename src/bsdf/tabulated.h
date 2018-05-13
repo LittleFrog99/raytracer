@@ -4,7 +4,7 @@
 
 class Tabulated : public Separable {
 public:
-    Tabulated(Material *mat_ptr, float eta, vec3 absorp, vec3 scatter, BSSRDFTable *table);
+    Tabulated(Material *mat_ptr, float eta, float g, vec3 absorp, vec3 scatter, BSSRDFTable *table);
 
 private:
     BSSRDFTable *table;

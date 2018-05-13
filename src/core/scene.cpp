@@ -12,6 +12,7 @@
 #include "material/transparent.h"
 #include "material/dielectric.h"
 #include "material/svmaterial.h"
+#include "material/subsurface.h"
 #include "light/ambientoccluder.h"
 #include "light/arealight.h"
 #include "camera/pinhole.h"
@@ -48,11 +49,12 @@ void World::build() {
     auto glass2P = new Dielectric(vec3(0.28, 0.64, 0.93), 0.2, 0.1, 0.1, 1.33, 1.0);
     auto 🐸 = new ImageTexture("resources/frog.jpg", RECTANGULAR);
     auto frogP = new SVPhong(🐸, 0.2, 0.5, 0.3);
+    auto sssP = new Subsurface(1.5, 0.0, vec3(0.0021, 0.0041, 0.0071), vec3(2.19, 2.62, 3.00));
 
     /* Geometry Objects */
     auto sphere1P = new Sphere(plastic1P);
     sphere1P->setParams(dvec3(-1.00, 0.80, 0), .80);
-    auto sphere2P = new Sphere(glass1P);
+    auto sphere2P = new Sphere(sssP);
     sphere2P->setParams(dvec3(0.4, 0.30, -.50), .30);
     auto plane1P = new Plane(plastic3P);
     plane1P->setParams(dvec3(0, 1, 0), dvec3(0.0, 0.0, 0.0));

@@ -1,10 +1,10 @@
 #include "utilities.h"
 
-bool Math::catmullRomWeights(int size, float *nodes, float x, int *offset, float *weights)
+bool Interpolation::catmullRomWeights(int size, float *nodes, float x, int *offset, float *weights)
 {
     if (x < nodes[0] || x > nodes[size - 1]) return false; // out of bounds
     // Searching for the interval index containing x
-    int index = Math::findInterval(size, [&](int i) { return nodes[i] <= x; });
+    int index = findInterval(size, [&](int i) { return nodes[i] <= x; });
     *offset = index - 1;
     float x0 = nodes[index], x1 = nodes[index + 1];
     // Compute the t paramter and powers
@@ -37,8 +37,9 @@ bool Math::catmullRomWeights(int size, float *nodes, float x, int *offset, float
     return true;
 }
 
-float Math::sampleCatmullRom2D(int size1, int size2, float *nodes1, float *nodes2, 
-    float *values, float *cdf, float alpha, float u, float *fval, float *pdf)
+float Interpolation::sampleCatmullRom2D(int size1, int size2, float *nodes1, float *nodes2,
+                                        float *values, float *cdf, float alpha, float u, 
+                                        float *fval, float *pdf)
 {
     // Determine offset and coefficients for the _alpha_ parameter
     int offset;
@@ -57,8 +58,7 @@ float Math::sampleCatmullRom2D(int size1, int size2, float *nodes1, float *nodes
     // Map _u_ to a spline interval by inverting the interpolated _cdf_
     float maximum = interpolate(cdf, size2 - 1);
     u *= maximum;
-    int idx =
-        findInterval(size2, [&](int i) { return interpolate(cdf, i) <= u; });
+    int idx = findInterval(size2, [&](int i) { return interpolate(cdf, i) <= u; });
 
     // Look up node positions and interpolated function values
     float f0 = interpolate(values, idx), f1 = interpolate(values, idx + 1);
@@ -68,7 +68,6 @@ float Math::sampleCatmullRom2D(int size1, int size2, float *nodes1, float *nodes
 
     // Re-scale _u_ using the interpolated _cdf_
     u = (u - interpolate(cdf, idx)) / width;
-
     // Approximate derivatives using finite differences of the interpolant
     if (idx > 0)
         d0 = width * (f1 - interpolate(values, idx - 1)) /
@@ -82,7 +81,6 @@ float Math::sampleCatmullRom2D(int size1, int size2, float *nodes1, float *nodes
         d1 = f1 - f0;
 
     // Invert definite integral over spline segment and return solution
-
     // Set initial guess for $t$ by importance sampling a linear interpolant
     float t;
     if (f0 != f1)
@@ -94,7 +92,6 @@ float Math::sampleCatmullRom2D(int size1, int size2, float *nodes1, float *nodes
     while (true) {
         // Fall back to a bisection step when _t_ is out of bounds
         if (!(t >= a && t <= b)) t = 0.5f * (a + b);
-
         // Evaluate target function and its derivative in Horner form
         Fhat = t * (f0 +
                     t * (.5f * d0 +
@@ -107,13 +104,11 @@ float Math::sampleCatmullRom2D(int size1, int size2, float *nodes1, float *nodes
 
         // Stop the iteration if converged
         if (std::abs(Fhat - u) < 1e-6f || b - a < 1e-6f) break;
-
         // Update bisection bounds using updated _t_
         if (Fhat - u < 0)
             a = t;
         else
             b = t;
-
         // Perform a Newton step
         t -= (Fhat - u) / fhat;
     }
@@ -122,4 +117,86 @@ float Math::sampleCatmullRom2D(int size1, int size2, float *nodes1, float *nodes
     if (fval) *fval = fhat;
     if (pdf) *pdf = fhat / maximum;
     return x0 + width * t;
+}
+
+float Interpolation::integrateCatmullRom(int n, const float *x, const float *values,
+                          float *cdf) 
+{
+    float sum = 0;
+    cdf[0] = 0;
+    for (int i = 0; i < n - 1; ++i) {
+        // Look up $x_i$ and function values of spline segment _i_
+        float x0 = x[i], x1 = x[i + 1];
+        float f0 = values[i], f1 = values[i + 1];
+        float width = x1 - x0;
+
+        // Approximate derivatives using finite differences
+        float d0, d1;
+        if (i > 0)
+            d0 = width * (f1 - values[i - 1]) / (x1 - x[i - 1]);
+        else
+            d0 = f1 - f0;
+        if (i + 2 < n)
+            d1 = width * (values[i + 2] - f0) / (x[i + 2] - x0);
+        else
+            d1 = f1 - f0;
+
+        // Keep a running sum and build a cumulative distribution function
+        sum += ((d0 - d1) * (1.f / 12.f) + (f0 + f1) * .5f) * width;
+        cdf[i + 1] = sum;
+    }
+    return sum;
+}
+
+float Interpolation::invertCatmullRom(int n, const float *x, const float *values, float u) {
+    // Stop when _u_ is out of bounds
+    if (!(u > values[0]))
+        return x[0];
+    else if (!(u < values[n - 1]))
+        return x[n - 1];
+
+    // Map _u_ to a spline interval by inverting _values_
+    int i = findInterval(n, [&](int i) { return values[i] <= u; });
+
+    // Look up $x_i$ and function values of spline segment _i_
+    float x0 = x[i], x1 = x[i + 1];
+    float f0 = values[i], f1 = values[i + 1];
+    float width = x1 - x0;
+
+    // Approximate derivatives using finite differences
+    float d0, d1;
+    if (i > 0)
+        d0 = width * (f1 - values[i - 1]) / (x1 - x[i - 1]);
+    else
+        d0 = f1 - f0;
+    if (i + 2 < n)
+        d1 = width * (values[i + 2] - f0) / (x[i + 2] - x0);
+    else
+        d1 = f1 - f0;
+
+    // Invert the spline interpolant using Newton-Bisection
+    float a = 0, b = 1, t = .5f;
+    float Fhat, fhat;
+    while (true) {
+        // Fall back to a bisection step when _t_ is out of bounds
+        if (!(t > a && t < b)) t = 0.5f * (a + b);
+        // Compute powers of _t_
+        float t2 = t * t, t3 = t2 * t;
+        // Set _Fhat_ using Equation (8.27)
+        Fhat = (2 * t3 - 3 * t2 + 1) * f0 + (-2 * t3 + 3 * t2) * f1 +
+               (t3 - 2 * t2 + t) * d0 + (t3 - t2) * d1;
+        // Set _fhat_ using Equation (not present)
+        fhat = (6 * t2 - 6 * t) * f0 + (-6 * t2 + 6 * t) * f1 +
+               (3 * t2 - 4 * t + 1) * d0 + (3 * t2 - 2 * t) * d1;
+        // Stop the iteration if converged
+        if (std::abs(Fhat - u) < 1e-6f || b - a < 1e-6f) break;
+        // Update bisection bounds using updated _t_
+        if (Fhat - u < 0)
+            a = t;
+        else
+            b = t;
+        // Perform a Newton step
+        t -= (Fhat - u) / fhat;
+    }
+    return x0 + t * width;
 }

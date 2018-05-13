@@ -5,6 +5,7 @@
 #include "core/sampler.h"
 
 struct BSSRDFTable {
+    int nAlbedo, nRadius;
     vector<float> albedo, effAlbedo, radius, profile, profileCDF;
 
     BSSRDFTable() {}
@@ -22,7 +23,12 @@ public:
     virtual ~BSSRDF() {}
 
 protected:
-    float fresnelMoment1(float eta);
-    float fresnelMoment2(float eta);
-    void tangentSpace(const dvec3 &w, dvec3 &u, dvec3 &v);
+    static float fresnelReflFactor(float cos_theta, float eta);
+    static float fresnelMoment1(float eta);
+    static float fresnelMoment2(float eta);
+    static float phaseHG(float cosTheta, float g);
+    static void tangentSpace(const dvec3 &w, dvec3 &u, dvec3 &v);
+    static float beamDiffusionMS(float scatter, float absorp, float g, float eta, float r);
+    static float beamDiffusionSS(float scatter, float absorp, float g, float eta, float r);
+    static void calcBeamDiffusion(float g, float eta, BSSRDFTable *table);
 };
