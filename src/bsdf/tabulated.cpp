@@ -17,9 +17,9 @@ vec3 Tabulated::calcSr(float distance) {
         // Compute spline weights to interpolate BSSRDF on channel ch
         int albedoOff, radiusOff;
         float albedoWeights[4], radiusWeights[4];
-        if (!Interpolation::catmullRomWeights(table->nAlbedo, &table->albedo[0], albedo[ch], 
+        if (!Interpolation::catmullRomWeights(table->nAlbedo, table->albedo.get(), albedo[ch], 
             &albedoOff, albedoWeights) ||
-            !Interpolation::catmullRomWeights(table->nRadius, &table->radius[0], rOpt, 
+            !Interpolation::catmullRomWeights(table->nRadius, table->radius.get(), rOpt, 
             &radiusOff, radiusWeights))
             continue;
         // Set BSSRDF distance term sr[ch] using tensor spline interpolation
@@ -42,7 +42,7 @@ vec3 Tabulated::calcSr(float distance) {
 float Tabulated::sampleSr(int channel, double u) {
     if (extinc[channel] == 0) return -1;
     return Interpolation::sampleCatmullRom2D(table->nAlbedo, table->nRadius, 
-        &table->albedo[0], &table->radius[0], &table->profile[0], &table->profileCDF[0],
+        table->albedo.get(), table->radius.get(), table->profile.get(), table->profileCDF.get(),
         albedo[channel], u);
 }
 
@@ -52,9 +52,9 @@ float Tabulated::pdfSr(int channel, double radius) {
     // Compute spline weights to interpolate BSSRDF density on channel
     int albedoOff, radiusOff;
     float albedoWeights[4], radiusWeights[4];
-    if (!Interpolation::catmullRomWeights(table->nAlbedo, &table->albedo[0], albedo[channel],
+    if (!Interpolation::catmullRomWeights(table->nAlbedo, table->albedo.get(), albedo[channel],
                                  &albedoOff, albedoWeights) ||
-        !Interpolation::catmullRomWeights(table->nRadius, &table->radius[0], rOpt,
+        !Interpolation::catmullRomWeights(table->nRadius, table->radius.get(), rOpt,
                                  &radiusOff, radiusWeights))
         return 0.0f;
     

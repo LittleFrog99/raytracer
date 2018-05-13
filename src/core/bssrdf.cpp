@@ -1,14 +1,10 @@
 #include "bssrdf.h"
 
-BSSRDFTable::BSSRDFTable(int num_albedo_samples, int num_radius_samples) 
-    : nAlbedo(num_albedo_samples), nRadius(num_radius_samples)
-{
-    albedo.reserve(nAlbedo);
-    radius.reserve(nRadius);
-    profile.reserve(nAlbedo * nRadius);
-    effAlbedo.reserve(nAlbedo);
-    profileCDF.reserve(nAlbedo * nRadius);
-}
+BSSRDFTable::BSSRDFTable(int num_albedo_samples, int num_radius_samples)
+    : nAlbedo(num_albedo_samples), nRadius(num_radius_samples),
+      albedo(new float[nAlbedo]), radius(new float[nRadius]), profile(new float[nAlbedo * nRadius]),
+      effAlbedo(new float[nAlbedo]), profileCDF(new float[nAlbedo * nRadius])
+{}
 
 float BSSRDF::fresnelReflFactor(float cos_theta, float eta) {
     float cosThetaI = cos_theta; 

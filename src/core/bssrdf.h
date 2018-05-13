@@ -6,13 +6,13 @@
 
 struct BSSRDFTable {
     int nAlbedo, nRadius;
-    vector<float> albedo, effAlbedo, radius, profile, profileCDF;
+    unique_ptr<float[]> albedo, effAlbedo, radius, profile, profileCDF;
 
     BSSRDFTable() {}
     BSSRDFTable(int num_albedo_samples, int num_radius_samples);
 
     inline float evaluateProfile(int albedoIndex, int radiusIndex) {
-        return profile[albedoIndex * radius.size() + radiusIndex];
+        return profile[albedoIndex * nRadius + radiusIndex];
     }
 };
 
