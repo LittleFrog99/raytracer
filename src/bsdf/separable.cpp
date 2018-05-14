@@ -26,7 +26,7 @@ float Separable::sampleSw(Shade &pi, dvec3 &wi, float *pdf) {
     dvec3 samplePt = smplrP->sampleUnitHemisphere();
     wi = normalize(samplePt.x * u + samplePt.y * v + samplePt.z * w);
     *pdf = INV_PI * dot(pi.normal, wi);
-    return calcSw(pi, wi) * eta * eta;
+    return calcSw(pi, wi);
 }
 
 vec3 Separable::calcSp(Shade &po, Shade &pi) {

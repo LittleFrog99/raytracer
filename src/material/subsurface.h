@@ -2,6 +2,7 @@
 
 #include "core/material.h"
 #include "bsdf/tabulated.h"
+#include "core/brdf.h"
 
 class Subsurface : public Material {
 public:
@@ -10,5 +11,6 @@ public:
 
 private:
     Tabulated *SSS;
+    BRDF *BRDF = nullptr;
     BSSRDFTable table;
 };

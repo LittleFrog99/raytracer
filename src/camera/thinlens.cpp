@@ -47,6 +47,6 @@ void ThinLens::render(World &world) {
 
             color /= vp.numSamples;
             color *= exposureTime;
-            world.plotPoint(row, col, vec4(color, 1.0));
+            world.plotPoint(row, col, color);
         }
 }

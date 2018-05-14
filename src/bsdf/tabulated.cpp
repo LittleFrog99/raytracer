@@ -26,7 +26,7 @@ vec3 Tabulated::calcSr(float distance) {
         float srCh = 0;
         for (int i = 0; i < 4; i++)
             for (int j = 0; j < 4; j++) {
-                float weight = albedoWeights[i] * radiusWeights[i];
+                float weight = albedoWeights[i] * radiusWeights[j];
                 if (weight != 0)
                     srCh += weight * table->evaluateProfile(albedoOff + i, radiusOff + j);
             }
@@ -43,7 +43,7 @@ float Tabulated::sampleSr(int channel, double u) {
     if (extinc[channel] == 0) return -1;
     return Interpolation::sampleCatmullRom2D(table->nAlbedo, table->nRadius, 
         table->albedo.get(), table->radius.get(), table->profile.get(), table->profileCDF.get(),
-        albedo[channel], u);
+        albedo[channel], u) / extinc[channel];
 }
 
 float Tabulated::pdfSr(int channel, double radius) {

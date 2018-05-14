@@ -47,15 +47,16 @@ void World::build() {
     auto mirror1P = new Reflective(vec3(1.0), 0.2, 0.2, 0.3, 0.6);
     auto glass1P = new Transparent(vec3(1.0), 0.0, 0.0, 0.0, 0.1, 0.9, 1.5);
     auto glass2P = new Dielectric(vec3(0.28, 0.64, 0.93), 0.2, 0.1, 0.1, 1.33, 1.0);
+    auto glass3P = new Dielectric(vec3(1.0), 0, 0, 0, 1.33, 1.0);
     auto 🐸 = new ImageTexture("resources/frog.jpg", RECTANGULAR);
     auto frogP = new SVPhong(🐸, 0.2, 0.5, 0.3);
-    auto sssP = new Subsurface(1.5, 0.0, vec3(0.0021, 0.0041, 0.0071), vec3(2.19, 2.62, 3.00));
+    auto sssP = new Subsurface(1.3, 0.0, vec3(0.21, 0.41, 0.71), vec3(219, 262, 300));
 
     /* Geometry Objects */
     auto sphere1P = new Sphere(plastic1P);
     sphere1P->setParams(dvec3(-1.00, 0.80, 0), .80);
     auto sphere2P = new Sphere(sssP);
-    sphere2P->setParams(dvec3(0.4, 0.30, -.50), .30);
+    sphere2P->setParams(dvec3(0.0, 0.30, -1.0), .30);
     auto plane1P = new Plane(plastic3P);
     plane1P->setParams(dvec3(0, 1, 0), dvec3(0.0, 0.0, 0.0));
     auto disk1P = new Disk(emi1P);
@@ -78,11 +79,11 @@ void World::build() {
     auto inst3P = new Instance(rect6P);
     inst3P->scale(dvec3(0.5, 1, 0.5))->rotate(dvec3(1, 0, 0), radians(60.0f))->translate(dvec3(0, 0.6, -0.8));
     SVModel::setMaterialParams(0.4, 0.5, 0.2);
-    auto cubeP = new Model("resources/cube/cube.obj", glass1P);
-    auto inst4P = new Instance(cubeP);
-    inst4P->rotate(dvec3(1, 0, 0), radians(45.0f))->rotate(dvec3(0, 1, 0), radians(30.0f))->translate(dvec3(0, 0.8, -0.8));
+    auto bunnyP = new Model("resources/bunny.obj", sssP);
+    auto inst4P = new Instance(bunnyP);
+    inst4P->scale(dvec3(0.5f))->translate(dvec3(0, 0, -1));
 
-    addObject(sphere2P);
+    addObject(inst4P);
     addObject(disk1P);
     addObject(rect1P);
     addObject(rect2P);
