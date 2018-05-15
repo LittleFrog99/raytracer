@@ -10,7 +10,7 @@ public:
     virtual vec3 pathShade(Shade &po);
 
 private:
-    Tabulated *SSS;
-    BRDF *BRDF = nullptr;
+    Tabulated *SSS = nullptr;
+    BRDF *reflBRDF = nullptr;
     BSSRDFTable table;
 };
