@@ -50,7 +50,7 @@ void World::build() {
     auto glass3P = new Dielectric(vec3(1.0), 0, 0, 0, 1.33, 1.0);
     auto 🐸 = new ImageTexture("resources/frog.jpg", RECTANGULAR);
     auto frogP = new SVPhong(🐸, 0.2, 0.5, 0.3);
-    auto sssP = new Subsurface(1.3, 0.0, vec3(0.21, 0.41, 0.71), vec3(219, 262, 300));
+    auto sssP = new Subsurface(1.3, -0.7, vec3(0.21, 0.41, 0.71), vec3(219, 262, 300));
 
     /* Geometry Objects */
     auto sphere1P = new Sphere(plastic1P);

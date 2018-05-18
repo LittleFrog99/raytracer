@@ -130,7 +130,7 @@ void BSSRDF::calcBeamDiffusion(float g, float eta, BSSRDFTable *table)
     table->radius[1] = 2.5e-3f;
     for (int i = 2; i < table->nRadius; ++i) {
         table->radius[i] = table->radius[i - 1] * 1.15f;
-        cout << table->radius[i] << endl;
+        // cout << table->radius[i] << endl;
     }
 
     // Choose albedo values of the diffusion profile discretization

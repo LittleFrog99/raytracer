@@ -36,7 +36,7 @@ vec3 Subsurface::pathShade(Shade &po) {
                     inShadow = light->inShadow(shadowRay, pi);
                 }
                 if (!inShadow) 
-                    L += 4.0f * SSS->calcS(po, pi, wi) * light->incidRadiance(pi) * light->geoTerm(pi) * nDotWi / (light->probDenFunc(pi) * pdf);
+                    L += SSS->calcS(po, pi, wi) * light->incidRadiance(pi) * light->geoTerm(pi) * nDotWi / (light->probDenFunc(pi) * pdf);
             }
         }
         // And the indirect one
