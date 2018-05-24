@@ -33,8 +33,8 @@ bool AreaLight::inShadow(Ray &ray, Shade &shade) {
     return false;
 }
 
-float AreaLight::probDenFunc(Shade &shade) {
-    return objectP->probDenFunc(shade);
+float AreaLight::calcPdf(Shade &shade) {
+    return objectP->calcPdf(shade);
 }
 
 float AreaLight::geoTerm(Shade &shade) {

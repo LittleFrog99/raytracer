@@ -9,9 +9,12 @@ Separable::Separable(Material *mat_ptr, float eta) : materialP(mat_ptr), eta(eta
 }
 
 vec3 Separable::calcS(Shade &po, Shade &pi, dvec3 &wi) {
+    return calcFresnel(po) * calcSw(pi, wi) * calcSp(po, pi);
+}
+
+float Separable::calcFresnel(Shade &po) {
     float cosTheta = fabs(dot(po.hitPoint, -po.ray.direction));
-    float ft = 1 - fresnelReflFactor(cosTheta, eta);
-    return ft * calcSw(pi, wi) * calcSp(po, pi);
+    return 1.0 - fresnelReflFactor(cosTheta, eta);
 }
 
 float Separable::calcSw(Shade &pi, dvec3 &wi) {
@@ -35,11 +38,7 @@ vec3 Separable::calcSp(Shade &po, Shade &pi) {
 
 vec3 Separable::sampleS(Shade &po, double u1, const dvec2 &u2, Shade &pi, float *pdf)
 {
-    vec3 Sp = sampleSp(po, u1, u2, pi, pdf);
-    if (Sp != Color::BLACK) {
-        // Initialize material model at sampled surface interaction
-    }
-    return Sp;
+    return sampleSp(po, u1, u2, pi, pdf);
 }
 
 vec3 Separable::sampleSp(Shade &po, double u1, const dvec2 &u2, Shade &pi, float *pdf)
@@ -127,8 +126,9 @@ vec3 Separable::sampleSp(Shade &po, double u1, const dvec2 &u2, Shade &pi, float
     for (int axis = 0; axis < 3; axis++)
         for (int ch = 0; ch < 3; ch++)
             *pdf += pdfSr(ch, rProj[axis]) * abs(nLocal[axis]) * chProb * axisProb[axis];
+    *pdf /= numFound;
 
-    return calcSp(po, pi);
+    return calcFresnel(po) * calcSp(po, pi);
 }
 
 Separable::~Separable() {

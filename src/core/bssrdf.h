@@ -28,7 +28,7 @@ protected:
     static float fresnelMoment2(float eta);
     static float phaseHG(float cosTheta, float g);
     static void tangentSpace(const dvec3 &w, dvec3 &u, dvec3 &v);
-    static float beamDiffusionMS(float scatter, float absorp, float g, float eta, float r);
-    static float beamDiffusionSS(float scatter, float absorp, float g, float eta, float r);
-    static void calcBeamDiffusion(float g, float eta, BSSRDFTable *table);
+    static float beamDiffusion(float scatter, float absorp, float g, float eta, float r);
+    static float beamSingleScattering(float scatter, float absorp, float g, float eta, float r);
+    static void genProfileTable(float g, float eta, BSSRDFTable *table);
 };

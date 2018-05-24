@@ -10,7 +10,7 @@ public:
     virtual dvec3 calcDirection(Shade &shade) = 0;
     virtual vec3 incidRadiance(Shade &shade) { return vec3(); }
     virtual bool inShadow(Ray &shadow_ray, Shade &shade) = 0;
-    virtual float probDenFunc(Shade &shade) { return 1.0; }
+    virtual float calcPdf(Shade &shade) { return 1.0; }
     virtual float geoTerm(Shade &shade) { return 1.0; }
     virtual void emitPhotons(PhotonMap *map, int num) {}
 

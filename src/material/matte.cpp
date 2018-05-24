@@ -26,7 +26,7 @@ vec3 Matte::shade(Shade &shade) {
 
             if (!inShadow)
                 color += diffBRDF->calcBRDF(shade, in, out) * lightP->incidRadiance(shade)
-                    * float(lightP->geoTerm(shade) * nDotIn / lightP->probDenFunc(shade));
+                    * float(lightP->geoTerm(shade) * nDotIn / lightP->calcPdf(shade));
         }
     }
 

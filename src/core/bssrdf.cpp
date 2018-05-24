@@ -47,83 +47,69 @@ void BSSRDF::tangentSpace(const dvec3 &w, dvec3 &u, dvec3 &v) {
     u = cross(v, w);
 }
 
-float BSSRDF::beamDiffusionMS(float sigma_s, float sigma_a, float g, float eta, float r) 
+float BSSRDF::beamDiffusion(float scatter, float absorp, float g, float eta, float radius) 
 {
-    const int nSamples = 100;
+    static const int NUM_SAMPLES = 100;
     float Ed = 0;
+
     // Precompute information for dipole integrand
-
-    // Compute reduced scattering coefficients $\sigmaps, \sigmapt$ and albedo
-    // $\rhop$
-    float sigmap_s = sigma_s * (1 - g);
-    float sigmap_t = sigma_a + sigmap_s;
-    float rhop = sigmap_s / sigmap_t;
-
-    // Compute non-classical diffusion coefficient $D_\roman{G}$ using
-    // Equation (15.24)
-    float D_g = (2 * sigma_a + sigmap_s) / (3 * sigmap_t * sigmap_t);
-
-    // Compute effective transport coefficient $\sigmatr$ based on $D_\roman{G}$
-    float sigma_tr = std::sqrt(sigma_a / D_g);
-
-    // Determine linear extrapolation distance $\depthextrapolation$ using
-    // Equation (15.28)
+    // Compute reduced scattering coefficients (σ's, σ't) and albedo (ρ') 
+    float rdScatter = scatter * (1 - g);
+    float rdExtinc = absorp + rdScatter;
+    float rdAlbedo = rdScatter / rdExtinc;
+    // Compute non-classical diffusion coefficient D_g (Grosjean's solution) (P924 15.24)
+    float D_g = (2 * absorp + rdScatter) / (3 * rdExtinc * rdExtinc);
+    // Compute effective transport coefficient (σtr) based on D_g
+    float effTrans = sqrt(absorp / D_g);
+    // Determine linear extrapolation distance (ze) (P926 15.28)
     float fm1 = fresnelMoment1(eta), fm2 = fresnelMoment2(eta);
-    float ze = -2 * D_g * (1 + 3 * fm2) / (1 - 2 * fm1);
+    float extrapDist = -2 * D_g * (1 + 3 * fm2) / (1 - 2 * fm1);
+    // Determine exitance scale factors (P927 15.31 & 15.32)
+    float cFluence = 0.25f * (1 - 2 * fm1), cIrrad = 0.5f * (1 - 3 * fm2);
 
-    // Determine exitance scale factors using Equations (15.31) and (15.32)
-    float cPhi = .25f * (1 - 2 * fm1), cE = .5f * (1 - 3 * fm2);
-    for (int i = 0; i < nSamples; ++i) {
-        // Sample real point source depth $\depthreal$
-        float zr = -std::log(1 - (i + .5f) / nSamples) / sigmap_t;
+    for (int i = 0; i < NUM_SAMPLES; ++i) {
+        // Sample real point source (zr)
+        float zReal = -log(1 - (i + 0.5f) / NUM_SAMPLES) / rdExtinc;
+        float zVirt = -zReal + 2 * extrapDist;
+        float distReal = sqrt(radius * radius + zReal * zReal);
+        float distVirt = sqrt(radius * radius + zVirt * zVirt);
 
-        // Evaluate dipole integrand $E_{\roman{d}}$ at $\depthreal$ and add to
-        // _Ed_
-        float zv = -zr + 2 * ze;
-        float dr = std::sqrt(r * r + zr * zr), dv = std::sqrt(r * r + zv * zv);
+        // Compute dipole fluence rate (φD) (P923 15.20 & P926 15.25)
+        float fluenceRate = 1.0 / (4 * PI) / D_g * (exp(-effTrans * distReal) / distReal 
+                                                    - exp(-effTrans * distVirt) / distVirt);
+        // Compute dipole vector irradiance (-ED·n) (P926 15.27)
+        float vecIrrad = 1.0 / (4 * PI) * 
+            (zReal * (1 + effTrans * distReal) * exp(-effTrans * distReal) / pow(distReal, 3) 
+             - zVirt * (1 + effTrans * distVirt) * exp(-effTrans * distVirt) / pow(distVirt, 3));
 
-        // Compute dipole fluence rate $\dipole(r)$ using Equation (15.27)
-        float phiD = 1.0 / (4 * PI) / D_g * (exp(-sigma_tr * dr) / dr - exp(-sigma_tr * dv) / dv);
-
-        // Compute dipole vector irradiance $-\N{}\cdot\dipoleE(r)$ using
-        // Equation (15.27)
-        float EDn = 1.0 / (4 * PI) * (zr * (1 + sigma_tr * dr) *
-                                  exp(-sigma_tr * dr) / (dr * dr * dr) -
-                              zv * (1 + sigma_tr * dv) *
-                                  exp(-sigma_tr * dv) / (dv * dv * dv));
-
-        // Add contribution from dipole for depth $\depthreal$ to _Ed_
-        float E = phiD * cPhi + EDn * cE;
-        float kappa = 1 - exp(-2 * sigmap_t * (dr + zr));
-        Ed += kappa * rhop * rhop * E;
+        // Add contribution from dipole for depth (zr) to Ed
+        float E = fluenceRate * cFluence + vecIrrad * cIrrad;
+        float kappa = 1 - exp(-2 * rdExtinc * (distReal + zReal));
+        Ed += kappa * rdAlbedo * rdAlbedo * E;
     }
-    return Ed / nSamples;
+    return Ed / NUM_SAMPLES;
 }
 
-float BSSRDF::beamDiffusionSS(float sigma_s, float sigma_a, float g, float eta, float r) 
+float BSSRDF::beamSingleScattering(float scatter, float absorp, float g, float eta, float radius) 
 {
-    // Compute material parameters and minimum $t$ below the critical angle
-    float sigma_t = sigma_a + sigma_s, rho = sigma_s / sigma_t;
-    float tCrit = r * sqrt(eta * eta - 1);
+    // Compute material parameters and minimum t below the critical angle
+    float extinc = absorp + scatter, albedo = scatter / extinc; // don't need reduced parameters
+    float tCrit = radius * sqrt(eta * eta - 1);
     float Ess = 0;
-    const int nSamples = 100;
-    for (int i = 0; i < nSamples; ++i) {
-        // Evaluate single scattering integrand and add to _Ess_
-        float ti = tCrit - log(1 - (i + .5f) / nSamples) / sigma_t;
-
-        // Determine length $d$ of connecting segment and $\cos\theta_\roman{o}$
-        float d = sqrt(r * r + ti * ti);
-        float cosThetaO = ti / d;
-
-        // Add contribution of single scattering at depth $t$
-        Ess += rho * exp(-sigma_t * (d + tCrit)) / (d * d) *
-               phaseHG(cosThetaO, g) * (1 - fresnelReflFactor(cosThetaO, eta)) *
-               abs(cosThetaO);
+    static const int NUM_SAMPLES = 100;
+    for (int i = 0; i < NUM_SAMPLES; ++i) {
+        float ti = tCrit - log(1 - (i + 0.5f) / NUM_SAMPLES) / extinc;
+        // Determine length of connecting segment and cos(θo)
+        float dist = sqrt(radius * radius + ti * ti);
+        float cosThetaO = ti / dist;
+        // Add contribution of single scattering at depth t
+        Ess += albedo * exp(-extinc * (dist + tCrit)) / (dist * dist) * phaseHG(cosThetaO, g) 
+                   * (1 - fresnelReflFactor(cosThetaO, eta)) * abs(cosThetaO);
     }
-    return Ess / nSamples;
+    return Ess / NUM_SAMPLES;
 }
 
-void BSSRDF::calcBeamDiffusion(float g, float eta, BSSRDFTable *table)
+void BSSRDF::genProfileTable(float g, float eta, BSSRDFTable *table)
 {
     // Choose radius values of the diffusion profile discretization
     table->radius[0] = 0;
@@ -140,19 +126,18 @@ void BSSRDF::calcBeamDiffusion(float g, float eta, BSSRDFTable *table)
             (1 - exp(-8));
 
     for (int i = 0; i < table->nAlbedo; i++) {
-        // Compute the diffusion profile for the _i_th albedo sample
-        // Compute scattering profile for chosen albedo $\rho$
+        // Compute the diffusion profile for the i th albedo sample
+        // Compute scattering profile for chosen albedo 
         for (int j = 0; j < table->nRadius; ++j) {
-            float rho = table->albedo[i], r = table->radius[j];
+            float albedo = table->albedo[i], radius = table->radius[j];
             table->profile[i * table->nRadius + j] =
-                2 * PI * r * (beamDiffusionSS(rho, 1 - rho, g, eta, r) +
-                              beamDiffusionMS(rho, 1 - rho, g, eta, r));
+                2 * PI * radius * (beamSingleScattering(albedo, 1 - albedo, g, eta, radius) +
+                                   beamDiffusion(albedo, 1 - albedo, g, eta, radius));
         }
 
-        // Compute effective albedo $\rho_{\roman{eff}}$ and CDF for importance sampling
+        // Compute effective albedo and CDF for importance sampling
         table->effAlbedo[i] =
-            Interpolation::integrateCatmullRom(table->nRadius, table->radius.get(),
-                                &table->profile[i * table->nRadius],
-                                &table->profileCDF[i * table->nRadius]);
+            Interpolation::integrateCatmullRom(table->nRadius, table->radius.get(), 
+                &table->profile[i * table->nRadius], &table->profileCDF[i * table->nRadius]);
     }
 }

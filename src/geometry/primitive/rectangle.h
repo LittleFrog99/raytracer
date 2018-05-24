@@ -10,7 +10,7 @@ public:
     virtual bool intersect(Ray &ray, double &tmin, Shade &shade);
     virtual bool shadowIntersect(Ray &ray, double &tmin);
     virtual dvec3 getNormal(dvec3 &point) { return normal; }
-    virtual float probDenFunc(Shade &shade) { return 1.0 / area; }
+    virtual float calcPdf(Shade &shade) { return 1.0 / area; }
 
 private:
     dvec3 origin = dvec3(-1, 0, -1);

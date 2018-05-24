@@ -12,7 +12,7 @@ public:
     virtual void setSampler(Sampler *sampler_ptr);
     virtual dvec3 sample();
     virtual dvec3 getNormal(dvec3 &point) { return normal; }
-    virtual float probDenFunc(Shade &shade) { return 1.0 / area; }
+    virtual float calcPdf(Shade &shade) { return 1.0 / area; }
 
 private:
     dvec3 center;

@@ -6,7 +6,7 @@ Tabulated::Tabulated(Material *mat_ptr, float eta, float g, vec3 absorp, vec3 sc
     extinc = absorp + scatter;
     for (int i = 0; i < 3; i++) 
         albedo[i] = extinc[i] == 0 ? 0 : (scatter[i] / extinc[i]);
-    calcBeamDiffusion(g, eta, table);
+    genProfileTable(g, eta, table);
 }
 
 vec3 Tabulated::calcSr(float distance) {

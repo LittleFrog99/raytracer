@@ -5,6 +5,7 @@
 class Separable : public BSSRDF {
 public:
     Separable(Material *mat_ptr, float eta);
+    float calcSw(Shade &pi, dvec3 &wi); // direction term
     virtual vec3 calcS(Shade &po, Shade &pi, dvec3 &wi);
     virtual vec3 sampleS(Shade &po, double u1, const dvec2 &u2, Shade &pi, float *pdf);
     virtual float sampleSw(Shade &pi, dvec3 &wi, float *pdf);
@@ -15,7 +16,7 @@ protected:
     float eta;
     Sampler *smplrP = nullptr;
     
-    float calcSw(Shade &pi, dvec3 &wi); // direction term
+    float calcFresnel(Shade &po);
     vec3 calcSp(Shade &po, Shade &pi); // spatial term
     vec3 sampleSp(Shade &po, double u1, const dvec2 &u2, Shade &pi, float *pdf);
 

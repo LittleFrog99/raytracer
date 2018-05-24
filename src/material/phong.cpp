@@ -28,7 +28,7 @@ vec3 Phong::shade(Shade &shade) {
             if (!inShadow)
                 color += (diffBRDF->calcBRDF(shade, in, out) 
                 + specBRDF->calcBRDF(shade, in, out)) * light->incidRadiance(shade) 
-                * light->geoTerm(shade) * nDotIn / light->probDenFunc(shade);
+                * light->geoTerm(shade) * nDotIn / light->calcPdf(shade);
         }
     }
 
